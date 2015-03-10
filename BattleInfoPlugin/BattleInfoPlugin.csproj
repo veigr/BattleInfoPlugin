@@ -118,11 +118,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddDoubleValueConverter.cs" />
-    <Compile Include="Fleet.xaml.cs">
-      <DependentUpon>Fleet.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FleetViewModel.cs" />
     <Compile Include="Models\BattleData.cs" />
     <Compile Include="Models\BattleEndNotifier.cs" />
     <Compile Include="Models\FleetDamages.cs" />
@@ -139,24 +134,28 @@
     <Compile Include="Models\Raw\practice_midnight_battle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\ShipData.cs" />
-    <Compile Include="ToolViewModel.cs" />
-    <Page Include="Fleet.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="ViewModels\FleetViewModel.cs" />
+    <Compile Include="ViewModels\ToolViewModel.cs" />
+    <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
+    <Compile Include="Views\Fleet.xaml.cs">
+      <DependentUpon>Fleet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ToolView.xaml.cs">
+      <DependentUpon>ToolView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Styles\PluginStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ToolView.xaml">
+    <Compile Include="BattleInfoPlugin.cs" />
+    <Page Include="Views\Fleet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="BattleInfoPlugin.cs" />
-    <Compile Include="ToolView.xaml.cs">
-      <DependentUpon>ToolView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="Views\ToolView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

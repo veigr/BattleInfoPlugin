@@ -1,7 +1,7 @@
 ﻿using BattleInfoPlugin.Models;
 using Livet;
 
-namespace BattleInfoPlugin
+namespace BattleInfoPlugin.ViewModels
 {
     public class FleetViewModel : ViewModel
     {
@@ -12,13 +12,13 @@ namespace BattleInfoPlugin
         public string Name
         {
             get
-            { return _Name; }
+            { return this._Name; }
             set
             { 
-                if (_Name == value)
+                if (this._Name == value)
                     return;
-                _Name = value;
-                RaisePropertyChanged();
+                this._Name = value;
+                this.RaisePropertyChanged();
             }
         }
         #endregion
@@ -49,13 +49,13 @@ namespace BattleInfoPlugin
         public bool IsVisible
         {
             get
-            { return _IsVisible; }
+            { return this._IsVisible; }
             set
             { 
-                if (_IsVisible == value)
+                if (this._IsVisible == value)
                     return;
-                _IsVisible = value;
-                RaisePropertyChanged();
+                this._IsVisible = value;
+                this.RaisePropertyChanged();
             }
         }
         #endregion

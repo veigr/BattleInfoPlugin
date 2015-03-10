@@ -1,19 +1,20 @@
-﻿<BattleInfoPlugin:ToolViewModel xmlns:BattleInfoPlugin="clr-namespace:BattleInfoPlugin"
+﻿<viewModels:ToolViewModel xmlns:BattleInfoPlugin="clr-namespace:BattleInfoPlugin"
                                 xmlns:Livet="clr-namespace:Livet;assembly=Livet"
                                 xmlns:Models="clr-namespace:Grabacr07.KanColleWrapper.Models;assembly=KanColleWrapper" 
                                 xmlns:System="clr-namespace:System;assembly=mscorlib" 
                                 xmlns:Messaging="clr-namespace:Livet.Messaging;assembly=Livet"
                                 xmlns:models="clr-namespace:BattleInfoPlugin.Models"
+                                xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
                                 UpdatedTime="2015/03/08 15:15:15">
     
-    <BattleInfoPlugin:ToolViewModel.Data>
+    <viewModels:ToolViewModel.Data>
         <models:BattleData Name="連合艦隊 - 水上部隊 - 昼戦">
         </models:BattleData>
-    </BattleInfoPlugin:ToolViewModel.Data>
+    </viewModels:ToolViewModel.Data>
     
-	<BattleInfoPlugin:ToolViewModel.Enemies>
-        <BattleInfoPlugin:FleetViewModel Name="敵艦隊" IsVisible="True">
-            <BattleInfoPlugin:FleetViewModel.Fleet>
+	<viewModels:ToolViewModel.Enemies>
+        <viewModels:FleetViewModel Name="敵艦隊" IsVisible="True">
+            <viewModels:FleetViewModel.Fleet>
                 <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
                     <models:ShipData.HP>
                         <Models:LimitedValue Current="36" Maximum="43" Minimum="0"/>
@@ -29,13 +30,13 @@
                         <Models:LimitedValue Current="-999" Maximum="999" Minimum="0"/>
                     </models:ShipData.HP>
                 </models:ShipData>
-            </BattleInfoPlugin:FleetViewModel.Fleet>
-		</BattleInfoPlugin:FleetViewModel>
-	</BattleInfoPlugin:ToolViewModel.Enemies>
+            </viewModels:FleetViewModel.Fleet>
+		</viewModels:FleetViewModel>
+	</viewModels:ToolViewModel.Enemies>
 
-    <BattleInfoPlugin:ToolViewModel.FirstFleet>
-        <BattleInfoPlugin:FleetViewModel Name="自艦隊" IsVisible="True">
-            <BattleInfoPlugin:FleetViewModel.Fleet>
+    <viewModels:ToolViewModel.FirstFleet>
+        <viewModels:FleetViewModel Name="自艦隊" IsVisible="True">
+            <viewModels:FleetViewModel.Fleet>
                 <models:ShipData MaxHP="56" NowHP="54" Name="Bismarck drei" Situation="None" TypeName="戦艦">
                     <models:ShipData.HP>
                         <Models:LimitedValue Current="64" Maximum="57" Minimum="0"/>
@@ -66,13 +67,13 @@
                         <Models:LimitedValue Current="17" Maximum="39" Minimum="0"/>
                     </models:ShipData.HP>
                 </models:ShipData>
-            </BattleInfoPlugin:FleetViewModel.Fleet>
-        </BattleInfoPlugin:FleetViewModel>
-    </BattleInfoPlugin:ToolViewModel.FirstFleet>
+            </viewModels:FleetViewModel.Fleet>
+        </viewModels:FleetViewModel>
+    </viewModels:ToolViewModel.FirstFleet>
 
-    <BattleInfoPlugin:ToolViewModel.SecondFleet>
-        <BattleInfoPlugin:FleetViewModel Name="護衛艦隊" IsVisible="True">
-            <BattleInfoPlugin:FleetViewModel.Fleet>
+    <viewModels:ToolViewModel.SecondFleet>
+        <viewModels:FleetViewModel Name="護衛艦隊" IsVisible="True">
+            <viewModels:FleetViewModel.Fleet>
                 <models:ShipData MaxHP="76" NowHP="63" Name="夕立改二" Situation="HeavilyDamaged" TypeName="ぽいぬ">
                     <models:ShipData.HP>
                         <Models:LimitedValue Current="28" Maximum="99" Minimum="0"/>
@@ -93,7 +94,7 @@
                         <Models:LimitedValue Current="70" Maximum="41" Minimum="0"/>
                     </models:ShipData.HP>
                 </models:ShipData>
-            </BattleInfoPlugin:FleetViewModel.Fleet>
-		</BattleInfoPlugin:FleetViewModel>
-	</BattleInfoPlugin:ToolViewModel.SecondFleet>
-</BattleInfoPlugin:ToolViewModel>
+            </viewModels:FleetViewModel.Fleet>
+		</viewModels:FleetViewModel>
+	</viewModels:ToolViewModel.SecondFleet>
+</viewModels:ToolViewModel>

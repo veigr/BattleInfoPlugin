@@ -3,7 +3,7 @@ using BattleInfoPlugin.Models;
 using Livet;
 using Livet.EventListeners;
 
-namespace BattleInfoPlugin
+namespace BattleInfoPlugin.ViewModels
 {
     public class ToolViewModel : ViewModel
     {

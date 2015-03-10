@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BattleInfoPlugin
+namespace BattleInfoPlugin.Views.Converters
 {
     public class AddDoubleValueConverter : IValueConverter
     {

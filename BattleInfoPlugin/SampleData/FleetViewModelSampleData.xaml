@@ -1,12 +1,13 @@
-﻿<BattleInfoPlugin:FleetViewModel xmlns:BattleInfoPlugin="clr-namespace:BattleInfoPlugin"
+﻿<viewModels:FleetViewModel xmlns:BattleInfoPlugin="clr-namespace:BattleInfoPlugin"
                                  xmlns:Livet="clr-namespace:Livet;assembly=Livet"
                                  xmlns:Models="clr-namespace:Grabacr07.KanColleWrapper.Models;assembly=KanColleWrapper"
                                  xmlns:Messaging="clr-namespace:Livet.Messaging;assembly=Livet"
                                  xmlns:models="clr-namespace:BattleInfoPlugin.Models"
+                                 xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
                                  Name="敵艦隊"
                                  IsVisible="True">
 
-    <BattleInfoPlugin:FleetViewModel.Fleet>
+    <viewModels:FleetViewModel.Fleet>
         <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
             <models:ShipData.HP>
                 <Models:LimitedValue Current="6" Maximum="9" Minimum="0"/>
@@ -22,6 +23,6 @@
                 <Models:LimitedValue Current="77" Maximum="25" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
-    </BattleInfoPlugin:FleetViewModel.Fleet>
+    </viewModels:FleetViewModel.Fleet>
 
-</BattleInfoPlugin:FleetViewModel>
+</viewModels:FleetViewModel>

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.Composition;
 using BattleInfoPlugin.Models;
+using BattleInfoPlugin.ViewModels;
+using BattleInfoPlugin.Views;
 using Grabacr07.KanColleViewer.Composition;
 
 namespace BattleInfoPlugin
