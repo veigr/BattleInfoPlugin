@@ -62,16 +62,16 @@
             </Border>
 
             <views:Fleet Grid.Column="0" Grid.Row="1"
-                        Margin="0,6,0,0"
-                        DataContext="{Binding FirstFleet}"/>
+                         Margin="0,6,0,0"
+                         DataContext="{Binding FirstFleet}"/>
 
             <views:Fleet Grid.Column="1" Grid.Row="1"
-                            Margin="0,6,0,0"
-                            DataContext="{Binding SecondFleet}"/>
+                         Margin="0,6,0,0"
+                         DataContext="{Binding SecondFleet}"/>
 
             <views:Fleet Grid.Column="2" Grid.Row="1"
-                            Margin="0,6,0,0"
-                            DataContext="{Binding Enemies}"/>
+                         Margin="0,6,0,0"
+                         DataContext="{Binding Enemies}"/>
 
             <CheckBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4"
                       HorizontalAlignment="Right"

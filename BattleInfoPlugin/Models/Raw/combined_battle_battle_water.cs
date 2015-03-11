@@ -5,7 +5,7 @@
     /// </summary>
     public class combined_battle_battle_water
     {
-        public string api_deck_id { get; set; }
+        public int api_deck_id { get; set; }
         public int[] api_ship_ke { get; set; }
         public int[] api_ship_lv { get; set; }
         public int[] api_nowhps { get; set; }
@@ -19,7 +19,7 @@
         public int[][] api_eParam { get; set; }
         public int[][] api_fParam_combined { get; set; }
         public int[] api_search { get; set; }
-        public object[] api_formation { get; set; }
+        public int[] api_formation { get; set; }
         public int[] api_stage_flag { get; set; }
         public Api_Kouku api_kouku { get; set; }
         public int api_support_flag { get; set; }

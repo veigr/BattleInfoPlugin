@@ -1,0 +1,36 @@
+﻿namespace BattleInfoPlugin.Models.Raw
+{
+    public class map_start_next
+    {
+        public int api_rashin_flg { get; set; }
+        public int api_rashin_id { get; set; }
+        public int api_maparea_id { get; set; }
+        public int api_mapinfo_no { get; set; }
+        public int api_no { get; set; }
+        public int api_color_no { get; set; }
+        public int api_event_id { get; set; }
+        public int api_event_kind { get; set; }
+        public int api_next { get; set; }
+        public int api_bosscell_no { get; set; }
+        public int api_bosscomp { get; set; }
+        public Api_Eventmap api_eventmap { get; set; }
+        public int api_comment_kind { get; set; }
+        public int api_production_kind { get; set; }
+        public Api_Enemy api_enemy { get; set; }
+    }
+
+    public class Api_Eventmap
+    {
+        public int api_max_maphp { get; set; }
+        public int api_now_maphp { get; set; }
+        public int api_dmg { get; set; }
+    }
+
+    public class Api_Enemy
+    {
+        public int api_enemy_id { get; set; }
+        public int api_result { get; set; }
+        public string api_result_str { get; set; }
+    }
+
+}

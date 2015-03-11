@@ -13,7 +13,7 @@
     </viewModels:ToolViewModel.Data>
     
 	<viewModels:ToolViewModel.Enemies>
-        <viewModels:FleetViewModel Name="敵艦隊" IsVisible="True">
+        <viewModels:FleetViewModel Name="敵艦隊" FleetFormation="輪形陣" IsVisible="True">
             <viewModels:FleetViewModel.Fleet>
                 <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
                     <models:ShipData.HP>
@@ -35,7 +35,7 @@
 	</viewModels:ToolViewModel.Enemies>
 
     <viewModels:ToolViewModel.FirstFleet>
-        <viewModels:FleetViewModel Name="自艦隊" IsVisible="True">
+        <viewModels:FleetViewModel Name="自艦隊" FleetFormation="戦闘陣形" IsVisible="True">
             <viewModels:FleetViewModel.Fleet>
                 <models:ShipData MaxHP="56" NowHP="54" Name="Bismarck drei" Situation="None" TypeName="戦艦">
                     <models:ShipData.HP>

@@ -1,11 +1,12 @@
 ﻿<viewModels:FleetViewModel xmlns:BattleInfoPlugin="clr-namespace:BattleInfoPlugin"
-                                 xmlns:Livet="clr-namespace:Livet;assembly=Livet"
-                                 xmlns:Models="clr-namespace:Grabacr07.KanColleWrapper.Models;assembly=KanColleWrapper"
-                                 xmlns:Messaging="clr-namespace:Livet.Messaging;assembly=Livet"
-                                 xmlns:models="clr-namespace:BattleInfoPlugin.Models"
-                                 xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
-                                 Name="敵艦隊"
-                                 IsVisible="True">
+                           xmlns:Livet="clr-namespace:Livet;assembly=Livet"
+                           xmlns:Models="clr-namespace:Grabacr07.KanColleWrapper.Models;assembly=KanColleWrapper"
+                           xmlns:Messaging="clr-namespace:Livet.Messaging;assembly=Livet"
+                           xmlns:models="clr-namespace:BattleInfoPlugin.Models"
+                           xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
+                           Name="敵艦隊"
+                           FleetFormation="戦闘陣形"
+                           IsVisible="True">
 
     <viewModels:FleetViewModel.Fleet>
         <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">

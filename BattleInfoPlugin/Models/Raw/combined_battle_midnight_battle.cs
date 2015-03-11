@@ -5,7 +5,7 @@
     /// </summary>
     public class combined_battle_midnight_battle
     {
-        public string api_deck_id { get; set; }
+        public int api_deck_id { get; set; }
         public int[] api_ship_ke { get; set; }
         public int[] api_ship_lv { get; set; }
         public int[] api_nowhps { get; set; }

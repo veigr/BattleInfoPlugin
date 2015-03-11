@@ -94,6 +94,10 @@ namespace BattleInfoPlugin.ViewModels
 
         public ToolViewModel(BattleData data, BattleEndNotifier notifier)
         {
+            this.FirstFleet = new FleetViewModel(null, null);
+            this.SecondFleet = new FleetViewModel(null, null);
+            this.Enemies = new FleetViewModel(null, null);
+
             this.notifier = notifier;
 
             this.Data = data;
@@ -106,7 +110,7 @@ namespace BattleInfoPlugin.ViewModels
                 },
                 {
                     () => this.Data.FirstFleet,
-                    (_, __) => this.FirstFleet = new FleetViewModel("自艦隊", this.Data.FirstFleet)
+                    (_, __) => this.FirstFleet = new FleetViewModel("自艦隊", this.Data.FirstFleet, data.FriendFormation)
                 },
                 {
                     () => this.Data.SecondFleet,
@@ -114,7 +118,7 @@ namespace BattleInfoPlugin.ViewModels
                 },
                 {
                     () => this.Data.Enemies,
-                    (_, __) => this.Enemies = new FleetViewModel("敵艦隊", this.Data.Enemies)
+                    (_, __) => this.Enemies = new FleetViewModel("敵艦隊", this.Data.Enemies, data.NextEnemyFormation)
                 },
             });
         }

@@ -34,5 +34,14 @@ namespace BattleInfoPlugin.Properties {
                 this["IsEnabledBattleEndNotify"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BattleInfoPlugin_EnemyData.txt")]
+        public string EnemyDataFilePath {
+            get {
+                return ((string)(this["EnemyDataFilePath"]));
+            }
+        }
     }
 }

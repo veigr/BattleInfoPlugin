@@ -1,4 +1,5 @@
-﻿using BattleInfoPlugin.Models;
+﻿using System;
+using BattleInfoPlugin.Models;
 using Livet;
 
 namespace BattleInfoPlugin.ViewModels
@@ -32,39 +33,54 @@ namespace BattleInfoPlugin.ViewModels
             get
             { return this._Fleet; }
             set
-            { 
+            {
                 if (this._Fleet == value)
                     return;
                 this._Fleet = value;
                 this.RaisePropertyChanged();
-                this.IsVisible = value != null && value.Length != 0;
+                this.RaisePropertyChanged(() => this.IsVisible);
             }
         }
         #endregion
 
 
         #region IsVisible変更通知プロパティ
-        private bool _IsVisible;
 
         public bool IsVisible
         {
             get
-            { return this._IsVisible; }
+            { return this.Fleet != null && this.Fleet.Length != 0; }
+        }
+        #endregion
+
+
+        #region FleetFormation変更通知プロパティ
+        private Formation _FleetFormation;
+
+        public string FleetFormation
+        {
+            get
+            { return this._FleetFormation != Formation.なし ? this._FleetFormation.ToString() : string.Empty; }
             set
-            { 
-                if (this._IsVisible == value)
+            {
+                var newString = string.IsNullOrWhiteSpace(value) ? Formation.なし.ToString() : value;
+                Formation newValue;
+                if (!Enum.TryParse(newString, out newValue)) return;
+
+                if (this._FleetFormation == newValue)
                     return;
-                this._IsVisible = value;
+                this._FleetFormation = newValue;
                 this.RaisePropertyChanged();
             }
         }
         #endregion
 
 
-        public FleetViewModel(string name, ShipData[] data)
+        public FleetViewModel(string name, ShipData[] data, Formation formation = Formation.なし)
         {
             this.Name = name;
             this.Fleet = data;
+            this.FleetFormation = formation.ToString();
         }
     }
 }
