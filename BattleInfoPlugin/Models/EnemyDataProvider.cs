@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -79,11 +79,11 @@ namespace BattleInfoPlugin.Models
 
         public void Dump(string title = "")
         {
-            System.Console.WriteLine(title);
-            this.EnemyDictionary.SelectMany(x => x.Value, (key, value) => new { key, value })
-                .ToList().ForEach(x => System.Console.WriteLine(x.key + " : " + x.value));
-            this.EnemyFormation
-                .ToList().ForEach(x => System.Console.WriteLine(x.Key + " : " + x.Value));
+            Debug.WriteLine(title);
+            //this.EnemyDictionary.SelectMany(x => x.Value, (key, value) => new { key, value })
+            //    .ToList().ForEach(x => Debug.WriteLine(x.key + " : " + x.value));
+            //this.EnemyFormation
+            //    .ToList().ForEach(x => Debug.WriteLine(x.Key + " : " + x.Value));
         }
 
         private void Reload()

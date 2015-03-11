@@ -391,6 +391,7 @@ namespace BattleInfoPlugin.Models
             this.UpdatedTime = DateTimeOffset.Now;
             this.Name = "次セル";
 
+            this.FriendFormation = Formation.なし;
             this.NextEnemyFormation = this.provider.GetNextEnemyFormation(startNext);
             this.Enemies = this.provider.GetNextEnemies(startNext);
             this.Enemies.UpdateHPBySource();
