@@ -142,6 +142,7 @@
     <Compile Include="ViewModels\FleetViewModel.cs" />
     <Compile Include="ViewModels\ToolViewModel.cs" />
     <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
+    <Compile Include="Views\Converters\AdditionalNameColorConverter.cs" />
     <Compile Include="Views\Fleet.xaml.cs">
       <DependentUpon>Fleet.xaml</DependentUpon>
     </Compile>

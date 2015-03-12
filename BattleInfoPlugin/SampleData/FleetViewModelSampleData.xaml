@@ -14,12 +14,12 @@
                 <wrapper:LimitedValue Current="6" Maximum="9" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
-        <models:ShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Repair" TypeName="ろり">
+        <models:ShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Repair" TypeName="ろり" AdditionalName="elite">
             <models:ShipData.HP>
                 <wrapper:LimitedValue Current="71" Maximum="85" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
-        <models:ShipData MaxHP="40" NowHP="62" Name="駆逐ロ級後期型" Situation="HeavilyDamaged" TypeName="きもい">
+        <models:ShipData MaxHP="40" NowHP="62" Name="駆逐ロ級後期型" Situation="HeavilyDamaged" TypeName="きもい" AdditionalName="flagship">
             <models:ShipData.HP>
                 <wrapper:LimitedValue Current="77" Maximum="25" Minimum="0"/>
             </models:ShipData.HP>

@@ -54,7 +54,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="戦闘結果"
+                    <TextBlock Text="戦闘情報"
                                Style="{DynamicResource HeaderTextStyleKey}"
                                Margin="0,0,20,0"
                                Grid.Column="0"

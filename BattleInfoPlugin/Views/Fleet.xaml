@@ -8,6 +8,7 @@
              xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
              xmlns:models="clr-namespace:BattleInfoPlugin.Models"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:localConv="clr-namespace:BattleInfoPlugin.Views.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300"
              d:DesignWidth="300"
@@ -19,6 +20,7 @@
                 <ResourceDictionary Source="../Styles/PluginStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <localConv:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
             <converters:HasFlagConverter x:Key="HasFlagConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
@@ -96,6 +98,8 @@
                                            ToolTipService.VerticalOffset="-3">
                                      <Run Text="{Binding Name, Mode=OneWay}"
                                           Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                     <Run Text="{Binding AdditionalName, Mode=OneWay}"
+                                          Foreground="{Binding AdditionalName, Converter={StaticResource AdditionalNameColorConverter}}"/>
                                      <LineBreak />
                                      <Run Text="{Binding TypeName, Mode=OneWay}"
                                           FontSize="11" />
@@ -103,6 +107,8 @@
                                     <TextBlock Margin="0,-2,0,0">
                                              <Run Text="{Binding Name, Mode=OneWay}"
                                                   Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                             <Run Text="{Binding AdditionalName, Mode=OneWay}"
+                                                  Foreground="{Binding AdditionalName, Converter={StaticResource AdditionalNameColorConverter}}"/>
                                              <LineBreak />
                                              <Run Text="{Binding TypeName, Mode=OneWay}"
                                                   FontSize="11" />

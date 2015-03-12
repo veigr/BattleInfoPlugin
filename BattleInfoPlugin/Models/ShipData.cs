@@ -17,12 +17,21 @@ namespace BattleInfoPlugin.Models
         {
             get
             {
-                if (this.ShipSource != null) return this.ShipSource.Info.Name;
-                if (this.EnemyInfo == null) return "？？？";
+                return this.ShipSource != null
+                    ? this.ShipSource.Info.Name
+                    : this.EnemyInfo != null
+                        ? this.EnemyInfo.Name
+                        : "？？？";
+            }
+        }
 
-                var enemyMaster = BattleInfoPlugin.RawStart2.api_mst_ship.Single(x => x.api_id == this.EnemyInfo.Id);
-                var additional = !string.IsNullOrEmpty(enemyMaster.api_yomi) ? " " + enemyMaster.api_yomi : "";
-                return enemyMaster.api_name + additional;
+        public string AdditionalName
+        {
+            get
+            {
+                if (this.EnemyInfo == null) return "";
+                var isEnemyID = 500 < this.EnemyInfo.Id && this.EnemyInfo.Id < 901;
+                return isEnemyID ? BattleInfoPlugin.RawStart2.api_mst_ship.Single(x => x.api_id == this.EnemyInfo.Id).api_yomi : "";
             }
         }
 

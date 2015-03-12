@@ -17,6 +17,7 @@
         public int api_comment_kind { get; set; }
         public int api_production_kind { get; set; }
         public Api_Enemy api_enemy { get; set; }
+        public Api_Happening api_happening { get; set; }
     }
 
     public class Api_Eventmap
@@ -33,4 +34,13 @@
         public string api_result_str { get; set; }
     }
 
+    public class Api_Happening
+    {
+        public int api_type { get; set; }
+        public int api_count { get; set; }
+        public int api_usemst { get; set; }
+        public int api_mst_id { get; set; }
+        public int api_icon_id { get; set; }
+        public int api_dentan { get; set; }
+    }
 }

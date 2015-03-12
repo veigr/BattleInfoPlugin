@@ -411,7 +411,7 @@ namespace BattleInfoPlugin.Models
         private void UpdateFleetsByStartNext(map_start_next startNext, string api_deck_id = null)
         {
             this.UpdatedTime = DateTimeOffset.Now;
-            this.Name = "次セル";
+            this.Name = "次マス情報";
 
             this.provider.UpdateMapData(startNext);
 
