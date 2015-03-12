@@ -1,6 +1,6 @@
 ﻿<viewModels:FleetViewModel xmlns:BattleInfoPlugin="clr-namespace:BattleInfoPlugin"
                            xmlns:Livet="clr-namespace:Livet;assembly=Livet"
-                           xmlns:Models="clr-namespace:Grabacr07.KanColleWrapper.Models;assembly=KanColleWrapper"
+                           xmlns:wrapper="clr-namespace:Grabacr07.KanColleWrapper.Models;assembly=KanColleWrapper"
                            xmlns:Messaging="clr-namespace:Livet.Messaging;assembly=Livet"
                            xmlns:models="clr-namespace:BattleInfoPlugin.Models"
                            xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
@@ -11,17 +11,17 @@
     <viewModels:FleetViewModel.Fleet>
         <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
             <models:ShipData.HP>
-                <Models:LimitedValue Current="6" Maximum="9" Minimum="0"/>
+                <wrapper:LimitedValue Current="6" Maximum="9" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
         <models:ShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Repair" TypeName="ろり">
             <models:ShipData.HP>
-                <Models:LimitedValue Current="71" Maximum="85" Minimum="0"/>
+                <wrapper:LimitedValue Current="71" Maximum="85" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
         <models:ShipData MaxHP="40" NowHP="62" Name="駆逐ロ級後期型" Situation="HeavilyDamaged" TypeName="きもい">
             <models:ShipData.HP>
-                <Models:LimitedValue Current="77" Maximum="25" Minimum="0"/>
+                <wrapper:LimitedValue Current="77" Maximum="25" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
     </viewModels:FleetViewModel.Fleet>

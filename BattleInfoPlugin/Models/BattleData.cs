@@ -49,6 +49,26 @@ namespace BattleInfoPlugin.Models
         #endregion
 
 
+        #region BattleSituation変更通知プロパティ
+
+        private BattleSituation _BattleSituation;
+
+        public BattleSituation BattleSituation
+        {
+            get
+            { return this._BattleSituation; }
+            set
+            {
+                if (this._BattleSituation == value)
+                    return;
+                this._BattleSituation = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+        //FIXME 艦隊が情報をもっと持つようになってきたらFleet型作る
+
         #region FirstFleet変更通知プロパティ
         private ShipData[] _FirstFleet;
 
@@ -137,6 +157,8 @@ namespace BattleInfoPlugin.Models
             }
         }
         #endregion
+
+
 
         private readonly EnemyDataProvider provider = new EnemyDataProvider();
 
@@ -391,6 +413,7 @@ namespace BattleInfoPlugin.Models
             this.UpdatedTime = DateTimeOffset.Now;
             this.Name = "次セル";
 
+            this.BattleSituation = BattleSituation.なし;
             this.FriendFormation = Formation.なし;
             this.NextEnemyFormation = this.provider.GetNextEnemyFormation(startNext);
             this.Enemies = this.provider.GetNextEnemies(startNext);
@@ -409,6 +432,7 @@ namespace BattleInfoPlugin.Models
 
             if (api_formation != null)
             {
+                this.BattleSituation = (BattleSituation)api_formation[2];
                 this.FriendFormation = (Formation)api_formation[0];
                 this.NextEnemyFormation = (Formation)api_formation[1];
                 if (isUpdateEnemyData) this.provider.UpdateEnemyData(api_ship_ke, api_formation);

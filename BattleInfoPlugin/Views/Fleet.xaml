@@ -62,9 +62,9 @@
 
     <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
         <TextBlock Margin="3, 4">
-                <Run Text="{Binding Name}"/>
+                <Run Text="{Binding Name, Mode=OneWay}"/>
                 <Run Text="  "/>
-                <Run Text="{Binding FleetFormation}"
+                <Run Text="{Binding FleetFormation, Mode=OneWay}"
                      FontSize="12"
                      Style="{DynamicResource EmphaticTextElementStyleKey}"/>
         </TextBlock>

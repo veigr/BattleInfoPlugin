@@ -92,7 +92,9 @@ namespace BattleInfoPlugin.ViewModels
         }
         #endregion
 
-
+        public FleetViewModel():this("")
+        {
+        }
 
         public FleetViewModel(string name, ShipData[] data = null, Formation formation = Formation.なし)
         {

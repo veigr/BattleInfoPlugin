@@ -21,6 +21,16 @@ namespace BattleInfoPlugin.ViewModels
             }
         }
 
+        public string BattleSituation
+        {
+            get
+            {
+                return this.Data != null && this.Data.BattleSituation != Models.BattleSituation.なし
+                    ? this.Data.BattleSituation.ToString() : "";
+            }
+        }
+
+
         #region FirstFleet変更通知プロパティ
         private FleetViewModel _FirstFleet;
 
@@ -107,6 +117,10 @@ namespace BattleInfoPlugin.ViewModels
                 {
                     () => this.Data.UpdatedTime,
                     (_, __) => this.RaisePropertyChanged(() => this.UpdatedTime)
+                },
+                {
+                    () => this.Data.BattleSituation,
+                    (_, __) => this.RaisePropertyChanged(() => this.BattleSituation)
                 },
                 {
                     () => this.Data.FirstFleet,

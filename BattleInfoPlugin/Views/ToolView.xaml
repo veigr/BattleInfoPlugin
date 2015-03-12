@@ -45,20 +45,34 @@
             <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"
                     BorderThickness="0,0,0,1"
                     BorderBrush="{DynamicResource ActiveBorderBrushKey}">
-                <StackPanel Margin="3, 0, 0, 10"
-                            Orientation="Horizontal">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
                     <TextBlock Text="戦闘結果"
                                Style="{DynamicResource HeaderTextStyleKey}"
-                               VerticalAlignment="Center"
-                               Margin="0,0,20,0"/>
+                               Margin="0,0,20,0"
+                               Grid.Column="0"
+                               Grid.Row="0"/>
                     <TextBlock Text="{Binding UpdatedTime}"
                                Style="{DynamicResource DefaultTextStyleKey}"
-                               VerticalAlignment="Center"
-                               Margin="0,0,10,0"/>
-                    <TextBlock Text="{Binding Data.Name}"
-                               Style="{DynamicResource DefaultTextStyleKey}"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
+                               Grid.Column="1"
+                               Grid.Row="0"/>
+                    <TextBlock Grid.Column="1"
+                               Grid.Row="1"
+                               Style="{DynamicResource DefaultTextStyleKey}">
+                        <Run Text="{Binding Data.Name, Mode=OneWay}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding BattleSituation, Mode=OneWay}"
+                             FontSize="12"
+                             Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                    </TextBlock>
+                </Grid>
             </Border>
 
             <views:Fleet Grid.Column="0" Grid.Row="1"
