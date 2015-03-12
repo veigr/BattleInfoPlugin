@@ -55,32 +55,50 @@ namespace BattleInfoPlugin.ViewModels
 
 
         #region FleetFormation変更通知プロパティ
-        private Formation _FleetFormation;
+        private string _FleetFormation;
 
         public string FleetFormation
         {
             get
-            { return this._FleetFormation != Formation.なし ? this._FleetFormation.ToString() : string.Empty; }
+            { return this._FleetFormation; }
             set
             {
-                var newString = string.IsNullOrWhiteSpace(value) ? Formation.なし.ToString() : value;
-                Formation newValue;
-                if (!Enum.TryParse(newString, out newValue)) return;
-
-                if (this._FleetFormation == newValue)
+                if (this._FleetFormation == value)
                     return;
-                this._FleetFormation = newValue;
+                this._FleetFormation = value;
                 this.RaisePropertyChanged();
+            }
+        }
+
+        #endregion
+
+
+        #region FormationSource変更通知プロパティ
+        private Formation _FormationSource;
+
+        public Formation FormationSource
+        {
+            get
+            { return this._FormationSource; }
+            set
+            { 
+                if (this._FormationSource == value)
+                    return;
+                this._FormationSource = value;
+                this.RaisePropertyChanged();
+
+                this.FleetFormation = value != Formation.なし ? value.ToString() : "";
             }
         }
         #endregion
 
 
-        public FleetViewModel(string name, ShipData[] data, Formation formation = Formation.なし)
+
+        public FleetViewModel(string name, ShipData[] data = null, Formation formation = Formation.なし)
         {
             this.Name = name;
             this.Fleet = data;
-            this.FleetFormation = formation.ToString();
+            this.FormationSource = formation;
         }
     }
 }

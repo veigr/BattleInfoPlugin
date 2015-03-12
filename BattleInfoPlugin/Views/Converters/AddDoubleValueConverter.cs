@@ -10,7 +10,8 @@ namespace BattleInfoPlugin.Views.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((double)value) + this.Value;
+            var val = ((double)value) + this.Value;
+            return 0 < val ? val : 0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

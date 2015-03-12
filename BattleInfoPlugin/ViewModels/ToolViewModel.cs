@@ -94,9 +94,9 @@ namespace BattleInfoPlugin.ViewModels
 
         public ToolViewModel(BattleData data, BattleEndNotifier notifier)
         {
-            this.FirstFleet = new FleetViewModel(null, null);
-            this.SecondFleet = new FleetViewModel(null, null);
-            this.Enemies = new FleetViewModel(null, null);
+            this.FirstFleet = new FleetViewModel("自艦隊");
+            this.SecondFleet = new FleetViewModel("護衛艦隊");
+            this.Enemies = new FleetViewModel("敵艦隊");
 
             this.notifier = notifier;
 
@@ -110,15 +110,23 @@ namespace BattleInfoPlugin.ViewModels
                 },
                 {
                     () => this.Data.FirstFleet,
-                    (_, __) => this.FirstFleet = new FleetViewModel("自艦隊", this.Data.FirstFleet, data.FriendFormation)
+                    (_, __) => this.FirstFleet.Fleet = this.Data.FirstFleet
                 },
                 {
                     () => this.Data.SecondFleet,
-                    (_, __) => this.SecondFleet = new FleetViewModel("護衛艦隊", this.Data.SecondFleet)
+                    (_, __) => this.SecondFleet.Fleet = this.Data.SecondFleet
                 },
                 {
                     () => this.Data.Enemies,
-                    (_, __) => this.Enemies = new FleetViewModel("敵艦隊", this.Data.Enemies, data.NextEnemyFormation)
+                    (_, __) => this.Enemies.Fleet = this.Data.Enemies
+                },
+                {
+                    () => this.Data.FriendFormation,
+                    (_, __) => this.FirstFleet.FormationSource = this.Data.FriendFormation
+                },
+                {
+                    () => this.Data.NextEnemyFormation,
+                    (_, __) => this.Enemies.FormationSource = this.Data.NextEnemyFormation
                 },
             });
         }

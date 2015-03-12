@@ -121,8 +121,10 @@
   <ItemGroup>
     <Compile Include="Models\BattleData.cs" />
     <Compile Include="Models\BattleEndNotifier.cs" />
+    <Compile Include="Models\BattleSituation.cs" />
     <Compile Include="Models\EnemyDataProvider.cs" />
     <Compile Include="Models\FleetDamages.cs" />
+    <Compile Include="Models\Formation.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />
     <Compile Include="Models\Raw\battle_midnight_sp_midnight.cs" />
     <Compile Include="Models\Raw\combined_battle_airbattle.cs" />

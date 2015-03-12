@@ -12,7 +12,7 @@
         </models:BattleData>
     </viewModels:ToolViewModel.Data>
     
-	<viewModels:ToolViewModel.Enemies>
+    <viewModels:ToolViewModel.Enemies>
         <viewModels:FleetViewModel Name="敵艦隊" FleetFormation="輪形陣" IsVisible="True">
             <viewModels:FleetViewModel.Fleet>
                 <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
@@ -31,8 +31,8 @@
                     </models:ShipData.HP>
                 </models:ShipData>
             </viewModels:FleetViewModel.Fleet>
-		</viewModels:FleetViewModel>
-	</viewModels:ToolViewModel.Enemies>
+        </viewModels:FleetViewModel>
+    </viewModels:ToolViewModel.Enemies>
 
     <viewModels:ToolViewModel.FirstFleet>
         <viewModels:FleetViewModel Name="自艦隊" FleetFormation="戦闘陣形" IsVisible="True">
@@ -95,6 +95,6 @@
                     </models:ShipData.HP>
                 </models:ShipData>
             </viewModels:FleetViewModel.Fleet>
-		</viewModels:FleetViewModel>
-	</viewModels:ToolViewModel.SecondFleet>
+        </viewModels:FleetViewModel>
+    </viewModels:ToolViewModel.SecondFleet>
 </viewModels:ToolViewModel>

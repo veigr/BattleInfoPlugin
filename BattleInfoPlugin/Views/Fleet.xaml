@@ -170,7 +170,7 @@
                     </StackPanel>
 
                     <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Ship.Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow|Evacuation}"
+                        <DataTrigger Binding="{Binding Situation, Converter={StaticResource HasFlagConverter}, ConverterParameter=Tow|Evacuation}"
                                          Value="True">
                             <Setter TargetName="HPIndicator"
                                         Property="Opacity"

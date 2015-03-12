@@ -409,7 +409,6 @@ namespace BattleInfoPlugin.Models
 
             if (api_formation != null)
             {
-                // VM更新方法の都合上、艦隊データより先に更新しないといけないのが果てしなく微妙
                 this.FriendFormation = (Formation)api_formation[0];
                 this.NextEnemyFormation = (Formation)api_formation[1];
                 if (isUpdateEnemyData) this.provider.UpdateEnemyData(api_ship_ke, api_formation);
