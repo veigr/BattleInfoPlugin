@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using BattleInfoPlugin.Models;
 using BattleInfoPlugin.ViewModels;
 using BattleInfoPlugin.Views;
 using Grabacr07.KanColleViewer.Composition;
+using Grabacr07.KanColleWrapper;
+using Grabacr07.KanColleWrapper.Models.Raw;
 
 namespace BattleInfoPlugin
 {
@@ -14,6 +17,12 @@ namespace BattleInfoPlugin
     public class BattleInfoPlugin : IToolPlugin
     {
         private readonly ToolViewModel vm = new ToolViewModel(new BattleData(), new BattleEndNotifier());
+        internal static kcsapi_start2 RawStart2 { get; private set; }
+
+        public BattleInfoPlugin()
+        {
+            KanColleClient.Current.Proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(x => RawStart2 = x.Data);
+        }
 
         public object GetToolView()
         {
