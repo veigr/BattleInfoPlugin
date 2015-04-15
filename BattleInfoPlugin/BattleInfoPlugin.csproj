@@ -137,6 +137,7 @@
     <Compile Include="Models\Raw\map_start_next.cs" />
     <Compile Include="Models\Raw\practice_battle.cs" />
     <Compile Include="Models\Raw\practice_midnight_battle.cs" />
+    <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="ViewModels\FleetViewModel.cs" />

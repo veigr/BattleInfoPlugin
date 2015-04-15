@@ -193,6 +193,9 @@ namespace BattleInfoPlugin.Models
             proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/midnight_battle")
                 .TryParse<practice_midnight_battle>().Subscribe(x => this.Update(x.Data));
 
+            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/airbattle")
+                .TryParse<sortie_airbattle>().Subscribe(x => this.Update(x.Data));
+
             proxy.api_req_sortie_battle
                 .TryParse<sortie_battle>().Subscribe(x => this.Update(x.Data));
 
@@ -380,6 +383,26 @@ namespace BattleInfoPlugin.Models
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+        }
+
+        private void Update(sortie_airbattle data)
+        {
+            this.Name = "航空戦 - 昼戦";
+
+            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, data.api_eSlot);
+            this.UpdateMaxHP(data.api_maxhps);
+            this.UpdateNowHP(data.api_nowhps);
+
+            this.FirstFleet.CalcDamages(
+                data.api_kouku.GetFirstFleetDamages(),
+                data.api_kouku2.GetFirstFleetDamages()
+                );
+
+            this.Enemies.CalcDamages(
+                data.api_support_info.GetEnemyDamages(),    //将来的に増える可能性を想定して追加しておく
+                data.api_kouku.GetEnemyDamages(),
+                data.api_kouku2.GetEnemyDamages()
+                );
         }
 
         private void Update(sortie_battle data)
