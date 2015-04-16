@@ -94,6 +94,13 @@ namespace BattleInfoPlugin.Models.Raw
                         : defaultValue : defaultValue : defaultValue;
         }
 
+        public static AirSupremacy GetAirSupremacy(this Api_Kouku kouku)
+        {
+            return kouku != null && kouku.api_stage1 != null
+                ? (AirSupremacy) kouku.api_stage1.api_disp_seiku
+                : AirSupremacy.q‹óí‚È‚µ;
+        }
+
         #endregion
 
         #region —‹Œ‚í

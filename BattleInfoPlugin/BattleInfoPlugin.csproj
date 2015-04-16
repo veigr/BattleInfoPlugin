@@ -119,6 +119,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AirSupremacy.cs" />
     <Compile Include="Models\BattleData.cs" />
     <Compile Include="Models\BattleEndNotifier.cs" />
     <Compile Include="Models\BattleSituation.cs" />

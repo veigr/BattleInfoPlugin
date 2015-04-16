@@ -26,7 +26,18 @@ namespace BattleInfoPlugin.ViewModels
             get
             {
                 return this.Data != null && this.Data.BattleSituation != Models.BattleSituation.なし
-                    ? this.Data.BattleSituation.ToString() : "";
+                    ? this.Data.BattleSituation.ToString()
+                    : "";
+            }
+        }
+
+        public string FriendAirSupremacy
+        {
+            get
+            {
+                return this.Data != null && this.Data.FriendAirSupremacy != AirSupremacy.航空戦なし
+                    ? this.Data.FriendAirSupremacy.ToString()
+                    : "";
             }
         }
 
@@ -121,6 +132,10 @@ namespace BattleInfoPlugin.ViewModels
                 {
                     () => this.Data.BattleSituation,
                     (_, __) => this.RaisePropertyChanged(() => this.BattleSituation)
+                },
+                {
+                    () => this.Data.FriendAirSupremacy,
+                    (_, __) => this.RaisePropertyChanged(() => this.FriendAirSupremacy)
                 },
                 {
                     () => this.Data.FirstFleet,

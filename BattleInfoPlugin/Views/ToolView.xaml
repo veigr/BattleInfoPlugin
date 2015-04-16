@@ -71,6 +71,10 @@
                         <Run Text="{Binding BattleSituation, Mode=OneWay}"
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
+                             FontSize="12"
+                             Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>
                 </Grid>
             </Border>

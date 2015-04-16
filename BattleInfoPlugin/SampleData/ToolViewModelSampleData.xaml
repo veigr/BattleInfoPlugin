@@ -6,7 +6,8 @@
                           xmlns:models="clr-namespace:BattleInfoPlugin.Models"
                           xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
                           UpdatedTime="2015/03/08 15:15:15"
-                          BattleSituation="T字有利">
+                          BattleSituation="T字有利"
+                          FriendAirSupremacy="制空権確保">
     
     <viewModels:ToolViewModel.Data>
         <models:BattleData>
