@@ -236,8 +236,6 @@ namespace BattleInfoPlugin.Models
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
-
-            this.FriendAirSupremacy = AirSupremacy.航空戦なし;
         }
 
         public void Update(battle_midnight_sp_midnight data)
@@ -361,8 +359,6 @@ namespace BattleInfoPlugin.Models
             this.SecondFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
-
-            this.FriendAirSupremacy = AirSupremacy.航空戦なし;
         }
 
         public void Update(combined_battle_sp_midnight data)
@@ -418,8 +414,6 @@ namespace BattleInfoPlugin.Models
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
-
-            this.FriendAirSupremacy = AirSupremacy.航空戦なし;
         }
 
         private void Update(sortie_airbattle data)
