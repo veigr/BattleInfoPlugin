@@ -221,8 +221,7 @@ namespace BattleInfoPlugin.Models.Raw
         {
             var zip = damages.Zip(dfList, (da, df) => new { df, da });
             var ret = new int[12];
-            foreach (var d in zip)
-            {
+            foreach (var d in zip.Where(d => 0 < d.df)) {
                 ret[d.df - 1] += d.da;
             }
             return ret;
