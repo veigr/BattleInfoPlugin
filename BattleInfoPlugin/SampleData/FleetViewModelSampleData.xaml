@@ -14,7 +14,7 @@
                 <wrapper:LimitedValue Current="6" Maximum="9" Minimum="0"/>
             </models:ShipData.HP>
         </models:ShipData>
-        <models:ShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Repair" TypeName="ろり" AdditionalName="elite">
+        <models:ShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Evacuation" TypeName="ろり" AdditionalName="elite">
             <models:ShipData.HP>
                 <wrapper:LimitedValue Current="71" Maximum="85" Minimum="0"/>
             </models:ShipData.HP>
