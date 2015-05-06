@@ -1,4 +1,4 @@
-using System.Runtime.Serialization;
+ï»¿using System.Runtime.Serialization;
 
 namespace BattleInfoPlugin.Models
 {
@@ -6,26 +6,26 @@ namespace BattleInfoPlugin.Models
     public enum Formation
     {
         [EnumMember]
-        •s–¾ = -1,
+        ä¸æ˜ = -1,
         [EnumMember]
-        ‚È‚µ = 0,
+        ãªã— = 0,
         [EnumMember]
-        ’Pcw = 1,
+        å˜ç¸¦é™£ = 1,
         [EnumMember]
-        •¡cw = 2,
+        è¤‡ç¸¦é™£ = 2,
         [EnumMember]
-        —ÖŒ`w = 3,
+        è¼ªå½¢é™£ = 3,
         [EnumMember]
-        ’òŒ`w = 4,
+        æ¢¯å½¢é™£ = 4,
         [EnumMember]
-        ’P‰¡w = 5,
+        å˜æ¨ªé™£ = 5,
         [EnumMember]
-        ‘ÎöwŒ` = 11,
+        å¯¾æ½œé™£å½¢ = 11,
         [EnumMember]
-        ‘O•ûwŒ` = 12,
+        å‰æ–¹é™£å½¢ = 12,
         [EnumMember]
-        —ÖŒ`wŒ` = 13,
+        è¼ªå½¢é™£å½¢ = 13,
         [EnumMember]
-        í“¬wŒ` = 14,
+        æˆ¦é—˜é™£å½¢ = 14,
     }
 }

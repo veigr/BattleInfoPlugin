@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace BattleInfoPlugin.Models.Raw
     {
         private static readonly FleetDamages defaultValue = new FleetDamages();
 
-        #region x‰‡
+        #region æ”¯æ´
 
         public static FleetDamages GetEnemyDamages(this Api_Support_Info support)
         {
@@ -29,7 +29,7 @@ namespace BattleInfoPlugin.Models.Raw
 
         #endregion
 
-        #region –CŒ‚
+        #region ç ²æ’ƒ
 
         public static FleetDamages GetFriendDamages(this Hougeki hougeki)
         {
@@ -49,7 +49,7 @@ namespace BattleInfoPlugin.Models.Raw
 
         #endregion
 
-        #region –éí
+        #region å¤œæˆ¦
 
         public static FleetDamages GetFriendDamages(this Midnight_Hougeki hougeki)
         {
@@ -68,7 +68,7 @@ namespace BattleInfoPlugin.Models.Raw
 
         #endregion
 
-        #region q‹óí
+        #region èˆªç©ºæˆ¦
 
         public static FleetDamages GetFirstFleetDamages(this Api_Kouku kouku)
         {
@@ -98,12 +98,12 @@ namespace BattleInfoPlugin.Models.Raw
         {
             return kouku != null && kouku.api_stage1 != null
                 ? (AirSupremacy) kouku.api_stage1.api_disp_seiku
-                : AirSupremacy.q‹óí‚È‚µ;
+                : AirSupremacy.èˆªç©ºæˆ¦ãªã—;
         }
 
         #endregion
 
-        #region —‹Œ‚í
+        #region é›·æ’ƒæˆ¦
 
         public static FleetDamages GetFriendDamages(this Raigeki raigeki)
         {
@@ -122,14 +122,14 @@ namespace BattleInfoPlugin.Models.Raw
 
         #endregion
 
-        #region ƒ_ƒ[ƒWŒvZ
+        #region ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—
 
         /// <summary>
-        /// 12€–Ú’†æ“ª6€–Úæ“¾
+        /// 12é …ç›®ä¸­å…ˆé ­6é …ç›®å–å¾—
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="origin">ƒSƒ~-1‚ª•t‚¢‚Ä‚éê‡1ƒIƒŠƒWƒ“</param>
+        /// <param name="origin">ã‚´ãƒŸ-1ãŒä»˜ã„ã¦ã‚‹å ´åˆ1ã‚ªãƒªã‚¸ãƒ³</param>
         /// <returns></returns>
         public static IEnumerable<T> GetFriendData<T>(this IEnumerable<T> source, int origin = 1)
         {
@@ -137,11 +137,11 @@ namespace BattleInfoPlugin.Models.Raw
         }
 
         /// <summary>
-        /// 12€–Ú’†––”ö6€–Úæ“¾
+        /// 12é …ç›®ä¸­æœ«å°¾6é …ç›®å–å¾—
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="origin">ƒSƒ~-1‚ª•t‚¢‚Ä‚éê‡1ƒIƒŠƒWƒ“</param>
+        /// <param name="origin">ã‚´ãƒŸ-1ãŒä»˜ã„ã¦ã‚‹å ´åˆ1ã‚ªãƒªã‚¸ãƒ³</param>
         /// <returns></returns>
         public static IEnumerable<T> GetEnemyData<T>(this IEnumerable<T> source, int origin = 1)
         {
@@ -149,23 +149,23 @@ namespace BattleInfoPlugin.Models.Raw
         }
 
         /// <summary>
-        /// —‹Œ‚Eq‹óíƒ_ƒ[ƒWƒŠƒXƒgZo
+        /// é›·æ’ƒãƒ»èˆªç©ºæˆ¦ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆç®—å‡º
         /// </summary>
         /// <param name="damages">api_fdam/api_edam</param>
         /// <returns></returns>
         public static FleetDamages GetDamages(this double[] damages)
         {
             return damages
-                .GetFriendData()    //“G–¡•û‹¤’Ê
+                .GetFriendData()    //æ•µå‘³æ–¹å…±é€š
                 .Select(Convert.ToInt32)
                 .ToArray()
                 .ToFleetDamages();
         }
 
-        #region –CŒ‚íƒ_ƒ[ƒWƒŠƒXƒgZo
+        #region ç ²æ’ƒæˆ¦ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆç®—å‡º
 
         /// <summary>
-        /// –CŒ‚í—FŒRƒ_ƒ[ƒWƒŠƒXƒgZo
+        /// ç ²æ’ƒæˆ¦å‹è»ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆç®—å‡º
         /// </summary>
         /// <param name="damages">api_damage</param>
         /// <param name="df_list">api_df_list</param>
@@ -180,7 +180,7 @@ namespace BattleInfoPlugin.Models.Raw
         }
 
         /// <summary>
-        /// –CŒ‚í“GŒRƒ_ƒ[ƒWƒŠƒXƒgZo
+        /// ç ²æ’ƒæˆ¦æ•µè»ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆç®—å‡º
         /// </summary>
         /// <param name="damages">api_damage</param>
         /// <param name="df_list">api_df_list</param>
@@ -195,9 +195,9 @@ namespace BattleInfoPlugin.Models.Raw
         }
 
         /// <summary>
-        /// –CŒ‚íƒ_ƒ[ƒWƒŠƒXƒgint”z—ñ‰»
-        /// ’e’…ŠÏ‘ªËŒ‚ƒf[ƒ^‚Íƒtƒ‰ƒbƒg‰»‚·‚é
-        /// api_df_list‚à“¯—l‚ÌŒ^‚È‚Ì‚Å—¬—p‰Â”\
+        /// ç ²æ’ƒæˆ¦ãƒ€ãƒ¡ãƒ¼ã‚¸ãƒªã‚¹ãƒˆinté…åˆ—åŒ–
+        /// å¼¾ç€è¦³æ¸¬å°„æ’ƒãƒ‡ãƒ¼ã‚¿ã¯ãƒ•ãƒ©ãƒƒãƒˆåŒ–ã™ã‚‹
+        /// api_df_listã‚‚åŒæ§˜ã®å‹ãªã®ã§æµç”¨å¯èƒ½
         /// </summary>
         /// <param name="damages">api_damage</param>
         /// <returns></returns>
@@ -211,8 +211,8 @@ namespace BattleInfoPlugin.Models.Raw
         }
 
         /// <summary>
-        /// ƒtƒ‰ƒbƒg‰»‚µ‚½api_damage‚Æapi_df_list‚ğŒ³‚É
-        /// ©ŒR6Ç{“GŒR6Ç‚Ì’·‚³12‚Ìƒ_ƒ[ƒW‡Œv”z—ñ‚ğì¬
+        /// ãƒ•ãƒ©ãƒƒãƒˆåŒ–ã—ãŸapi_damageã¨api_df_listã‚’å…ƒã«
+        /// è‡ªè»6éš»ï¼‹æ•µè»6éš»ã®é•·ã•12ã®ãƒ€ãƒ¡ãƒ¼ã‚¸åˆè¨ˆé…åˆ—ã‚’ä½œæˆ
         /// </summary>
         /// <param name="damages">api_damage</param>
         /// <param name="dfList">api_df_list</param>
