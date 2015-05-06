@@ -23,3 +23,11 @@
 
 * MIT License
 
+
+### LATEST BUILD
+
+* [![Build status](https://ci.appveyor.com/api/projects/status/wqd7o4u10lvqfsbj?svg=true)](https://ci.appveyor.com/project/veigr/battleinfoplugin/build/artifacts) [BattleInfoPlugin - AppVeyor](https://ci.appveyor.com/project/veigr/battleinfoplugin/build/artifacts)
+* 「ブロックの解除」を忘れないように。
+    * [https://twitter.com/Grabacr07/status/497403215730589696](https://twitter.com/Grabacr07/status/497403215730589696)
+* 何が起きても気にしない人だけが使ってください。
+    * バグを踏むと、誤った結果表示になったり戦闘時にアプリがクラッシュしたりする可能性があります。
