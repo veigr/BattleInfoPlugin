@@ -20,7 +20,7 @@ namespace BattleInfoPlugin.ViewModels
 {
     public class EnemyWindowViewModel : ViewModel
     {
-        public IEnumerable<MapAreaViewModel> MapAreas { get; set; }
+        public IEnumerable<EnemyMapViewModel> EnemyMaps { get; set; }
 
         public EnemyWindowViewModel()
         {
@@ -28,32 +28,27 @@ namespace BattleInfoPlugin.ViewModels
 
         public EnemyWindowViewModel(Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> mapEnemies)
         {
-            //TODO セル同一視
-            this.MapAreas = KanColleClient.Current.Master.MapAreas
-                .Select(area => new MapAreaViewModel
+            this.EnemyMaps = KanColleClient.Current.Master.MapInfos
+                .Select(mi => new EnemyMapViewModel
                 {
-                    Key = area.Value,
-                    MapInfos = mapEnemies.Where(info => info.Key.MapAreaId == area.Key)
-                        .Select(info => new MapInfoViewModel
+                    Info = mi.Value,
+                    MapCells = mapEnemies.Where(info => info.Key.Id == mi.Key)
+                        .Select(info => info.Value)
+                        .SelectMany(cells => cells)
+                        .Select(cell => new MapCellViewModel
                         {
-                            Key = info.Key,
-                            MapCells = info.Value
-                                .Select(cell => new MapCellViewModel
+                            Key = cell.Key,
+                            Enemies = cell.Value
+                                .Select(enemy => new EnemyFleetViewModel
                                 {
-                                    Key = cell.Key,
-                                    Enemies = cell.Value
-                                        .Select(enemy => new EnemyFleetViewModel
-                                        {
-                                            Key = enemy.Key,
-                                            Fleet = enemy.Value,
-                                        })
-                                        .OrderBy(enemy => enemy.Key),
+                                    Key = enemy.Key,
+                                    Fleet = enemy.Value,
                                 })
-                                .OrderBy(cell => cell.Key),
+                                .OrderBy(enemy => enemy.Key)
                         })
-                        .OrderBy(info => info.Key.Id),
+                        .OrderBy(cell => cell.Key)
                 })
-                .OrderBy(area => area.Key.Id);
+                .OrderBy(info => info.Info.Id);
         }
 
         public void Initialize()

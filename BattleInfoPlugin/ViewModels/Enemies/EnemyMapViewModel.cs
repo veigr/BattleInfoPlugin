@@ -17,15 +17,19 @@ using Grabacr07.KanColleWrapper.Models;
 
 namespace BattleInfoPlugin.ViewModels.Enemies
 {
-    public class MapAreaViewModel : TabItemViewModel
+    public class EnemyMapViewModel : TabItemViewModel
     {
-        public MapArea Key { get; set; }
+        public MapInfo Info { get; set; }
 
-        public IEnumerable<MapInfoViewModel> MapInfos { get; set; }
+        public IEnumerable<MapCellViewModel> MapCells { get; set; }
 
         public override string Name
         {
-            get { return this.Key.Id + "." + this.Key.Name; }
+            get
+            {
+                return this.Info.MapAreaId + "-" + this.Info.IdInEachMapArea
+                    + ": " + this.Info.Name;
+            }
             protected set { throw new NotImplementedException(); }
         }
     }

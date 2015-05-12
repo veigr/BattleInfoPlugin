@@ -100,6 +100,7 @@ namespace BattleInfoPlugin.Models
 
         public Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> GetMapEnemies()
         {
+            this.Reload();
             var master = KanColleClient.Current.Master;
             return this.MapEnemyData.ToDictionary(
                 info => master.MapInfos[info.Key],

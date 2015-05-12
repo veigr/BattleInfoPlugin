@@ -145,9 +145,8 @@
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="Models\ShipSlotData.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
-    <Compile Include="ViewModels\Enemies\MapAreaViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\EnemyMapViewModel.cs" />
     <Compile Include="ViewModels\Enemies\MapCellViewModel.cs" />
-    <Compile Include="ViewModels\Enemies\MapInfoViewModel.cs" />
     <Compile Include="ViewModels\EnemyWindowViewModel.cs" />
     <Compile Include="ViewModels\FleetViewModel.cs" />
     <Compile Include="ViewModels\ToolViewModel.cs" />
