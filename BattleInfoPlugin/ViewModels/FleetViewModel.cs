@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using BattleInfoPlugin.Models;
 using Livet;
+using Livet.EventListeners;
 
 namespace BattleInfoPlugin.ViewModels
 {
@@ -26,9 +28,9 @@ namespace BattleInfoPlugin.ViewModels
 
 
         #region Fleet変更通知プロパティ
-        private ShipData[] _Fleet;
+        private FleetData _Fleet;
 
-        public ShipData[] Fleet
+        public FleetData Fleet
         {
             get
             { return this._Fleet; }
@@ -38,7 +40,13 @@ namespace BattleInfoPlugin.ViewModels
                     return;
                 this._Fleet = value;
                 this.RaisePropertyChanged();
+
+                this.RaisePropertyChanged(() => this.FleetFormation);
                 this.RaisePropertyChanged(() => this.IsVisible);
+
+                this.Name = !string.IsNullOrWhiteSpace(value.Name)
+                    ? value.Name
+                    : this.defaultName;
             }
         }
         #endregion
@@ -49,58 +57,36 @@ namespace BattleInfoPlugin.ViewModels
         public bool IsVisible
         {
             get
-            { return this.Fleet != null && this.Fleet.Length != 0; }
+            { return this.Fleet != null && this.Fleet.Ships.Count() != 0; }
         }
         #endregion
 
 
         #region FleetFormation変更通知プロパティ
-        private string _FleetFormation;
 
         public string FleetFormation
         {
             get
-            { return this._FleetFormation; }
-            set
             {
-                if (this._FleetFormation == value)
-                    return;
-                this._FleetFormation = value;
-                this.RaisePropertyChanged();
+                return (this.Fleet != null && this.Fleet.Formation != Formation.なし)
+                      ? this.Fleet.Formation.ToString()
+                      : "";
             }
         }
 
         #endregion
 
-
-        #region FormationSource変更通知プロパティ
-        private Formation _FormationSource;
-
-        public Formation FormationSource
-        {
-            get
-            { return this._FormationSource; }
-            set
-            { 
-                if (this._FormationSource == value)
-                    return;
-                this._FormationSource = value;
-                this.RaisePropertyChanged();
-
-                this.FleetFormation = value != Formation.なし ? value.ToString() : "";
-            }
-        }
-        #endregion
-
-        public FleetViewModel():this("")
+        public FleetViewModel() : this("")
         {
         }
 
-        public FleetViewModel(string name, ShipData[] data = null, Formation formation = Formation.なし)
+        public FleetViewModel(string name, FleetData fleet = null)
         {
             this.Name = name;
-            this.Fleet = data;
-            this.FormationSource = formation;
+            this.Fleet = fleet;
+            this.defaultName = name;
         }
+
+        private readonly string defaultName;
     }
 }

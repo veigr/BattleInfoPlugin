@@ -73,12 +73,12 @@
         <Rectangle Height="1"
                    Margin="3, 4"
                    Style="{DynamicResource SeparatorRectangleStyleKey}" />
-        <ItemsControl ItemsSource="{Binding Fleet}"
+        <ItemsControl ItemsSource="{Binding Fleet.Ships}"
                       Background="Transparent"
                       Grid.IsSharedSizeScope="True" DataContext="{Binding}"
                       Margin="3,0">
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:ShipData}">
+                <DataTemplate DataType="{x:Type models:MembersShipData}">
                     <DataTemplate.Resources>
                         <Style TargetType="{x:Type Run}">
                             <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}"/>

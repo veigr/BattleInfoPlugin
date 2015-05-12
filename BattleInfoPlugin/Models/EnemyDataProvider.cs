@@ -8,13 +8,14 @@ using System.Runtime.Serialization.Json;
 using BattleInfoPlugin.Models.Raw;
 using BattleInfoPlugin.Properties;
 using Grabacr07.KanColleWrapper;
+using Grabacr07.KanColleWrapper.Models;
 
 namespace BattleInfoPlugin.Models
 {
     [DataContract]
     public class EnemyDataProvider
     {
-        private static DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(EnemyDataProvider));
+        private static readonly DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(EnemyDataProvider));
 
         // EnemyId, EnemyMasterIDs
         [DataMember]
@@ -39,6 +40,10 @@ namespace BattleInfoPlugin.Models
         [DataMember]
         private Dictionary<int, HashSet<KeyValuePair<int, int>>> MapRoute { get; set; }
 
+        // EnemyId, Name
+        [DataMember]
+        private Dictionary<int, string> EnemyNames { get; set; }
+
         // MapInfoID, CellNo
         [DataMember]
         private Dictionary<int, int> MapBossCellNo { get; set; }
@@ -53,36 +58,23 @@ namespace BattleInfoPlugin.Models
             if (this.EnemyDictionary == null) this.EnemyDictionary = new Dictionary<int, int[]>();
             if (this.EnemyFormation == null) this.EnemyFormation = new Dictionary<int, Formation>();
             if (this.EnemySlotItems == null) this.EnemySlotItems = new Dictionary<int, int[][]>();
+            if (this.EnemyNames == null) this.EnemyNames = new Dictionary<int, string>();
             if (this.MapEnemyData == null) this.MapEnemyData = new Dictionary<int, Dictionary<int, HashSet<int>>>();
             if (this.MapRoute == null) this.MapRoute = new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
             if (this.MapBossCellNo == null) this.MapBossCellNo = new Dictionary<int, int>();
             this.previousCellNo = 0;
             this.Dump("GetNextEnemyFormation");
         }
-
-        public Formation GetNextEnemyFormation(map_start_next startNext)
+        
+        public FleetData GetNextEnemyFleet(map_start_next startNext)
         {
-            this.Dump("GetNextEnemyFormation");
-
-            if (startNext.api_enemy == null) return Formation.なし;
+            this.Dump("GetNextEnemyFleet");
+            if (startNext.api_enemy == null) return new FleetData();
             this.currentEnemyID = startNext.api_enemy.api_enemy_id;
-
-            return this.EnemyFormation.ContainsKey(startNext.api_enemy.api_enemy_id)
-                ? this.EnemyFormation[startNext.api_enemy.api_enemy_id]
-                : Formation.不明;
-        }
-
-        public ShipData[] GetNextEnemies(map_start_next startNext)
-        {
-            this.Dump("GetNextEnemies");
-
-            if (startNext.api_enemy == null) return new ShipData[0];
-            this.currentEnemyID = startNext.api_enemy.api_enemy_id;
-
-            var master = KanColleClient.Current.Master.Ships;
-            return this.EnemyDictionary.ContainsKey(startNext.api_enemy.api_enemy_id)
-                ? this.EnemyDictionary[startNext.api_enemy.api_enemy_id].Select(x => new ShipData(master[x])).ToArray()
-                : Enumerable.Repeat(new ShipData(), 6).ToArray();
+            return new FleetData(
+                this.GetNextEnemies(startNext),
+                this.GetNextEnemyFormation(startNext),
+                this.GetNextEnemyName(startNext));
         }
 
         public void UpdateMapData(map_start_next startNext)
@@ -92,6 +84,92 @@ namespace BattleInfoPlugin.Models
             this.UpdateMapBossCellNo(startNext);
             this.Save();
             this.Dump("UpdateMapData");
+        }
+
+        public void UpdateEnemyName(battle_result result)
+        {
+            if (result == null) return;
+            if (result.api_enemy_info == null) return;
+
+            if (this.EnemyNames.ContainsKey(this.currentEnemyID))
+                this.EnemyNames[this.currentEnemyID] = result.api_enemy_info.api_deck_name;
+            else
+                this.EnemyNames.Add(this.currentEnemyID, result.api_enemy_info.api_deck_name);
+            this.Save();
+        }
+
+        public Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> GetMapEnemies()
+        {
+            var master = KanColleClient.Current.Master;
+            return this.MapEnemyData.ToDictionary(
+                info => master.MapInfos[info.Key],
+                info => info.Value.ToDictionary(
+                    cell => cell.Key,
+                    cell => cell.Value.ToDictionary(
+                        enemy => enemy,
+                        enemy => new FleetData(
+                            this.GetEnemiesFromId(enemy),
+                            this.GetEnemyFormationFromId(enemy),
+                            this.GetEnemyNameFromId(enemy),
+                            this.GetIsBoss(info.Key, cell.Key)
+                            ))));
+        }
+
+        private bool GetIsBoss(int mapInfoId, int cellId)
+        {
+            return this.MapBossCellNo.ContainsKey(mapInfoId)
+                && this.MapBossCellNo[mapInfoId] == cellId;
+        }
+
+        private string GetNextEnemyName(map_start_next startNext)
+        {
+            return startNext.api_enemy != null
+                ? this.GetEnemyNameFromId(startNext.api_enemy.api_enemy_id)
+                : "";
+        }
+
+        private string GetEnemyNameFromId(int enemyId)
+        {
+            return this.EnemyNames.ContainsKey(enemyId)
+                ? this.EnemyNames[enemyId]
+                : "";
+        }
+
+        private Formation GetNextEnemyFormation(map_start_next startNext)
+        {
+            return startNext.api_enemy != null
+                ? this.GetEnemyFormationFromId(startNext.api_enemy.api_enemy_id)
+                : Formation.なし;
+        }
+
+        private Formation GetEnemyFormationFromId(int enemyId)
+        {
+            return this.EnemyFormation.ContainsKey(enemyId)
+                ? this.EnemyFormation[enemyId]
+                : Formation.不明;
+        }
+
+        private IEnumerable<ShipData> GetNextEnemies(map_start_next startNext)
+        {
+            return startNext.api_enemy != null
+                ? this.GetEnemiesFromId(startNext.api_enemy.api_enemy_id)
+                : new MembersShipData[0];
+        }
+
+        private IEnumerable<ShipData> GetEnemiesFromId(int enemyId)
+        {
+            var shipInfos = KanColleClient.Current.Master.Ships;
+            var slotInfos = KanColleClient.Current.Master.SlotItems;
+            if (!this.EnemyDictionary.ContainsKey(enemyId)) return Enumerable.Repeat(new MastersShipData(), 6).ToArray();
+            var enemies = this.EnemyDictionary[enemyId]
+                .Select((x, i) => new MastersShipData(shipInfos[x])
+                {
+                    Slots = this.EnemySlotItems[enemyId][i]
+                        .Where(s => s != -1)
+                        .Select(s => slotInfos[s])
+                        .Select((s, si) => new ShipSlotData(s, shipInfos[x].Slots[si], shipInfos[x].Slots[si]))
+                }).ToArray();
+            return enemies;
         }
 
         private void UpdateMapEnemyData(map_start_next startNext)
@@ -183,6 +261,7 @@ namespace BattleInfoPlugin.Models
                 this.EnemyDictionary = obj.EnemyDictionary;
                 this.EnemyFormation = obj.EnemyFormation;
                 this.EnemySlotItems = obj.EnemySlotItems;
+                this.EnemyNames = obj.EnemyNames;
                 this.MapEnemyData = obj.MapEnemyData;
                 this.MapRoute = obj.MapRoute;
                 this.MapBossCellNo = obj.MapBossCellNo;

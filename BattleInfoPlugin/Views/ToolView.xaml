@@ -5,9 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:BattleInfoPlugin.Views"
              xmlns:converters="clr-namespace:BattleInfoPlugin.Views.Converters"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              mc:Ignorable="d" 
              d:DesignHeight="350"
-             d:DesignWidth="560"
+             d:DesignWidth="640"
              d:DataContext="{d:DesignData /SampleData/ToolViewModelSampleData.xaml}">
 
     <UserControl.Resources>
@@ -19,6 +22,15 @@
             <converters:AddDoubleValueConverter x:Key="HeightConverter" Value="-8"/>
         </ResourceDictionary>
     </UserControl.Resources>
+
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}"
+                                     MessageKey="Show/EnemyWindow">
+            <l:TransitionInteractionMessageAction Mode="NewOrActive"
+                                                  WindowType="views:EnemyWindow"
+                                                  IsOwned="False" />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
 
     <!-- 親に縦だけAutoなScrollViewerがいるので、自前でScrollBarを出したいなら
          ViewPortサイズからMargin削った分をサイズに設定する必要がある -->
@@ -48,7 +60,9 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -76,6 +90,22 @@
                              FontSize="12"
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>
+
+
+                    <Button Grid.Column="3"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Content="既知の敵一覧"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,10,3">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction TargetObject="{Binding}"
+                                                     MethodName="OpenEnemyWindow"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
                 </Grid>
             </Border>
 

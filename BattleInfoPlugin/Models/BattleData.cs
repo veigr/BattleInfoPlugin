@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using BattleInfoPlugin.Models.Raw;
 using Grabacr07.KanColleWrapper;
+using Grabacr07.KanColleWrapper.Models;
 using Livet;
 
 namespace BattleInfoPlugin.Models
@@ -10,9 +12,7 @@ namespace BattleInfoPlugin.Models
     public class BattleData : NotificationObject
     {
         //FIXME 敵の開幕雷撃&連合艦隊がまだ不明(とりあえず第二艦隊が受けるようにしてる)
-        //FIXME 連合艦隊全般未テスト
-
-
+        
         #region Name変更通知プロパティ
         private string _Name;
 
@@ -67,12 +67,11 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
-        //FIXME 艦隊が情報をもっと持つようになってきたらFleet型作る
 
         #region FirstFleet変更通知プロパティ
-        private ShipData[] _FirstFleet;
+        private FleetData _FirstFleet;
 
-        public ShipData[] FirstFleet
+        public FleetData FirstFleet
         {
             get
             { return this._FirstFleet; }
@@ -88,9 +87,9 @@ namespace BattleInfoPlugin.Models
 
 
         #region SecondFleet変更通知プロパティ
-        private ShipData[] _SecondFleet;
+        private FleetData _SecondFleet;
 
-        public ShipData[] SecondFleet
+        public FleetData SecondFleet
         {
             get
             { return this._SecondFleet; }
@@ -106,9 +105,9 @@ namespace BattleInfoPlugin.Models
 
 
         #region Enemies変更通知プロパティ
-        private ShipData[] _Enemies;
+        private FleetData _Enemies;
 
-        public ShipData[] Enemies
+        public FleetData Enemies
         {
             get
             { return this._Enemies; }
@@ -117,42 +116,6 @@ namespace BattleInfoPlugin.Models
                 if (this._Enemies == value)
                     return;
                 this._Enemies = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-        
-        #region FriendFormation変更通知プロパティ
-        private Formation _FriendFormation;
-
-        public Formation FriendFormation
-        {
-            get
-            { return this._FriendFormation; }
-            set
-            { 
-                if (this._FriendFormation == value)
-                    return;
-                this._FriendFormation = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        #endregion
-
-
-        #region NextEnemyFormation変更通知プロパティ
-        private Formation _NextEnemyFormation;
-
-        public Formation NextEnemyFormation
-        {
-            get
-            { return this._NextEnemyFormation; }
-            set
-            { 
-                if (this._NextEnemyFormation == value)
-                    return;
-                this._NextEnemyFormation = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -222,6 +185,18 @@ namespace BattleInfoPlugin.Models
 
             proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next")
                 .TryParse<map_start_next>().Subscribe(x => this.UpdateFleetsByStartNext(x.Data));
+
+            proxy.api_req_sortie_battleresult
+                .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
+
+            proxy.api_req_combined_battle_battleresult
+                .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
+
+        }
+
+        public Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> GetMapEnemies()
+        {
+            return this.provider.GetMapEnemies();
         }
 
         #region Update From Battle SvData
@@ -478,17 +453,18 @@ namespace BattleInfoPlugin.Models
 
             this.BattleSituation = BattleSituation.なし;
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
-            this.FriendFormation = Formation.なし;
-            this.NextEnemyFormation = this.provider.GetNextEnemyFormation(startNext);
-            this.Enemies = this.provider.GetNextEnemies(startNext);
-            this.Enemies.UpdateHPBySource();
+            if (this.FirstFleet != null) this.FirstFleet.Formation = Formation.なし;
+            this.Enemies = this.provider.GetNextEnemyFleet(startNext);
 
             if (api_deck_id != null) this.CurrentDeckId = int.Parse(api_deck_id);
             if (this.CurrentDeckId < 1) return;
 
             this.UpdateFriendFleets(this.CurrentDeckId);
-            this.FirstFleet.UpdateHPBySource();
-            this.SecondFleet.UpdateHPBySource();
+        }
+
+        private void Update(battle_result result)
+        {
+            this.provider.UpdateEnemyName(result);
         }
 
         private void UpdateFleets(
@@ -499,18 +475,21 @@ namespace BattleInfoPlugin.Models
             bool isUpdateEnemyData = true)
         {
             this.UpdatedTime = DateTimeOffset.Now;
+            this.UpdateFriendFleets(api_deck_id);
+
+            var master = KanColleClient.Current.Master.Ships;
+            this.Enemies = new FleetData(
+                api_ship_ke.Where(x => x != -1).Select(x => new MastersShipData(master[x])).ToArray(),
+                this.Enemies != null ? this.Enemies.Formation : Formation.なし,
+                this.Enemies != null ? this.Enemies.Name : "");
 
             if (api_formation != null)
             {
                 this.BattleSituation = (BattleSituation)api_formation[2];
-                this.FriendFormation = (Formation)api_formation[0];
-                this.NextEnemyFormation = (Formation)api_formation[1];
+                if (this.FirstFleet != null) this.FirstFleet.Formation = (Formation)api_formation[0];
+                if (this.Enemies != null) this.Enemies.Formation = (Formation)api_formation[1];
                 if (isUpdateEnemyData) this.provider.UpdateEnemyData(api_ship_ke, api_formation, api_eSlot);
             }
-            this.UpdateFriendFleets(api_deck_id);
-
-            var master = KanColleClient.Current.Master.Ships;
-            this.Enemies = api_ship_ke.Where(x => x != -1).Select(x => new ShipData(master[x])).ToArray();
 
             this.CurrentDeckId = api_deck_id;
         }
@@ -518,38 +497,34 @@ namespace BattleInfoPlugin.Models
         private void UpdateFriendFleets(int deckID)
         {
             var organization = KanColleClient.Current.Homeport.Organization;
-            this.FirstFleet = organization.Fleets[deckID].Ships.Select(s => new ShipData(s)).ToArray();
-            this.SecondFleet = organization.Combined && deckID == 1
-                ? organization.Fleets[2].Ships.Select(s => new ShipData(s)).ToArray()
-                : new ShipData[0];
+            this.FirstFleet = new FleetData(
+                organization.Fleets[deckID].Ships.Select(s => new MembersShipData(s)).ToArray(),
+                this.FirstFleet != null ? this.FirstFleet.Formation : Formation.なし,
+                organization.Fleets[deckID].Name);
+            this.SecondFleet = new FleetData(
+                organization.Combined && deckID == 1
+                    ? organization.Fleets[2].Ships.Select(s => new MembersShipData(s)).ToArray()
+                    : new MembersShipData[0],
+                this.SecondFleet != null ? this.SecondFleet.Formation : Formation.なし,
+                organization.Fleets[2].Name);
         }
 
         private void UpdateMaxHP(int[] api_maxhps, int[] api_maxhps_combined = null)
         {
-            this.FirstFleet.SetValues(api_maxhps.GetFriendData(), (s, v) => s.MaxHP = v);
-            this.Enemies.SetValues(api_maxhps.GetEnemyData(), (s, v) => s.MaxHP = v);
+            this.FirstFleet.Ships.SetValues(api_maxhps.GetFriendData(), (s, v) => s.MaxHP = v);
+            this.Enemies.Ships.SetValues(api_maxhps.GetEnemyData(), (s, v) => s.MaxHP = v);
 
             if (api_maxhps_combined == null) return;
-            this.SecondFleet.SetValues(api_maxhps_combined.GetFriendData(), (s, v) => s.MaxHP = v);
+            this.SecondFleet.Ships.SetValues(api_maxhps_combined.GetFriendData(), (s, v) => s.MaxHP = v);
         }
 
         private void UpdateNowHP(int[] api_nowhps, int[] api_nowhps_combined = null)
         {
-            this.FirstFleet.SetValues(api_nowhps.GetFriendData(), (s, v) => s.NowHP = v);
-            this.Enemies.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
+            this.FirstFleet.Ships.SetValues(api_nowhps.GetFriendData(), (s, v) => s.NowHP = v);
+            this.Enemies.Ships.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
 
             if (api_nowhps_combined == null) return;
-            this.SecondFleet.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
-        }
-    }
-
-    static class BattleDataExtensions
-    {
-
-        public static void UpdateHPBySource(this ShipData[] target)
-        {
-            target.SetValues(target.Select(x => x.SourceMaxHP), (s, v) => s.MaxHP = v);
-            target.SetValues(target.Select(x => x.SourceNowHP), (s, v) => s.NowHP = v);
+            this.SecondFleet.Ships.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
         }
     }
 }

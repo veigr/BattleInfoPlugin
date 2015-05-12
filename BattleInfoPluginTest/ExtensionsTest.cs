@@ -110,22 +110,22 @@ namespace BattleInfoPluginTest
             });
         }
 
-        public static ShipData[] CreateEmptyTestData()
+        public static MembersShipData[] CreateEmptyTestData()
         {
             return Enumerable.Repeat(0, 6)
-                .Select(_ => new ShipData()).ToArray();
+                .Select(_ => new MembersShipData()).ToArray();
         }
 
-        public static ShipData[] CreateTestData()
+        public static MembersShipData[] CreateTestData()
         {
             return new[]
             {
-                new ShipData {NowHP = 10, MaxHP = 10},
-                new ShipData {NowHP = 10, MaxHP = 20},
-                new ShipData {NowHP = 30, MaxHP = 30},
-                new ShipData {NowHP = 30, MaxHP = 40},
-                new ShipData {NowHP = 50, MaxHP = 50},
-                new ShipData {NowHP = 50, MaxHP = 60},
+                new MembersShipData {NowHP = 10, MaxHP = 10},
+                new MembersShipData {NowHP = 10, MaxHP = 20},
+                new MembersShipData {NowHP = 30, MaxHP = 30},
+                new MembersShipData {NowHP = 30, MaxHP = 40},
+                new MembersShipData {NowHP = 50, MaxHP = 50},
+                new MembersShipData {NowHP = 50, MaxHP = 60},
             };
         }
     }

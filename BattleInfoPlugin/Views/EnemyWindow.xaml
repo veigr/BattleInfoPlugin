@@ -1,0 +1,585 @@
+﻿<metro:MetroWindow x:Class="BattleInfoPlugin.Views.EnemyWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:vm="clr-namespace:BattleInfoPlugin.ViewModels"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+                   xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
+                   xmlns:views="clr-namespace:BattleInfoPlugin.Views"
+                   xmlns:converters="clr-namespace:BattleInfoPlugin.Views.Converters"
+                   mc:Ignorable="d" 
+                   Title="既知の敵一覧"
+                   Width="1000"
+                   Height="900"
+                   FontSize="12"
+                   Background="{DynamicResource ThemeBrushKey}"
+                   Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                   IsRestoringWindowPlacement="True"
+                   SnapsToDevicePixels="True"
+                   TextOptions.TextFormattingMode="Display"
+                   d:DataContext="{d:DesignInstance vm:EnemyWindowViewModel, IsDesignTimeCreatable=True}">
+
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/PluginStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    
+     <i:Interaction.Triggers>
+     
+        <!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
+        <!--Viewのコードビハインドは、基本的にView内で完結するロジックとViewModelからのイベントの受信(専用リスナを使用する)に限るとトラブルが少なくなります -->
+        <!--Livet1.1からはコードビハインドでViewModelのイベントを受信するためのWeakEventLisnterサポートが追加されています --> 
+        
+        <!--WindowのContentRenderedイベントのタイミングでViewModelのInitializeメソッドが呼ばれます-->
+        <i:EventTrigger EventName="ContentRendered">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
+        </i:EventTrigger>
+
+        <!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
+        <i:EventTrigger EventName="Closed">
+            <l:DataContextDisposeAction/>
+        </i:EventTrigger>
+
+        <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
+
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="23" />
+        </Grid.RowDefinitions>
+
+        <!-- #region CaptionBar -->
+        <Border metro:MetroWindow.IsCaptionBar="True"
+                Panel.ZIndex="100">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <controls:AppIcon Width="36"
+                                  Height="36"
+                                  Background="Transparent"
+                                  AnchorVisibility="Collapsed"
+                                  BandVisibility="Collapsed" />
+
+                <TextBlock Grid.Column="1"
+                           Text="既知の敵一覧"
+                           Style="{DynamicResource CaptionTextStyleKey}"
+                           Margin="2,0,8,0" />
+
+                <metro:SystemButtons Grid.Column="2"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Top" />
+            </Grid>
+        </Border>
+        <!-- #endregion -->
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer Grid.Column="0"
+                          VerticalScrollBarVisibility="Auto"
+                          PanningMode="Both">
+                <Grid MinWidth="90"
+                      Background="{DynamicResource ActiveBackgroundBrushKey}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="エリア"
+                               Style="{DynamicResource CaptionTextStyleKey}"
+                               Margin="3,0"/>
+
+                    <Rectangle Grid.Row="1"
+                               Height="1"
+                               Margin="20,10"
+                               Fill="{DynamicResource InactiveForegroundBrushKey}"
+                               Opacity="0.5" />
+
+                    <metro:TabView Grid.Row="2"
+                                   ItemsSource="{Binding MapAreas}"
+                                   IsSynchronizedWithCurrentItem="True"/>
+                </Grid>
+            </ScrollViewer>
+
+
+            <ScrollViewer Grid.Column="1"
+                          VerticalScrollBarVisibility="Auto"
+                          PanningMode="Both">
+                <Grid MinWidth="90"
+                      Background="{DynamicResource BackgroundBrushKey}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="マップ"
+                               Style="{DynamicResource CaptionTextStyleKey}"
+                               Margin="3,0"/>
+
+                    <Rectangle Grid.Row="1"
+                               Height="1"
+                               Margin="20,10"
+                               Fill="{DynamicResource InactiveForegroundBrushKey}"
+                               Opacity="0.5" />
+
+                    <metro:TabView Grid.Row="2"
+                                   ItemsSource="{Binding MapAreas/MapInfos}"
+                                   IsSynchronizedWithCurrentItem="True">
+                        <metro:TabView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                <Setter Property="Height" Value="38" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource AccentHighlightBrushKey}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </metro:TabView.ItemContainerStyle>
+                    </metro:TabView>
+                </Grid>
+            </ScrollViewer>
+
+
+
+            <ScrollViewer Grid.Column="1"
+                          VerticalScrollBarVisibility="Auto"
+                          PanningMode="Both">
+                <Grid MinWidth="90"
+                      Background="{DynamicResource BackgroundBrushKey}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="マップ"
+                               Style="{DynamicResource CaptionTextStyleKey}"
+                               Margin="3,0"/>
+
+                    <Rectangle Grid.Row="1"
+                               Height="1"
+                               Margin="20,10"
+                               Fill="{DynamicResource InactiveForegroundBrushKey}"
+                               Opacity="0.5" />
+
+                    <metro:TabView Grid.Row="2"
+                                   ItemsSource="{Binding MapAreas/MapInfos}"
+                                   IsSynchronizedWithCurrentItem="True">
+                        <metro:TabView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                <Setter Property="Height" Value="38" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource ThemeBrushKey}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource AccentHighlightBrushKey}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource ActiveBackgroundBrushKey}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </metro:TabView.ItemContainerStyle>
+                    </metro:TabView>
+                </Grid>
+            </ScrollViewer>
+            
+            <ScrollViewer Grid.Column="2"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          PanningMode="Both">
+                <ItemsControl ItemsSource="{Binding MapAreas/MapInfos/MapCells}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           Margin="5"
+                                           Style="{DynamicResource DefaultTextStyleKey}"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Left">
+                                    <Run Text="Cell ID:"/>
+                                    <Run Text="{Binding Key, Mode=OneTime}"
+                                         Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                </TextBlock>
+
+                                <ItemsControl Grid.Row="0"
+                                              Grid.Column="1"
+                                              Grid.IsSharedSizeScope="True"
+                                              ItemsSource="{Binding Enemies}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" SharedSizeGroup="EnemyName"/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+                                                    
+                                                    <StackPanel Grid.Column="0"
+                                                                Margin="0,5,0,10">
+                                                        <StackPanel.Resources>
+                                                            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+                                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                                <Setter Property="Margin" Value="5,0" />
+                                                                <Setter Property="VerticalAlignment" Value="Bottom" />
+                                                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                                            </Style>
+                                                        </StackPanel.Resources>
+                                                        <TextBlock FontSize="11">
+                                                            <Run Text="Enemy ID:"/>
+                                                            <Run Text="{Binding Key, Mode=OneTime}"/>
+                                                        </TextBlock>
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   Style="{DynamicResource EmphaticTextStyleKey}"
+                                                                   Margin="5,0"
+                                                                   VerticalAlignment="Bottom"
+                                                                   HorizontalAlignment="Left"
+                                                                   FontSize="16"/>
+                                                        <Border Background="DarkRed"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="5,0"
+                                                                Visibility="{Binding Fleet.IsBoss, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                            <TextBlock Text="BOSS"/>
+                                                        </Border>
+                                                        <TextBlock Text="制空権"
+                                                                   Margin="5,10,5,0"/>
+                                                        <TextBlock FontSize="11">
+                                                            <Run Text="均衡:"/>
+                                                            <Run Text="{Binding Fleet.AirParityRequirements, Mode=OneTime}"
+                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                        </TextBlock>
+                                                        <TextBlock FontSize="11">
+                                                            <Run Text="優勢:"/>
+                                                            <Run Text="{Binding Fleet.AirSuperiorityRequirements, Mode=OneTime}"
+                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                        </TextBlock>
+                                                        <TextBlock FontSize="11">
+                                                            <Run Text="確保:"/>
+                                                            <Run Text="{Binding Fleet.AirSupremacyRequirements, Mode=OneTime}"
+                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+
+                                                    <ItemsControl Grid.Column="1"
+                                                                  Grid.IsSharedSizeScope="True"
+                                                                  ItemsSource="{Binding Fleet.Ships}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <DataTemplate.Resources>
+                                                                    <converters:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
+                                                                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                                        <Setter Property="Margin" Value="5,0" />
+                                                                        <Setter Property="VerticalAlignment" Value="Bottom" />
+                                                                        <Setter Property="HorizontalAlignment" Value="Left" />
+                                                                    </Style>
+                                                                </DataTemplate.Resources>
+                                                                <StackPanel>
+
+                                                                    <Rectangle Height="1"
+                                                                               Style="{DynamicResource SeparatorRectangleStyleKey}"
+                                                                               Opacity="1"
+                                                                               Margin="10,-1,10,0" />
+                                                                    
+                                                                    <Grid HorizontalAlignment="Left"
+                                                                          Margin="0,5">
+                                                                        <Grid.RowDefinitions>
+                                                                            <RowDefinition Height="Auto" SharedSizeGroup="ShipStatusLabel"/>
+                                                                            <RowDefinition Height="Auto" SharedSizeGroup="ShipStatusValue"/>
+                                                                            <RowDefinition/>
+                                                                        </Grid.RowDefinitions>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="Auto" MinWidth="130" SharedSizeGroup="Name" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="37" SharedSizeGroup="HP" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="96" SharedSizeGroup="Attack" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="96" SharedSizeGroup="Tropedo" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="96" SharedSizeGroup="AA" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="96" SharedSizeGroup="Armer" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="ASW" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="Hit" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="Evade" />
+                                                                            <ColumnDefinition Width="Auto" MinWidth="28" SharedSizeGroup="Luck" />
+                                                                            <ColumnDefinition Width="Auto"/>
+                                                                            <ColumnDefinition/>
+                                                                        </Grid.ColumnDefinitions>
+
+                                                                        <TextBlock Grid.Column="0"
+                                                                                   Grid.Row="0">
+                                                                             <Run Text="{Binding Name, Mode=OneTime}"
+                                                                                  Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                                                             <Run Text="{Binding AdditionalName, Mode=OneTime}"
+                                                                                  Foreground="{Binding AdditionalName, Converter={StaticResource AdditionalNameColorConverter}}"/>
+                                                                        </TextBlock>
+                                                                        <TextBlock Grid.Column="0"
+                                                                                   Grid.Row="1"
+                                                                                   Text="{Binding TypeName, Mode=OneTime}"
+                                                                                   FontSize="11"/>
+                                                                        
+                                                                        <TextBlock Grid.Column="1"
+                                                                                   Grid.Row="0"
+                                                                                   Text="HP"/>
+                                                                        <TextBlock Grid.Column="1"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding MaxHP, Mode=OneTime}"
+                                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="2"
+                                                                                   Grid.Row="0"
+                                                                                   Text="火力"/>
+                                                                        <TextBlock Grid.Column="2"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SumFirepower, Mode=OneTime}"
+                                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                                            <Run>
+                                                                                <Run.Text>
+                                                                                    <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
+                                                                                        <Binding Path="Firepower"/>
+                                                                                        <Binding Path="SlotsFirepower"/>
+                                                                                    </MultiBinding>
+                                                                                </Run.Text>
+                                                                            </Run>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="3"
+                                                                                   Grid.Row="0"
+                                                                                   Text="雷装"/>
+                                                                        <TextBlock Grid.Column="3"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SumTorpedo, Mode=OneTime}"
+                                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                                            <Run>
+                                                                                <Run.Text>
+                                                                                    <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
+                                                                                        <Binding Path="Torpedo"/>
+                                                                                        <Binding Path="SlotsTorpedo"/>
+                                                                                    </MultiBinding>
+                                                                                </Run.Text>
+                                                                            </Run>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="4"
+                                                                                   Grid.Row="0"
+                                                                                   Text="対空"/>
+                                                                        <TextBlock Grid.Column="4"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SumAA, Mode=OneTime}"
+                                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                                            <Run>
+                                                                                <Run.Text>
+                                                                                    <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
+                                                                                        <Binding Path="AA"/>
+                                                                                        <Binding Path="SlotsAA"/>
+                                                                                    </MultiBinding>
+                                                                                </Run.Text>
+                                                                            </Run>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="5"
+                                                                                   Grid.Row="0"
+                                                                                   Text="装甲"/>
+                                                                        <TextBlock Grid.Column="5"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SumArmer, Mode=OneTime}"
+                                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                                            <Run>
+                                                                                <Run.Text>
+                                                                                    <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
+                                                                                        <Binding Path="Armer"/>
+                                                                                        <Binding Path="SlotsArmer"/>
+                                                                                    </MultiBinding>
+                                                                                </Run.Text>
+                                                                            </Run>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="6"
+                                                                                   Grid.Row="0"
+                                                                                   Text="対潜"/>
+                                                                        <TextBlock Grid.Column="6"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SlotsASW, Mode=OneTime, StringFormat={}(+{0})}"/>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="7"
+                                                                                   Grid.Row="0"
+                                                                                   Text="命中"/>
+                                                                        <TextBlock Grid.Column="7"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SlotsHit, Mode=OneTime, StringFormat={}(+{0})}"/>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="8"
+                                                                                   Grid.Row="0"
+                                                                                   Text="回避"/>
+                                                                        <TextBlock Grid.Column="8"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding SlotsEvade, Mode=OneTime, StringFormat={}(+{0})}"/>
+                                                                        </TextBlock>
+
+                                                                        <TextBlock Grid.Column="9"
+                                                                                   Grid.Row="0"
+                                                                                   Text="運"/>
+                                                                        <TextBlock Grid.Column="9"
+                                                                                   Grid.Row="1">
+                                                                            <Run Text="{Binding Luck, Mode=OneTime}"
+                                                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                                                                        </TextBlock>
+
+                                                                        <ItemsControl Grid.Column="10"
+                                                                                      Grid.Row="0"
+                                                                                      Grid.RowSpan="3"
+                                                                                      Grid.IsSharedSizeScope="True"
+                                                                                      ItemsSource="{Binding Slots}"
+                                                                                      Margin="7,0">
+                                                                            <ItemsControl.ItemTemplate>
+                                                                                <DataTemplate>
+                                                                                    <Grid ToolTip="{Binding ToolTip}">
+                                                                                        <Grid.ColumnDefinitions>
+                                                                                            <ColumnDefinition Width="Auto"/>
+                                                                                            <ColumnDefinition Width="Auto"/>
+                                                                                            <ColumnDefinition Width="Auto"/>
+                                                                                            <ColumnDefinition />
+                                                                                        </Grid.ColumnDefinitions>
+                                                                                        <controls:SlotItemIcon Grid.Column="0"
+                                                                                                               Type="{Binding Source.IconType, Mode=OneWay}"
+                                                                                                               Width="14"
+                                                                                                               Height="14" />
+                                                                                        <TextBlock Grid.Column="1"
+                                                                                                   Foreground="{DynamicResource ActiveForegroundBrushKey}"
+                                                                                                   Style="{DynamicResource DefaultTextStyleKey}"
+                                                                                                   Margin="5,1">
+                                                                                            <Run Text="{Binding Source.Name, Mode=OneWay}" />
+                                                                                        </TextBlock>
+                                                                                        <TextBlock Grid.Column="2"
+                                                                                                   HorizontalAlignment="Center"
+                                                                                                   Margin="5,1">
+                                                                                            <TextBlock.Style>
+                                                                                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextStyleKey}">
+                                                                                                    <Setter Property="Text" Value="" />
+                                                                                                    <Style.Triggers>
+                                                                                                        <MultiDataTrigger>
+                                                                                                            <MultiDataTrigger.Conditions>
+                                                                                                                <Condition Binding="{Binding Source.IsNumerable}" Value="True" />
+                                                                                                            </MultiDataTrigger.Conditions>
+                                                                                                            <Setter Property="Text">
+                                                                                                                <Setter.Value>
+                                                                                                                    <MultiBinding StringFormat="[{0:00}]">
+                                                                                                                        <Binding Path="Current" />
+                                                                                                                    </MultiBinding>
+                                                                                                                </Setter.Value>
+                                                                                                            </Setter>
+                                                                                                        </MultiDataTrigger>
+                                                                                                    </Style.Triggers>
+                                                                                                </Style>
+                                                                                            </TextBlock.Style>
+                                                                                        </TextBlock>
+                                                                                    </Grid>
+                                                                                </DataTemplate>
+                                                                            </ItemsControl.ItemTemplate>
+                                                                        </ItemsControl>
+                                                                    </Grid>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Grid>
+
+                                                <Rectangle Height="1"
+                                                           Style="{DynamicResource SeparatorRectangleStyleKey}"
+                                                           Opacity="1"
+                                                           Margin="10,-1,10,0" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <Rectangle Grid.Row="1"
+                                           Grid.Column="0"
+                                           Grid.ColumnSpan="2"
+                                           Height="1"
+                                           Style="{DynamicResource SeparatorRectangleStyleKey}"
+                                           Opacity="1"
+                                           Margin="10,-1,10,0" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+
+
+
+        <!-- region Status area -->
+        <Grid Grid.Row="2"
+              Background="{DynamicResource AccentBrushKey}"
+              Panel.ZIndex="100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <metro:ResizeGrip Grid.Column="1" />
+        </Grid>
+        <!-- endregion -->
+    </Grid>
+</metro:MetroWindow>

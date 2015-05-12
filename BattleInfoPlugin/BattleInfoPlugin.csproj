@@ -120,15 +120,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AirSupremacy.cs" />
-    <Compile Include="Models\AliasNameAttribute.cs" />
     <Compile Include="Models\BattleData.cs" />
     <Compile Include="Models\BattleEndNotifier.cs" />
     <Compile Include="Models\BattleSituation.cs" />
     <Compile Include="Models\EnemyDataProvider.cs" />
     <Compile Include="Models\FleetDamages.cs" />
+    <Compile Include="Models\FleetData.cs" />
     <Compile Include="Models\Formation.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />
     <Compile Include="Models\Raw\battle_midnight_sp_midnight.cs" />
+    <Compile Include="Models\Raw\battle_result.cs" />
     <Compile Include="Models\Raw\combined_battle_airbattle.cs" />
     <Compile Include="Models\Raw\combined_battle_battle.cs" />
     <Compile Include="Models\Raw\combined_battle_battle_water.cs" />
@@ -142,10 +143,19 @@
     <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\ShipData.cs" />
+    <Compile Include="Models\ShipSlotData.cs" />
+    <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\MapAreaViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\MapCellViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\MapInfoViewModel.cs" />
+    <Compile Include="ViewModels\EnemyWindowViewModel.cs" />
     <Compile Include="ViewModels\FleetViewModel.cs" />
     <Compile Include="ViewModels\ToolViewModel.cs" />
     <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
     <Compile Include="Views\Converters\AdditionalNameColorConverter.cs" />
+    <Compile Include="Views\EnemyWindow.xaml.cs">
+      <DependentUpon>EnemyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Fleet.xaml.cs">
       <DependentUpon>Fleet.xaml</DependentUpon>
     </Compile>
@@ -157,6 +167,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="BattleInfoPlugin.cs" />
+    <Page Include="Views\EnemyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Fleet.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

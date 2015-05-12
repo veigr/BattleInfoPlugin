@@ -2,6 +2,7 @@
 using BattleInfoPlugin.Models;
 using Livet;
 using Livet.EventListeners;
+using Livet.Messaging;
 
 namespace BattleInfoPlugin.ViewModels
 {
@@ -149,15 +150,16 @@ namespace BattleInfoPlugin.ViewModels
                     () => this.Data.Enemies,
                     (_, __) => this.Enemies.Fleet = this.Data.Enemies
                 },
-                {
-                    () => this.Data.FriendFormation,
-                    (_, __) => this.FirstFleet.FormationSource = this.Data.FriendFormation
-                },
-                {
-                    () => this.Data.NextEnemyFormation,
-                    (_, __) => this.Enemies.FormationSource = this.Data.NextEnemyFormation
-                },
             });
+        }
+
+        public void OpenEnemyWindow()
+        {
+            var message = new TransitionMessage("Show/EnemyWindow")
+            {
+                TransitionViewModel = new EnemyWindowViewModel(this.Data.GetMapEnemies())
+            };
+            this.Messenger.RaiseAsync(message);
         }
     }
 }

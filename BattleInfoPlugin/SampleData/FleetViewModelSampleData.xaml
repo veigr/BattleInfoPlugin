@@ -9,21 +9,25 @@
                            IsVisible="True">
 
     <viewModels:FleetViewModel.Fleet>
-        <models:ShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
-            <models:ShipData.HP>
-                <wrapper:LimitedValue Current="6" Maximum="9" Minimum="0"/>
-            </models:ShipData.HP>
-        </models:ShipData>
-        <models:ShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Evacuation" TypeName="ろり" AdditionalName="elite">
-            <models:ShipData.HP>
-                <wrapper:LimitedValue Current="71" Maximum="85" Minimum="0"/>
-            </models:ShipData.HP>
-        </models:ShipData>
-        <models:ShipData MaxHP="40" NowHP="62" Name="駆逐ロ級後期型" Situation="HeavilyDamaged" TypeName="きもい" AdditionalName="flagship">
-            <models:ShipData.HP>
-                <wrapper:LimitedValue Current="77" Maximum="25" Minimum="0"/>
-            </models:ShipData.HP>
-        </models:ShipData>
+        <models:FleetData Formation="戦闘陣形">
+            <models:FleetData.Ships>
+                <models:MembersShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
+                    <models:MembersShipData.HP>
+                        <wrapper:LimitedValue Current="6" Maximum="9" Minimum="0"/>
+                    </models:MembersShipData.HP>
+                </models:MembersShipData>
+                <models:MembersShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Evacuation" TypeName="ろり" AdditionalName="elite">
+                    <models:MembersShipData.HP>
+                        <wrapper:LimitedValue Current="71" Maximum="85" Minimum="0"/>
+                    </models:MembersShipData.HP>
+                </models:MembersShipData>
+                <models:MembersShipData MaxHP="40" NowHP="62" Name="駆逐ロ級後期型" Situation="HeavilyDamaged" TypeName="きもい" AdditionalName="flagship">
+                    <models:MembersShipData.HP>
+                        <wrapper:LimitedValue Current="77" Maximum="25" Minimum="0"/>
+                    </models:MembersShipData.HP>
+                </models:MembersShipData>
+            </models:FleetData.Ships>
+        </models:FleetData>
     </viewModels:FleetViewModel.Fleet>
 
 </viewModels:FleetViewModel>
