@@ -7,7 +7,7 @@ using Grabacr07.KanColleViewer.Composition;
 using Grabacr07.KanColleWrapper;
 using Livet;
 
-namespace BattleInfoPlugin.Models
+namespace BattleInfoPlugin.Models.Notifiers
 {
     public class BattleEndNotifier: NotificationObject
     {

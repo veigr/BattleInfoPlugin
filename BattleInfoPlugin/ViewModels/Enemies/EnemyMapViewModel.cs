@@ -13,7 +13,6 @@ using Livet.Messaging.Windows;
 
 using BattleInfoPlugin.Models;
 using Grabacr07.KanColleViewer.ViewModels;
-using Grabacr07.KanColleWrapper.Models;
 
 namespace BattleInfoPlugin.ViewModels.Enemies
 {

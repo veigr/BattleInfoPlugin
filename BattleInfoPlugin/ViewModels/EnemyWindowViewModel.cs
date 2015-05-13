@@ -13,8 +13,7 @@ using Livet.Messaging.Windows;
 
 using BattleInfoPlugin.Models;
 using BattleInfoPlugin.ViewModels.Enemies;
-using Grabacr07.KanColleWrapper;
-using Grabacr07.KanColleWrapper.Models;
+using BattleInfoPlugin.Models.Repositories;
 
 namespace BattleInfoPlugin.ViewModels
 {
@@ -28,7 +27,7 @@ namespace BattleInfoPlugin.ViewModels
 
         public EnemyWindowViewModel(Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> mapEnemies)
         {
-            this.EnemyMaps = KanColleClient.Current.Master.MapInfos
+            this.EnemyMaps = Master.Current.MapInfos
                 .Select(mi => new EnemyMapViewModel
                 {
                     Info = mi.Value,

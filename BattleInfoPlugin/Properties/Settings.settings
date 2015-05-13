@@ -8,5 +8,8 @@
     <Setting Name="EnemyDataFilePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">BattleInfoPlugin_EnemyData.txt</Value>
     </Setting>
+    <Setting Name="MasterDataFilePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BattleInfoPlugin_MasterData.txt</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

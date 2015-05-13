@@ -10,7 +10,7 @@ using BattleInfoPlugin.Properties;
 using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models;
 
-namespace BattleInfoPlugin.Models
+namespace BattleInfoPlugin.Models.Repositories
 {
     [DataContract]
     public class EnemyDataProvider
@@ -44,10 +44,6 @@ namespace BattleInfoPlugin.Models
         [DataMember]
         private Dictionary<int, string> EnemyNames { get; set; }
 
-        // MapInfoID, CellNo
-        [DataMember]
-        private Dictionary<int, int> MapBossCellNo { get; set; }
-
         [NonSerialized] private int currentEnemyID;
 
         [NonSerialized] private int previousCellNo;
@@ -61,7 +57,6 @@ namespace BattleInfoPlugin.Models
             if (this.EnemyNames == null) this.EnemyNames = new Dictionary<int, string>();
             if (this.MapEnemyData == null) this.MapEnemyData = new Dictionary<int, Dictionary<int, HashSet<int>>>();
             if (this.MapRoute == null) this.MapRoute = new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-            if (this.MapBossCellNo == null) this.MapBossCellNo = new Dictionary<int, int>();
             this.previousCellNo = 0;
             this.Dump("GetNextEnemyFormation");
         }
@@ -81,7 +76,6 @@ namespace BattleInfoPlugin.Models
         {
             this.UpdateMapEnemyData(startNext);
             this.UpdateMapRoute(startNext);
-            this.UpdateMapBossCellNo(startNext);
             this.Save();
             this.Dump("UpdateMapData");
         }
@@ -101,9 +95,8 @@ namespace BattleInfoPlugin.Models
         public Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> GetMapEnemies()
         {
             this.Reload();
-            var master = KanColleClient.Current.Master;
             return this.MapEnemyData.ToDictionary(
-                info => master.MapInfos[info.Key],
+                info => Master.Current.MapInfos[info.Key],
                 info => info.Value.ToDictionary(
                     cell => cell.Key,
                     cell => cell.Value.ToDictionary(
@@ -112,14 +105,17 @@ namespace BattleInfoPlugin.Models
                             this.GetEnemiesFromId(enemy),
                             this.GetEnemyFormationFromId(enemy),
                             this.GetEnemyNameFromId(enemy),
-                            this.GetIsBoss(info.Key, cell.Key)
+                            IsBoss(info.Key, cell.Key)
                             ))));
         }
 
-        private bool GetIsBoss(int mapInfoId, int cellId)
+        private static bool IsBoss(int mapInfoId, int cellNo)
         {
-            return this.MapBossCellNo.ContainsKey(mapInfoId)
-                && this.MapBossCellNo[mapInfoId] == cellId;
+            var cell = Master.Current.MapCells.Values
+                .Where(x => x.MapInfoId == mapInfoId)
+                .SingleOrDefault(x => x.IdInEachMapInfo == cellNo);
+            if (cell == null) return false;
+            return cell.ColorNo == 5;
         }
 
         private string GetNextEnemyName(map_start_next startNext)
@@ -198,18 +194,9 @@ namespace BattleInfoPlugin.Models
             this.previousCellNo = 0 < startNext.api_next ? startNext.api_no : 0;
         }
 
-        private void UpdateMapBossCellNo(map_start_next startNext)
-        {
-            var mapInfo = GetMapInfo(startNext);
-            if (!this.MapBossCellNo.ContainsKey(mapInfo))
-                this.MapBossCellNo.Add(mapInfo, startNext.api_bosscell_no);
-            else
-                this.MapBossCellNo[mapInfo] = startNext.api_bosscell_no;
-        }
-
         private static int GetMapInfo(map_start_next startNext)
         {
-            return KanColleClient.Current.Master.MapInfos
+            return Master.Current.MapInfos
                 .Select(x => x.Value)
                 .Where(m => m.MapAreaId == startNext.api_maparea_id)
                 .Single(m => m.IdInEachMapArea == startNext.api_mapinfo_no)
@@ -265,7 +252,6 @@ namespace BattleInfoPlugin.Models
                 this.EnemyNames = obj.EnemyNames;
                 this.MapEnemyData = obj.MapEnemyData;
                 this.MapRoute = obj.MapRoute;
-                this.MapBossCellNo = obj.MapBossCellNo;
             }
         }
 

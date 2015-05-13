@@ -121,12 +121,15 @@
   <ItemGroup>
     <Compile Include="Models\AirSupremacy.cs" />
     <Compile Include="Models\BattleData.cs" />
-    <Compile Include="Models\BattleEndNotifier.cs" />
     <Compile Include="Models\BattleSituation.cs" />
-    <Compile Include="Models\EnemyDataProvider.cs" />
     <Compile Include="Models\FleetDamages.cs" />
     <Compile Include="Models\FleetData.cs" />
     <Compile Include="Models\Formation.cs" />
+    <Compile Include="Models\MapArea.cs" />
+    <Compile Include="Models\MapCell.cs" />
+    <Compile Include="Models\MapInfo.cs" />
+    <Compile Include="Models\MasterTable.cs" />
+    <Compile Include="Models\Notifiers\BattleEndNotifier.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />
     <Compile Include="Models\Raw\battle_midnight_sp_midnight.cs" />
     <Compile Include="Models\Raw\battle_result.cs" />
@@ -142,6 +145,8 @@
     <Compile Include="Models\Raw\practice_midnight_battle.cs" />
     <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
+    <Compile Include="Models\Repositories\EnemyDataProvider.cs" />
+    <Compile Include="Models\Repositories\Master.cs" />
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="Models\ShipSlotData.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />

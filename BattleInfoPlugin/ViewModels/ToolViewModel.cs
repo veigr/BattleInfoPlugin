@@ -1,5 +1,6 @@
 ﻿using System;
 using BattleInfoPlugin.Models;
+using BattleInfoPlugin.Models.Notifiers;
 using Livet;
 using Livet.EventListeners;
 using Livet.Messaging;

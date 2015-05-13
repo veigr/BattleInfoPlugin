@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using BattleInfoPlugin.Models;
+using BattleInfoPlugin.Models.Notifiers;
 using BattleInfoPlugin.ViewModels;
 using BattleInfoPlugin.Views;
 using Grabacr07.KanColleViewer.Composition;
@@ -21,7 +22,11 @@ namespace BattleInfoPlugin
 
         public BattleInfoPlugin()
         {
-            KanColleClient.Current.Proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(x => RawStart2 = x.Data);
+            KanColleClient.Current.Proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(x =>
+            {
+                RawStart2 = x.Data;
+                Models.Repositories.Master.Current.Update(x.Data);
+            });
         }
 
         public object GetToolView()

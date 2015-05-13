@@ -43,5 +43,14 @@ namespace BattleInfoPlugin.Properties {
                 return ((string)(this["EnemyDataFilePath"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BattleInfoPlugin_MasterData.txt")]
+        public string MasterDataFilePath {
+            get {
+                return ((string)(this["MasterDataFilePath"]));
+            }
+        }
     }
 }
