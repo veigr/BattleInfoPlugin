@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-
+using System.Windows;
+using System.Windows.Media.Imaging;
 using Livet;
 using Livet.Commands;
 using Livet.Messaging;
@@ -12,6 +13,7 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using BattleInfoPlugin.Models;
+using BattleInfoPlugin.Models.Repositories;
 using Grabacr07.KanColleViewer.ViewModels;
 
 namespace BattleInfoPlugin.ViewModels.Enemies
@@ -21,6 +23,21 @@ namespace BattleInfoPlugin.ViewModels.Enemies
         public MapInfo Info { get; set; }
 
         public IEnumerable<MapCellViewModel> MapCells { get; set; }
+
+        public BitmapSource MapImage { get { return MapResource.GetMapImage(this.Info); } }
+
+        public bool HasImage { get { return this.MapImage != null; } }
+
+        public IDictionary<int, Point> CellPoints
+        {
+            get
+            {
+                return MapResource.GetMapCellPoints(this.Info)
+                    .GroupBy(kvp => kvp.Value)  //重複ポイントを除去
+                    .Select(g => g.First())
+                    .ToDictionary(x => x.Key, x => x.Value);
+            }
+        }
 
         public override string Name
         {

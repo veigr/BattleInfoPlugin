@@ -12,5 +12,7 @@
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer;component/Themes/Generic.xaml" />
+
+        <ResourceDictionary Source="pack://application:,,,/BattleInfoPlugin;component/Styles/Cell.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

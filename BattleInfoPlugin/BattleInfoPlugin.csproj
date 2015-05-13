@@ -53,6 +53,10 @@
       <HintPath>..\packages\FiddlerCore.4.4.8.4\lib\net40\FiddlerCore4.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DependentAssemblies\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="KanColleViewer, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>KanColleViewerAssemblies\KanColleViewer.exe</HintPath>
@@ -82,6 +86,10 @@
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MetroRadiance.1.0.16\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="SwfFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DependentAssemblies\SwfFormat.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -146,6 +154,7 @@
     <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\Repositories\EnemyDataProvider.cs" />
+    <Compile Include="Models\Repositories\MapResource.cs" />
     <Compile Include="Models\Repositories\Master.cs" />
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="Models\ShipSlotData.cs" />
@@ -155,6 +164,7 @@
     <Compile Include="ViewModels\EnemyWindowViewModel.cs" />
     <Compile Include="ViewModels\FleetViewModel.cs" />
     <Compile Include="ViewModels\ToolViewModel.cs" />
+    <Compile Include="Views\Controls\Cell.cs" />
     <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
     <Compile Include="Views\Converters\AdditionalNameColorConverter.cs" />
     <Compile Include="Views\EnemyWindow.xaml.cs">
@@ -166,6 +176,10 @@
     <Compile Include="Views\ToolView.xaml.cs">
       <DependentUpon>ToolView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Styles\Cell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\PluginStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -211,6 +225,8 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DependentAssemblies\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="DependentAssemblies\SwfFormat.dll" />
     <Content Include="KanColleViewerAssemblies\Desktop.Metro.dll" />
     <Content Include="KanColleViewerAssemblies\KanColleViewer.exe" />
     <Content Include="KanColleViewerAssemblies\KanColleWrapper.dll" />
