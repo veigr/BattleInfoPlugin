@@ -52,5 +52,14 @@ namespace BattleInfoPlugin.Properties {
                 return ((string)(this["MasterDataFilePath"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BattleInfoPluginData")]
+        public string CacheDirPath {
+            get {
+                return ((string)(this["CacheDirPath"]));
+            }
+        }
     }
 }

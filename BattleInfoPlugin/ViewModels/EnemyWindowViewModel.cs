@@ -33,7 +33,7 @@ namespace BattleInfoPlugin.ViewModels
                     Info = mi.Value,
                     //セルポイントデータに既知の敵データを外部結合して座標でマージ
                     MapCells = MapResource.HasMapSwf(mi.Value)
-                        ? MapResource.GetMapCellPoints(mi.Value)    //マップSWFがあったらそれを元に作る
+                        ? MapResource.GetMapCellPoints(mi.Value) //マップSWFがあったらそれを元に作る
                             //外部結合
                             .GroupJoin(
                                 CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies),
@@ -55,7 +55,7 @@ namespace BattleInfoPlugin.ViewModels
                             })
                             //敵データのないセルは除外
                             .Where(x => x.Enemies.Any())
-                        : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies)    //なかったら敵データだけ(TODO 重複データの解決はEnemyIDでやる？)
+                        : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies) //なかったら敵データだけ(TODO 重複データの解決はEnemyIDでやる？)
                             .OrderBy(cell => cell.Key),
                 })
                 .OrderBy(info => info.Info.Id);

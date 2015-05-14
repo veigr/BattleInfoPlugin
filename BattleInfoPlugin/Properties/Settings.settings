@@ -11,5 +11,8 @@
     <Setting Name="MasterDataFilePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">BattleInfoPlugin_MasterData.txt</Value>
     </Setting>
+    <Setting Name="CacheDirPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BattleInfoPluginData</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

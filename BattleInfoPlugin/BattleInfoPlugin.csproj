@@ -154,6 +154,7 @@
     <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\Repositories\EnemyDataProvider.cs" />
+    <Compile Include="Models\Repositories\KcsResourceWriter.cs" />
     <Compile Include="Models\Repositories\MapResource.cs" />
     <Compile Include="Models\Repositories\Master.cs" />
     <Compile Include="Models\ShipData.cs" />

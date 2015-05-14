@@ -9,6 +9,8 @@
 ### インストール
 
 * `BattleInfoPlugin.dll` を KanColleViewer の `Plugins` ディレクトリに放り込んで下さい。
+* `SwfFormat.dll` を KanColleViewer.exe と同じディレクトリに放り込んで下さい。
+* `ICSharpCode.SharpZipLib.dll` を KanColleViewer.exe と同じディレクトリに放り込んで下さい。
 
 ### 使用ライブラリ
 
@@ -17,9 +19,10 @@
 * [Reactive Extensions](http://rx.codeplex.com/)
 * [Livet](http://ugaya40.hateblo.jp/entry/Livet)
 * [FiddlerCore](http://www.telerik.com/fiddler/fiddlercore)
+* [Swf2XNA](https://github.com/debreuil/Swf2XNA)
 
 
-#### ライセンス
+### ライセンス
 
 * MIT License
 

@@ -15,48 +15,88 @@ namespace BattleInfoPlugin.Models.Repositories
     {
         public static BitmapSource GetMapImage(MapInfo map)
         {
-            var swf = map.ToSwf();
-            if (swf == null) return null;
-
-            return swf.Tags
-                .SkipWhile(x => x.TagType != TagType.ShowFrame) //1フレーム飛ばす
-                .OfType<DefineBitsTag>()
-                .FirstOrDefault(x => x.TagType == TagType.DefineBitsJPEG3)
-                .ToBitmapFrame();
+            return ExistsAssembly ? MapResourcePrivate.GetMapImage(map) : null;
         }
 
         public static IDictionary<int, Point> GetMapCellPoints(MapInfo map)
         {
-            var swf = map.ToSwf();
-            if (swf == null) return new Dictionary<int, Point>();
-
-            var places = swf.Tags
-                .OfType<DefineSpriteTag>()
-                .SelectMany(sprite => sprite.ControlTags)
-                .OfType<PlaceObject2Tag>()
-                .Where(place => place.Name != null)
-                .Where(place => place.Name.StartsWith("line"))
-                .ToArray();
-            var cellNumbers = Master.Current.MapCells
-                .Where(c => c.Value.MapInfoId == map.Id)
-                .Where(c => new[] { 0, 1, 2, 3, 8 }.All(x => x != c.Value.ColorNo)) //敵じゃないセルは除外(これでは気のせいは見分け付かない)
-                .Select(c => c.Value.IdInEachMapInfo)
-                .ToArray();
-            return cellNumbers
-                .OrderBy(n => n)
-                .Select(n => new KeyValuePair<int, Point>(n, places.FindPoint(n)))
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            return ExistsAssembly ? MapResourcePrivate.GetMapCellPoints(map) : new Dictionary<int, Point>();
         }
 
         public static bool HasMapSwf(MapInfo map)
         {
-            return map.HasMapSwf();
+            return ExistsAssembly && MapResourcePrivate.HasMapSwf(map);
+        }
+
+        private static bool? _ExistsAssembly;
+
+        private static bool ExistsAssembly
+        {
+            get
+            {
+                if (_ExistsAssembly.HasValue) return _ExistsAssembly.Value;
+
+                try
+                {
+                    System.Reflection.Assembly.LoadFrom("SwfFormat.dll");
+                    System.Reflection.Assembly.LoadFrom("ICSharpCode.SharpZipLib.dll");
+                    _ExistsAssembly = true;
+                }
+                catch (FileNotFoundException)
+                {
+                    _ExistsAssembly = false;
+                }
+                return _ExistsAssembly.Value;
+            }
+        }
+
+        private static class MapResourcePrivate
+        {
+            public static BitmapSource GetMapImage(MapInfo map)
+            {
+                var swf = map.ToSwf();
+                if (swf == null) return null;
+
+                return swf.Tags
+                    .SkipWhile(x => x.TagType != TagType.ShowFrame) //1フレーム飛ばす
+                    .OfType<DefineBitsTag>()
+                    .FirstOrDefault(x => x.TagType == TagType.DefineBitsJPEG3)
+                    .ToBitmapFrame();
+            }
+
+            public static IDictionary<int, Point> GetMapCellPoints(MapInfo map)
+            {
+                var swf = map.ToSwf();
+                if (swf == null) return new Dictionary<int, Point>();
+
+                var places = swf.Tags
+                    .OfType<DefineSpriteTag>()
+                    .SelectMany(sprite => sprite.ControlTags)
+                    .OfType<PlaceObject2Tag>()
+                    .Where(place => place.Name != null)
+                    .Where(place => place.Name.StartsWith("line"))
+                    .ToArray();
+                var cellNumbers = Master.Current.MapCells
+                    .Where(c => c.Value.MapInfoId == map.Id)
+                    .Where(c => new[] { 0, 1, 2, 3, 8 }.All(x => x != c.Value.ColorNo)) //敵じゃないセルは除外(これでは気のせいは見分け付かない)
+                    .Select(c => c.Value.IdInEachMapInfo)
+                    .ToArray();
+                return cellNumbers
+                    .OrderBy(n => n)
+                    .Select(n => new KeyValuePair<int, Point>(n, places.FindPoint(n)))
+                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            }
+
+            public static bool HasMapSwf(MapInfo map)
+            {
+                return map.HasMapSwf();
+            }
         }
     }
 
     static class MapResourceExtensions
     {
-        private const string mapDir = "ResponseData\\kcs\\resources\\swf\\map\\";
+        private static readonly string mapDir = Properties.Settings.Default.CacheDirPath + "\\kcs\\resources\\swf\\map\\";
 
         public static bool HasMapSwf(this MapInfo map)
         {
@@ -66,7 +106,6 @@ namespace BattleInfoPlugin.Models.Repositories
 
         }
 
-        //TODO cache
         public static SwfCompilationUnit ToSwf(this MapInfo map)
         {
             var filePath = mapDir
@@ -134,7 +173,7 @@ namespace BattleInfoPlugin.Models.Repositories
 
         private static IEnumerable<byte> CreateNonTransparentAlphaData(uint length)
         {
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 yield return 0xFF;
             }
@@ -147,15 +186,6 @@ namespace BattleInfoPlugin.Models.Repositories
             if (data[0] == 0xFF && data[1] == 0xE0)
                 return new byte[] { 0xFF, 0xD8 }.Concat(data).ToArray();
             return data;
-        }
-
-        private static void DumpBytes(byte[] data)
-        {
-            using (var writer = new System.IO.BinaryWriter(
-                new FileStream("m:\\" + DateTime.Now.ToString("ddHHmmssfffffff") + ".jpg", FileMode.CreateNew)))
-            {
-                writer.Write(data);
-            }
         }
     }
 }
