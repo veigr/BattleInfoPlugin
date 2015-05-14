@@ -28,14 +28,14 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public bool HasImage { get { return this.MapImage != null; } }
 
-        public IDictionary<int, Point> CellPoints
+        public IDictionary<string, Point> CellPoints
         {
             get
             {
                 return MapResource.GetMapCellPoints(this.Info)
                     .GroupBy(kvp => kvp.Value)  //重複ポイントを除去
                     .Select(g => g.First())
-                    .ToDictionary(x => x.Key, x => x.Value);
+                    .ToDictionary(x => x.Key.ToString(), x => x.Value);
             }
         }
 

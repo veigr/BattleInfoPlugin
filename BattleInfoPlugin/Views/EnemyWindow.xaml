@@ -34,6 +34,13 @@
             <l:VisibilityAndBooleanConverter x:Key="FalseToVisibleConverter"
                                              ConvertWhenTrue="Collapsed"
                                              ConvertWhenFalse="Visible"/>
+            
+            <CollectionViewSource x:Key="EnemyMapsSource"
+                                  Source="{Binding EnemyMaps}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Info.MapArea"/>
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
         </ResourceDictionary>
     </metro:MetroWindow.Resources>
     
@@ -101,30 +108,42 @@
 
             <ScrollViewer Grid.Column="0"
                           VerticalScrollBarVisibility="Auto"
-                          PanningMode="Both">
-                <Grid MinWidth="90"
-                      Background="{DynamicResource ActiveBackgroundBrushKey}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0"
-                               Text="マップ"
-                               Style="{DynamicResource CaptionTextStyleKey}"
-                               Margin="20,10,0,0"/>
-
-                    <Rectangle Grid.Row="1"
-                               Height="1"
-                               Margin="20,10"
-                               Fill="{DynamicResource InactiveForegroundBrushKey}"
-                               Opacity="0.5" />
-
-                    <metro:TabView Grid.Row="2"
-                                   ItemsSource="{Binding EnemyMaps}"
-                                   IsSynchronizedWithCurrentItem="True"/>
-                </Grid>
+                          PanningMode="Both"
+                          Background="{DynamicResource ActiveBackgroundBrushKey}">
+                <metro:TabView ItemsSource="{Binding Source={StaticResource EnemyMapsSource}}"
+                               IsSynchronizedWithCurrentItem="True"
+                               MinWidth="90">
+                    <metro:TabView.Template>
+                        <ControlTemplate TargetType="{x:Type metro:TabView}">
+                            <StackPanel Background="{TemplateBinding Background}">
+                                <ItemsPresenter/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </metro:TabView.Template>
+                    <metro:TabView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <StackPanel>
+                                                    <Border Padding="10,7"
+                                                                Background="{DynamicResource ThemeBrushKey}">
+                                                        <TextBlock Text="{Binding Name.Name}"
+                                                                       Foreground="{DynamicResource AccentBrushKey}"
+                                                                       FontSize="16"/>
+                                                    </Border>
+                                                    <ItemsPresenter Margin="0,0,0,16"/>
+                                                </StackPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </metro:TabView.GroupStyle>
+                </metro:TabView>
             </ScrollViewer>
 
             <Grid Grid.Column="1">
@@ -135,12 +154,12 @@
 
                 <Border Grid.Row="0"
                         HorizontalAlignment="Stretch"
-                        Visibility="{Binding EnemyMaps/HasImage, Converter={StaticResource TrueToVisibleConverter}}"
+                        Visibility="{Binding Source={StaticResource EnemyMapsSource}, Path=/HasImage, Converter={StaticResource TrueToVisibleConverter}}"
                         Background="{DynamicResource BackgroundBrushKey}"/>
 
                 <Image Grid.Row="0"
-                       Source="{Binding EnemyMaps/MapImage}"
-                       Visibility="{Binding EnemyMaps/HasImage, Converter={StaticResource TrueToVisibleConverter}}"
+                       Source="{Binding Source={StaticResource EnemyMapsSource}, Path=/MapImage}"
+                       Visibility="{Binding Source={StaticResource EnemyMapsSource}, Path=/HasImage, Converter={StaticResource TrueToVisibleConverter}}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Width="768"
@@ -148,8 +167,8 @@
                        Margin="0"
                        />
                 <ItemsControl Grid.Row="0"
-                              Visibility="{Binding EnemyMaps/HasImage, Converter={StaticResource TrueToVisibleConverter}}"
-                              ItemsSource="{Binding EnemyMaps/CellPoints}"
+                              Visibility="{Binding Source={StaticResource EnemyMapsSource}, Path=/HasImage, Converter={StaticResource TrueToVisibleConverter}}"
+                              ItemsSource="{Binding Source={StaticResource EnemyMapsSource}, Path=/CellPoints}"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Center"
                               Width="768"
@@ -176,7 +195,7 @@
                 
                 <Border Grid.Row="0"
                         HorizontalAlignment="Stretch"
-                        Visibility="{Binding EnemyMaps/HasImage, Converter={StaticResource FalseToVisibleConverter}}"
+                        Visibility="{Binding Source={StaticResource EnemyMapsSource}, Path=/HasImage, Converter={StaticResource FalseToVisibleConverter}}"
                         Background="{DynamicResource BackgroundBrushKey}"
                         Padding="20">
                     <TextBlock Text="No Map Image"
@@ -188,8 +207,8 @@
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto"
                               PanningMode="Both">
-                    
-                    <ItemsControl ItemsSource="{Binding EnemyMaps/MapCells}"
+
+                    <ItemsControl ItemsSource="{Binding Source={StaticResource EnemyMapsSource}, Path=/MapCells}"
                                   Grid.IsSharedSizeScope="True">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
