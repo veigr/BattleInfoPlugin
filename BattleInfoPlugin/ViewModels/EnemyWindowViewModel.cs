@@ -19,7 +19,26 @@ namespace BattleInfoPlugin.ViewModels
 {
     public class EnemyWindowViewModel : ViewModel
     {
-        public IEnumerable<EnemyMapViewModel> EnemyMaps { get; set; }
+        public EnemyMapViewModel[] EnemyMaps { get; set; }
+
+
+        #region SelectedMap変更通知プロパティ
+        private EnemyMapViewModel _SelectedMap;
+
+        public EnemyMapViewModel SelectedMap
+        {
+            get
+            { return this._SelectedMap; }
+            set
+            { 
+                if (this._SelectedMap == value)
+                    return;
+                this._SelectedMap = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         public EnemyWindowViewModel()
         {
@@ -32,7 +51,7 @@ namespace BattleInfoPlugin.ViewModels
                 {
                     Info = mi.Value,
                     //セルポイントデータに既知の敵データを外部結合して座標でマージ
-                    MapCells = MapResource.HasMapSwf(mi.Value)
+                    EnemyCells = MapResource.HasMapSwf(mi.Value)
                         ? MapResource.GetMapCellPoints(mi.Value) //マップSWFがあったらそれを元に作る
                             //外部結合
                             .GroupJoin(
@@ -45,30 +64,50 @@ namespace BattleInfoPlugin.ViewModels
                                 (x, y) => new { x.point, cells = y })
                             //座標マージ
                             .GroupBy(x => x.point.Value)
-                            .Select(x => new MapCellViewModel
+                            .Select(x => new EnemyCellViewModel
                             {
                                 Key = x.Min(y => y.point.Key), //若い番号を採用
                                 Enemies = x.Where(y => y.cells != null) //敵データをEnemyIdでマージ
                                     .SelectMany(y => y.cells.Enemies)
                                     .GroupBy(y => y.Key)
-                                    .Select(y => y.First()),
+                                    .Select(y => y.First())
+                                    .ToArray(),
                             })
                             //敵データのないセルは除外
                             .Where(x => x.Enemies.Any())
+                            .ToArray()
                         : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies) //なかったら敵データだけ(TODO 重複データの解決はEnemyIDでやる？)
-                            .OrderBy(cell => cell.Key),
+                            .OrderBy(cell => cell.Key)
+                            .ToArray(),
                 })
-                .OrderBy(info => info.Info.Id);
+                .OrderBy(info => info.Info.Id)
+                .ToArray();
+
+            //EnemyShipViewModelに親情報をセット
+            var allData = this.EnemyMaps
+                .SelectMany(x => x.EnemyCells, (map, cell) => new { map, cell })
+                .SelectMany(x => x.cell.Enemies, (cell, enemy) => new { cell.map, cell.cell, enemy })
+                .ToArray();
+            foreach (var enemy in this.EnemyMaps.SelectMany(x => x.EnemyCells).SelectMany(x => x.Enemies))
+            {
+                var srcEnemy = allData.First(x => x.enemy.Key == enemy.Key);
+                foreach (var ship in enemy.Ships)
+                {
+                    ship.MapViewModel = srcEnemy.map;
+                    ship.CellViewModel = srcEnemy.cell;
+                    ship.FleetViewModel = srcEnemy.enemy;
+                }
+            }
         }
 
-        private static IEnumerable<MapCellViewModel> CreateMapCellViewModelsFromEnemiesData(
+        private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
             KeyValuePair<int, MapInfo> mi,
             Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> mapEnemies)
         {
             return mapEnemies.Where(info => info.Key.Id == mi.Key)
                 .Select(info => info.Value)
                 .SelectMany(cells => cells)
-                .Select(cell => new MapCellViewModel
+                .Select(cell => new EnemyCellViewModel
                 {
                     Key = cell.Key,
                     Enemies = cell.Value
@@ -76,8 +115,10 @@ namespace BattleInfoPlugin.ViewModels
                         {
                             Key = enemy.Key,
                             Fleet = enemy.Value,
+                            Ships = enemy.Value.Ships.Select(s => new EnemyShipViewModel { Ship = s }).ToArray(),
                         })
                         .OrderBy(enemy => enemy.Key)
+                        .ToArray(),
                 });
         }
 

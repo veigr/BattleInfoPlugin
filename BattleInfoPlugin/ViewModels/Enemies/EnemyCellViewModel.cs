@@ -15,10 +15,10 @@ using BattleInfoPlugin.Models;
 
 namespace BattleInfoPlugin.ViewModels.Enemies
 {
-    public class MapCellViewModel : ViewModel
+    public class EnemyCellViewModel : ViewModel
     {
         public int Key { get; set; }
-        public IEnumerable<EnemyFleetViewModel> Enemies { get; set; }
+        public EnemyFleetViewModel[] Enemies { get; set; }
         
         public void Initialize()
         {

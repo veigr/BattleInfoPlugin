@@ -161,7 +161,8 @@
     <Compile Include="Models\ShipSlotData.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyMapViewModel.cs" />
-    <Compile Include="ViewModels\Enemies\MapCellViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\EnemyCellViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\EnemyShipViewModel.cs" />
     <Compile Include="ViewModels\EnemyWindowViewModel.cs" />
     <Compile Include="ViewModels\FleetViewModel.cs" />
     <Compile Include="ViewModels\ToolViewModel.cs" />

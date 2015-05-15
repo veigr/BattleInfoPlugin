@@ -31,6 +31,6 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public FleetData Fleet { get; set; }
 
-        public IEnumerable<ShipData> Ships { get { return this.Fleet.Ships; } }
+        public EnemyShipViewModel[] Ships { get; set; }
     }
 }

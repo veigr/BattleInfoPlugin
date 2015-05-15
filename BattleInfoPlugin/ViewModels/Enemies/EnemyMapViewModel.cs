@@ -22,7 +22,15 @@ namespace BattleInfoPlugin.ViewModels.Enemies
     {
         public MapInfo Info { get; set; }
 
-        public IEnumerable<MapCellViewModel> MapCells { get; set; }
+        public EnemyCellViewModel[] EnemyCells { get; set; }
+
+        public IEnumerable<EnemyShipViewModel> EnemyShips
+        {
+            get
+            {
+                return this.EnemyCells.SelectMany(x => x.Enemies).SelectMany(x => x.Ships);
+            }
+        }
 
         public BitmapSource MapImage { get { return MapResource.GetMapImage(this.Info); } }
 
