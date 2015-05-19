@@ -31,6 +31,26 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public FleetData Fleet { get; set; }
 
-        public EnemyShipViewModel[] Ships { get; set; }
+        #region EnemyShips
+
+        private EnemyShipViewModel[] _EnemyShips;
+
+        public EnemyShipViewModel[] EnemyShips
+        {
+            get { return this._EnemyShips; }
+            set
+            {
+                this._EnemyShips = value;
+                if (value == null) return;
+                foreach (var val in value)
+                {
+                    val.ParentFleet = this;
+                }
+            }
+        }
+
+        #endregion
+
+        public EnemyCellViewModel ParentCell { get; set; }
     }
 }

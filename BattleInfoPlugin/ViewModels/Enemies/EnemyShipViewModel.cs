@@ -12,10 +12,6 @@ namespace BattleInfoPlugin.ViewModels.Enemies
     {
         public ShipData Ship { get; set; }
 
-        public EnemyMapViewModel MapViewModel { get; set; }
-
-        public EnemyCellViewModel CellViewModel { get; set; }
-
-        public EnemyFleetViewModel FleetViewModel { get; set; }
+        public EnemyFleetViewModel ParentFleet { get; set; }
     }
 }

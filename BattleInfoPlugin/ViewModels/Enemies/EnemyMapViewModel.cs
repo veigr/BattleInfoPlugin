@@ -22,13 +22,31 @@ namespace BattleInfoPlugin.ViewModels.Enemies
     {
         public MapInfo Info { get; set; }
 
-        public EnemyCellViewModel[] EnemyCells { get; set; }
+        #region EnemyCells
+
+        private EnemyCellViewModel[] _EnemyCells;
+
+        public EnemyCellViewModel[] EnemyCells
+        {
+            get { return this._EnemyCells; }
+            set
+            {
+                this._EnemyCells = value;
+                if (value == null) return;
+                foreach (var val in value)
+                {
+                    val.ParentMap = this;
+                }
+            }
+        }
+
+        #endregion
 
         public IEnumerable<EnemyShipViewModel> EnemyShips
         {
             get
             {
-                return this.EnemyCells.SelectMany(x => x.Enemies).SelectMany(x => x.Ships);
+                return this.EnemyCells.SelectMany(x => x.EnemyFleets).SelectMany(x => x.EnemyShips);
             }
         }
 
@@ -42,7 +60,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
             {
                 return MapResource.GetMapCellPoints(this.Info)
                     .GroupBy(kvp => kvp.Value)  //重複ポイントを除去
-                    .Select(g => g.First())
+                    .Select(g => g.OrderBy(x => x.Key).First())
                     .ToDictionary(x => x.Key.ToString(), x => x.Value);
             }
         }
@@ -51,10 +69,19 @@ namespace BattleInfoPlugin.ViewModels.Enemies
         {
             get
             {
-                return this.Info.MapAreaId + "-" + this.Info.IdInEachMapArea
-                    + ": " + this.Info.Name;
+                return this.MapNo + ": " + this.Info.Name;
             }
             protected set { throw new NotImplementedException(); }
+        }
+
+        public string MapNo
+        {
+            get { return this.Info.MapAreaId + "-" + this.Info.IdInEachMapArea; }
+        }
+
+        public string RequiredDefeatCount
+        {
+            get { return 21 < this.Info.MapAreaId ? "Event" : this.Info.RequiredDefeatCount.ToString(); }
         }
     }
 }

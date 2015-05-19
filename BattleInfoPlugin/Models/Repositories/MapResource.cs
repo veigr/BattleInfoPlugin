@@ -78,7 +78,7 @@ namespace BattleInfoPlugin.Models.Repositories
                     .ToArray();
                 var cellNumbers = Master.Current.MapCells
                     .Where(c => c.Value.MapInfoId == map.Id)
-                    .Where(c => new[] { 0, 1, 2, 3, 8 }.All(x => x != c.Value.ColorNo)) //敵じゃないセルは除外(これでは気のせいは見分け付かない)
+                    //.Where(c => new[] { 0, 1, 2, 3, 8 }.All(x => x != c.Value.ColorNo)) //敵じゃないセルは除外(これでは気のせいは見分け付かない)
                     .Select(c => c.Value.IdInEachMapInfo)
                     .ToArray();
                 return cellNumbers

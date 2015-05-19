@@ -161,10 +161,12 @@ namespace BattleInfoPlugin.Models.Repositories
             var enemies = this.EnemyDictionary[enemyId]
                 .Select((x, i) => new MastersShipData(shipInfos[x])
                 {
-                    Slots = this.EnemySlotItems[enemyId][i]
-                        .Where(s => s != -1)
-                        .Select(s => slotInfos[s])
-                        .Select((s, si) => new ShipSlotData(s, shipInfos[x].Slots[si], shipInfos[x].Slots[si]))
+                    Slots = this.EnemySlotItems.ContainsKey(enemyId)
+                        ? this.EnemySlotItems[enemyId][i]
+                            .Where(s => s != -1)
+                            .Select(s => slotInfos[s])
+                            .Select((s, si) => new ShipSlotData(s, shipInfos[x].Slots[si], shipInfos[x].Slots[si]))
+                        : new ShipSlotData[0],
                 }).ToArray();
             return enemies;
         }

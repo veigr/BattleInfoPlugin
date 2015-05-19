@@ -136,7 +136,6 @@
     <Compile Include="Models\MapArea.cs" />
     <Compile Include="Models\MapCell.cs" />
     <Compile Include="Models\MapInfo.cs" />
-    <Compile Include="Models\MasterTable.cs" />
     <Compile Include="Models\Notifiers\BattleEndNotifier.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />
     <Compile Include="Models\Raw\battle_midnight_sp_midnight.cs" />
@@ -169,6 +168,7 @@
     <Compile Include="Views\Controls\Cell.cs" />
     <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
     <Compile Include="Views\Converters\AdditionalNameColorConverter.cs" />
+    <Compile Include="Views\Converters\BrTagToNewLineConverter.cs" />
     <Compile Include="Views\EnemyWindow.xaml.cs">
       <DependentUpon>EnemyWindow.xaml</DependentUpon>
     </Compile>
