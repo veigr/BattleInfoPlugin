@@ -8,7 +8,8 @@
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
                    xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
-                   xmlns:converters="clr-namespace:BattleInfoPlugin.Views.Converters"
+                   xmlns:converters="clr-namespace:Grabacr07.KanColleViewer.Views.Converters;assembly=KanColleViewer"
+                   xmlns:localconv="clr-namespace:BattleInfoPlugin.Views.Converters"
                    xmlns:local="clr-namespace:BattleInfoPlugin.Views.Controls"
                    xmlns:enemies="clr-namespace:BattleInfoPlugin.ViewModels.Enemies"
                    mc:Ignorable="d" 
@@ -31,7 +32,9 @@
             <l:VisibilityAndBooleanConverter x:Key="TrueToVisibleConverter"
                                              ConvertWhenTrue="Visible"
                                              ConvertWhenFalse="Collapsed"/>
-            <converters:BrTagToNewLineConverter x:Key="BrTagToNewLineConverter"/>
+            <localconv:BrTagToNewLineConverter x:Key="BrTagToNewLineConverter"/>
+            <localconv:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
+            <converters:HasFlagConverter x:Key="HasFlagConverter"/>
 
             <CollectionViewSource x:Key="EnemyMapsSource"
                                   Source="{Binding EnemyMaps}">
@@ -399,6 +402,7 @@
                                                                     <Setter Property="HorizontalAlignment" Value="Left" />
                                                                 </Style>
                                                             </StackPanel.Resources>
+
                                                             <TextBlock FontSize="11">
                                                                 <Run Text="Enemy ID:"/>
                                                                 <Run Text="{Binding Key, Mode=OneTime}"/>
@@ -409,11 +413,68 @@
                                                                        VerticalAlignment="Bottom"
                                                                        HorizontalAlignment="Left"
                                                                        FontSize="13"/>
+                                                            
                                                             <Border Background="DarkRed"
                                                                     HorizontalAlignment="Left"
                                                                     Margin="5,0"
-                                                                    Visibility="{Binding Fleet.IsBoss, Converter={StaticResource TrueToVisibleConverter}}">
-                                                                <TextBlock Text="BOSS"/>
+                                                                    MinWidth="50">
+                                                                <Border.Style>
+                                                                    <Style TargetType="{x:Type Border}">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding ParentCell.CellType, Converter={StaticResource HasFlagConverter}, ConverterParameter=ボス}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Visibility"
+                                                                                        Value="Visible"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                                <TextBlock Text="BOSS"
+                                                                           Margin="9,2"
+                                                                           HorizontalAlignment="Center"/>
+                                                            </Border>
+
+                                                            <Border Background="DarkGreen"
+                                                                    HorizontalAlignment="Left"
+                                                                    Margin="5,0"
+                                                                    MinWidth="50">
+                                                                <Border.Style>
+                                                                    <Style TargetType="{x:Type Border}">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding ParentCell.CellType, Converter={StaticResource HasFlagConverter}, ConverterParameter=航空戦}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Visibility"
+                                                                                        Value="Visible"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                                <TextBlock Text="航空戦"
+                                                                           Margin="9,2"
+                                                                           HorizontalAlignment="Center"/>
+                                                            </Border>
+
+                                                            <Border Background="#433390"
+                                                                    HorizontalAlignment="Left"
+                                                                    Margin="5,0"
+                                                                    MinWidth="50">
+                                                                <Border.Style>
+                                                                    <Style TargetType="{x:Type Border}">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding ParentCell.CellType, Converter={StaticResource HasFlagConverter}, ConverterParameter=夜戦}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Visibility"
+                                                                                        Value="Visible"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                                <TextBlock Text="夜戦"
+                                                                           Margin="9,2"
+                                                                           HorizontalAlignment="Center"/>
                                                             </Border>
 
                                                             <TextBlock Margin="5,10,5,0">
@@ -464,7 +525,6 @@
                         <DataTemplate DataType="{x:Type enemies:EnemyShipViewModel}">
                             <StackPanel DataContext="{Binding Ship}">
                                 <StackPanel.Resources>
-                                    <converters:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
                                     <Style TargetType="{x:Type TextBlock}"
                                            BasedOn="{StaticResource DefaultTextStyleKey}">
                                         <Setter Property="Margin" Value="5,0" />

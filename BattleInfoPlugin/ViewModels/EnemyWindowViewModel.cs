@@ -44,7 +44,9 @@ namespace BattleInfoPlugin.ViewModels
         {
         }
 
-        public EnemyWindowViewModel(Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> mapEnemies)
+        public EnemyWindowViewModel(
+            Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
+            Dictionary<MapCell, CellType> cellTypes)
         {
             this.EnemyMaps = Master.Current.MapInfos
                 .Select(mi => new EnemyMapViewModel
@@ -55,7 +57,7 @@ namespace BattleInfoPlugin.ViewModels
                         ? MapResource.GetMapCellPoints(mi.Value) //マップSWFがあったらそれを元に作る
                             //外部結合
                             .GroupJoin(
-                                CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies),
+                                CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes),
                                 outer => outer.Key,
                                 inner => inner.Key,
                                 (o, ie) => new { point = o, cells = ie })
@@ -72,11 +74,12 @@ namespace BattleInfoPlugin.ViewModels
                                     .GroupBy(y => y.Key)
                                     .Select(y => y.First())
                                     .ToArray(),
+                                CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
                             })
                             //敵データのないセルは除外
                             .Where(x => x.EnemyFleets.Any())
                             .ToArray()
-                        : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies) //なかったら敵データだけ(重複るが仕方ない)
+                        : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes) //なかったら敵データだけ(重複るが仕方ない)
                             .OrderBy(cell => cell.Key)
                             .ToArray(),
                 })
@@ -87,14 +90,15 @@ namespace BattleInfoPlugin.ViewModels
 
         private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
             KeyValuePair<int, MapInfo> mi,
-            Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> mapEnemies)
+            Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
+            Dictionary<MapCell, CellType> cellTypes)
         {
             return mapEnemies.Where(info => info.Key.Id == mi.Key)
                 .Select(info => info.Value)
                 .SelectMany(cells => cells)
                 .Select(cell => new EnemyCellViewModel
                 {
-                    Key = cell.Key,
+                    Key = cell.Key.IdInEachMapInfo,
                     EnemyFleets = cell.Value
                         .Select(enemy => new EnemyFleetViewModel
                         {
@@ -104,7 +108,17 @@ namespace BattleInfoPlugin.ViewModels
                         })
                         .OrderBy(enemy => enemy.Key)
                         .ToArray(),
+                    CellType = GetCellType(cell.Key, cellTypes),
                 });
+        }
+
+        private static CellType GetCellType(MapCell cell, Dictionary<MapCell, CellType> cellTypes)
+        {
+            var result = CellType.None;
+            if (cellTypes.ContainsKey(cell)) result = result | cellTypes[cell];
+            var cellMaster = Master.Current.MapCells[cell.Id];
+            result = result | cellMaster.ColorNo.ToCellType();
+            return result;
         }
 
         public void Initialize()

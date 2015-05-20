@@ -195,9 +195,18 @@ namespace BattleInfoPlugin.Models
 
         }
 
-        public Dictionary<MapInfo, Dictionary<int, Dictionary<int, FleetData>>> GetMapEnemies()
+        public Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> GetMapEnemies()
         {
             return this.provider.GetMapEnemies();
+        }
+
+        public Dictionary<MapCell, CellType> GetCellTypes()
+        {
+            var cells = Repositories.Master.Current.MapCells.Select(c => c.Value);
+            return this.provider.GetMapCellBattleTypes()
+                .SelectMany(x => x.Value, (x, y) => new { cell = cells.Single(c => c.MapInfoId == x.Key && c.IdInEachMapInfo == y.Key), type = y.Value })
+                .Select(x => new { x.cell, type = x.type.ToCellType() | x.cell.ColorNo.ToCellType() })
+                .ToDictionary(x => x.cell, x => x.type);
         }
 
         #region Update From Battle SvData
@@ -228,6 +237,8 @@ namespace BattleInfoPlugin.Models
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_airbattle data)
@@ -255,6 +266,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); //航空戦2回目はスルー
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_battle data)
@@ -289,6 +302,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_battle_water data)
@@ -323,6 +338,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_midnight_battle data)
@@ -351,6 +368,8 @@ namespace BattleInfoPlugin.Models
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(practice_battle data)
@@ -413,6 +432,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); // 航空戦2回目はスルー
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         private void Update(sortie_battle data)
@@ -441,6 +462,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.provider.UpdateBattleTypes(data);
         }
 
         #endregion

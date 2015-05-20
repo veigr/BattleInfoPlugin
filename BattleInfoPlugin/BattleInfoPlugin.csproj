@@ -130,6 +130,7 @@
     <Compile Include="Models\AirSupremacy.cs" />
     <Compile Include="Models\BattleData.cs" />
     <Compile Include="Models\BattleSituation.cs" />
+    <Compile Include="Models\CellType.cs" />
     <Compile Include="Models\FleetDamages.cs" />
     <Compile Include="Models\FleetData.cs" />
     <Compile Include="Models\Formation.cs" />
