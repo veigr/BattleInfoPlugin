@@ -30,7 +30,7 @@ namespace BattleInfoPlugin.Models.Repositories
 
         private static bool? _ExistsAssembly;
 
-        private static bool ExistsAssembly
+        public static bool ExistsAssembly
         {
             get
             {

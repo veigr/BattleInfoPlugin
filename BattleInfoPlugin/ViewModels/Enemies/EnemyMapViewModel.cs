@@ -54,6 +54,8 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public bool HasImage { get { return this.MapImage != null; } }
 
+        public bool ExistsMapAssembly { get { return MapResource.ExistsAssembly; } }
+
         public IDictionary<string, Point> CellPoints
         {
             get

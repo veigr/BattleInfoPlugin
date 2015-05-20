@@ -8,7 +8,6 @@
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
                    xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls;assembly=KanColleViewer"
-                   xmlns:views="clr-namespace:BattleInfoPlugin.Views"
                    xmlns:converters="clr-namespace:BattleInfoPlugin.Views.Converters"
                    xmlns:local="clr-namespace:BattleInfoPlugin.Views.Controls"
                    xmlns:enemies="clr-namespace:BattleInfoPlugin.ViewModels.Enemies"
@@ -32,9 +31,6 @@
             <l:VisibilityAndBooleanConverter x:Key="TrueToVisibleConverter"
                                              ConvertWhenTrue="Visible"
                                              ConvertWhenFalse="Collapsed"/>
-            <l:VisibilityAndBooleanConverter x:Key="FalseToVisibleConverter"
-                                             ConvertWhenTrue="Collapsed"
-                                             ConvertWhenFalse="Visible"/>
             <converters:BrTagToNewLineConverter x:Key="BrTagToNewLineConverter"/>
 
             <CollectionViewSource x:Key="EnemyMapsSource"
@@ -225,15 +221,52 @@
                                    TextWrapping="Wrap"/>
                     </StackPanel>
 
-                    <Border Grid.Column="1"
-                            HorizontalAlignment="Stretch"/>
+                    <StackPanel Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding /HasImage}" Value="False"/>
+                                            <Condition Binding="{Binding /ExistsMapAssembly}" Value="True"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="Map Data Not Found"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="・ローカルに保存されたマップデータが表示されます"
+                                   Style="{DynamicResource DefaultTextStyleKey}"/>
+                        <TextBlock Text="・マップデータはブラウザキャッシュがない状態で出撃した際に保存されます"
+                                   Style="{DynamicResource DefaultTextStyleKey}"/>
+                    </StackPanel>
 
-                    <TextBlock Grid.Column="1"
-                               Text="No Map Image"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="{Binding /HasImage, Converter={StaticResource FalseToVisibleConverter}}"
-                               FontSize="20"/>
+                    <StackPanel Grid.Column="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding /ExistsMapAssembly}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="Required Assembly Not Found"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="・SwfFormat.dll か ICSharpCode.SharpZipLib.dll が見つかりません"
+                                   Style="{DynamicResource DefaultTextStyleKey}"/>
+                    </StackPanel>
+
 
                     <ScrollViewer Grid.Column="1"
                                   Visibility="{Binding /HasImage, Converter={StaticResource TrueToVisibleConverter}}"
