@@ -108,17 +108,8 @@ namespace BattleInfoPlugin.ViewModels
                         })
                         .OrderBy(enemy => enemy.Key)
                         .ToArray(),
-                    CellType = GetCellType(cell.Key, cellTypes),
+                    CellType = cell.Key.GetCellType(cellTypes),
                 });
-        }
-
-        private static CellType GetCellType(MapCell cell, Dictionary<MapCell, CellType> cellTypes)
-        {
-            var result = CellType.None;
-            if (cellTypes.ContainsKey(cell)) result = result | cellTypes[cell];
-            var cellMaster = Master.Current.MapCells[cell.Id];
-            result = result | cellMaster.ColorNo.ToCellType();
-            return result;
         }
 
         public void Initialize()

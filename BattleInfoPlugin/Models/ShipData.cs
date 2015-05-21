@@ -243,6 +243,35 @@ namespace BattleInfoPlugin.Models
             get { return new LimitedValue(this.NowHP, this.MaxHP, 0); }
         }
 
+        public AttackType DayAttackType
+        {
+            get
+            {
+                return this.Count(Type2.主砲) == 2 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主主
+                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主徹
+                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.電探) == 1 ? AttackType.カットイン主電
+                    : this.Count(Type2.主砲) >= 1 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主副
+                    : this.Count(Type2.主砲) >= 2 ? AttackType.連撃
+                    : AttackType.通常;
+            }
+        }
+
+        public AttackType NightAttackType
+        {
+            get
+            {
+                return this.Count(Type2.魚雷) >= 2 ? AttackType.カットイン雷
+                    : this.Count(Type2.主砲) >= 3 ? AttackType.カットイン主主主
+                    : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主主副
+                    : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) == 0 && this.Count(Type2.魚雷) == 1 ? AttackType.カットイン主雷
+                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.魚雷) == 1 ? AttackType.カットイン主雷
+                    : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) == 0 && this.Count(Type2.魚雷) == 0 ? AttackType.連撃
+                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) >= 1 && this.Count(Type2.魚雷) == 0 ? AttackType.連撃
+                    : this.Count(Type2.主砲) == 0 && this.Count(Type2.副砲) >= 2 && this.Count(Type2.魚雷) <= 1 ? AttackType.連撃
+                    : AttackType.通常;
+            }
+        }
+
         public ShipData()
         {
             this._Name = "？？？";
@@ -250,6 +279,14 @@ namespace BattleInfoPlugin.Models
             this._TypeName = "？？？";
             this._Situation = ShipSituation.None;
             this._Slots = new ShipSlotData[0];
+        }
+    }
+
+    public static class ShipDataExtensions
+    {
+        public static int Count(this ShipData data, Type2 type2)
+        {
+            return data.Slots.Count(x => x.Type2 == type2);
         }
     }
 

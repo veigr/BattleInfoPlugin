@@ -62,23 +62,6 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
-        #region IsBoss変更通知プロパティ
-        private bool _IsBoss;
-
-        public bool IsBoss
-        {
-            get
-            { return this._IsBoss; }
-            set
-            {
-                if (this._IsBoss == value)
-                    return;
-                this._IsBoss = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        #endregion
-
         #region AirSuperiorityPotential変更通知プロパティ
         private int _AirSuperiorityPotential;
 
@@ -104,12 +87,11 @@ namespace BattleInfoPlugin.Models
         {
         }
 
-        public FleetData(IEnumerable<ShipData> ships, Formation formation, string name, bool isBoss = false)
+        public FleetData(IEnumerable<ShipData> ships, Formation formation, string name)
         {
             this._Ships = ships;
             this._Formation = formation;
             this._Name = name;
-            this._IsBoss = isBoss;
             this._AirSuperiorityPotential = this._Ships
                 .SelectMany(s => s.Slots)
                 .Where(s => s.Source.IsAirSuperiorityFighter)

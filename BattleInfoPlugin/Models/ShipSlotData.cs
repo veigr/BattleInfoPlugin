@@ -46,6 +46,8 @@ namespace BattleInfoPlugin.Models
         public int Evade { get; set; }
         public int LOS { get; set; }
 
+        public Type2 Type2 { get; set; }
+
         public string ToolTip
         {
             get
@@ -82,6 +84,7 @@ namespace BattleInfoPlugin.Models
             this.Hit = m.api_houm;
             this.Evade = m.api_houk;
             this.LOS = m.api_saku;
+            this.Type2 = (Type2)m.api_type[1];
         }
 
         public ShipSlotData(ShipSlot slot)

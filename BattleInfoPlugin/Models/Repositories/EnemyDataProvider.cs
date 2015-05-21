@@ -133,8 +133,7 @@ namespace BattleInfoPlugin.Models.Repositories
                         enemy => new FleetData(
                             this.GetEnemiesFromId(enemy),
                             this.GetEnemyFormationFromId(enemy),
-                            this.GetEnemyNameFromId(enemy),
-                            IsBoss(info.Key, cell.Key)
+                            this.GetEnemyNameFromId(enemy)
                             ))));
         }
 
@@ -142,15 +141,6 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             this.Reload();
             return this.MapCellBattleTypes;
-        }
-
-        private static bool IsBoss(int mapInfoId, int cellNo)
-        {
-            var cell = Master.Current.MapCells.Values
-                .Where(x => x.MapInfoId == mapInfoId)
-                .SingleOrDefault(x => x.IdInEachMapInfo == cellNo);
-            if (cell == null) return false;
-            return cell.ColorNo == 5;
         }
 
         private string GetNextEnemyName(map_start_next startNext)
@@ -283,13 +273,13 @@ namespace BattleInfoPlugin.Models.Repositories
             {
                 var obj = serializer.ReadObject(stream) as EnemyDataProvider;
                 if (obj == null) return;
-                this.EnemyDictionary = obj.EnemyDictionary;
-                this.EnemyFormation = obj.EnemyFormation;
-                this.EnemySlotItems = obj.EnemySlotItems;
-                this.EnemyNames = obj.EnemyNames;
-                this.MapEnemyData = obj.MapEnemyData;
-                this.MapCellBattleTypes = obj.MapCellBattleTypes;
-                this.MapRoute = obj.MapRoute;
+                this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<int, int[]>();
+                this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<int, Formation>();
+                this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<int, int[][]>();
+                this.EnemyNames = obj.EnemyNames ?? new Dictionary<int, string>();
+                this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<int>>>();
+                this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
+                this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
             }
         }
 

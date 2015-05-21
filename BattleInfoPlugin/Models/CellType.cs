@@ -37,5 +37,14 @@ namespace BattleInfoPlugin.Models
                 : battleType.Contains("airbattle") ? CellType.航空戦
                 : CellType.None;
         }
+
+        public static CellType GetCellType(this MapCell cell, Dictionary<MapCell, CellType> knownTypes)
+        {
+            var result = CellType.None;
+            if (knownTypes.ContainsKey(cell)) result = result | knownTypes[cell];
+            var cellMaster = Repositories.Master.Current.MapCells[cell.Id];
+            result = result | cellMaster.ColorNo.ToCellType();
+            return result;
+        }
     }
 }

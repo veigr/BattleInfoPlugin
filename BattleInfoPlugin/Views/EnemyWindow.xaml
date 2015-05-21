@@ -34,6 +34,7 @@
                                              ConvertWhenFalse="Collapsed"/>
             <localconv:BrTagToNewLineConverter x:Key="BrTagToNewLineConverter"/>
             <localconv:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
+            <localconv:AttackTypeToDisplayTextConverter x:Key="AttackTypeConverter"/>
             <converters:HasFlagConverter x:Key="HasFlagConverter"/>
 
             <CollectionViewSource x:Key="EnemyMapsSource"
@@ -563,6 +564,7 @@
                                         <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="Hit" />
                                         <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="Evade" />
                                         <ColumnDefinition Width="Auto" MinWidth="28" SharedSizeGroup="Luck" />
+                                        <ColumnDefinition Width="Auto" MinWidth="130" SharedSizeGroup="AttackType" />
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
@@ -687,7 +689,28 @@
                                                Text="{Binding Luck, Mode=OneTime}"
                                                Style="{DynamicResource ValueTextStyle}"/>
 
-                                    <ItemsControl Grid.Column="10"
+
+                                    <TextBlock Grid.Column="10"
+                                               Grid.Row="0"
+                                               Text="攻撃種別"/>
+                                    <StackPanel Grid.Column="10"
+                                                Grid.Row="1"
+                                                Grid.RowSpan="2">
+                                        <TextBlock>
+                                            <Run Text="昼戦"/>
+                                            <Run Text="{Binding DayAttackType, Mode=OneTime, Converter={StaticResource AttackTypeConverter}}"
+                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"
+                                                 FontSize="{DynamicResource DefaultFontSizeKey}"/>
+                                        </TextBlock>
+                                        <TextBlock>
+                                            <Run Text="夜戦"/>
+                                            <Run Text="{Binding NightAttackType, Mode=OneTime, Converter={StaticResource AttackTypeConverter}}"
+                                                 Style="{DynamicResource EmphaticTextElementStyleKey}"
+                                                 FontSize="{DynamicResource DefaultFontSizeKey}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <ItemsControl Grid.Column="11"
                                                   Grid.Row="0"
                                                   Grid.RowSpan="3"
                                                   ItemsSource="{Binding Slots}"

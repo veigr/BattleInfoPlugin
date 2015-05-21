@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AirSupremacy.cs" />
+    <Compile Include="Models\AttackType.cs" />
     <Compile Include="Models\BattleData.cs" />
     <Compile Include="Models\BattleSituation.cs" />
     <Compile Include="Models\CellType.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Models\Repositories\Master.cs" />
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="Models\ShipSlotData.cs" />
+    <Compile Include="Models\Type2.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyMapViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyCellViewModel.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="Views\Controls\Cell.cs" />
     <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
     <Compile Include="Views\Converters\AdditionalNameColorConverter.cs" />
+    <Compile Include="Views\Converters\AttackTypeToDisplayTextConverter.cs" />
     <Compile Include="Views\Converters\BrTagToNewLineConverter.cs" />
     <Compile Include="Views\EnemyWindow.xaml.cs">
       <DependentUpon>EnemyWindow.xaml</DependentUpon>
