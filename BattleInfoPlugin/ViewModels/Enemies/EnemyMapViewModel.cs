@@ -56,14 +56,18 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public bool ExistsMapAssembly { get { return MapResource.ExistsAssembly; } }
 
-        public IDictionary<string, Point> CellPoints
+        public IDictionary<string, Tuple<Point, int>> CellPoints
         {
             get
             {
                 return MapResource.GetMapCellPoints(this.Info)
-                    .GroupBy(kvp => kvp.Value)  //重複ポイントを除去
+                    .GroupBy(kvp => kvp.Value) //重複ポイントを除去
                     .Select(g => g.OrderBy(x => x.Key).First())
-                    .ToDictionary(x => x.Key.ToString(), x => x.Value);
+                    .ToDictionary(
+                        x => x.Key.ToString(),
+                        x => Tuple.Create(x.Value,
+                            Master.Current.MapCells.Select(c => c.Value).Single(c => c.IdInEachMapInfo == x.Key && c.MapInfoId == this.Info.Id).ColorNo)
+                    );
             }
         }
 

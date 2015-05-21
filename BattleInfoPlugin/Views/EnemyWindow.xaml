@@ -301,13 +301,14 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="{x:Type ContentPresenter}">
-                                        <Setter Property="Canvas.Left" Value="{Binding Path=Value.X}"/>
-                                        <Setter Property="Canvas.Top" Value="{Binding Path=Value.Y}"/>
+                                        <Setter Property="Canvas.Left" Value="{Binding Path=Value.Item1.X}"/>
+                                        <Setter Property="Canvas.Top" Value="{Binding Path=Value.Item1.Y}"/>
                                     </Style>
                                 </ItemsControl.ItemContainerStyle>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <local:Cell Text="{Binding Key}"/>
+                                        <local:Cell Text="{Binding Key}"
+                                                    CellIconNumber="{Binding Value.Item2}"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

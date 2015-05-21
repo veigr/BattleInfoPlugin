@@ -74,6 +74,7 @@ namespace BattleInfoPlugin.ViewModels
                                     .GroupBy(y => y.Key)
                                     .Select(y => y.First())
                                     .ToArray(),
+                                ColorNo = x.Where(y => y.cells != null).Select(y => y.cells.ColorNo).FirstOrDefault(),
                                 CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
                             })
                             //敵データのないセルは除外
@@ -108,6 +109,7 @@ namespace BattleInfoPlugin.ViewModels
                         })
                         .OrderBy(enemy => enemy.Key)
                         .ToArray(),
+                    ColorNo = cell.Key.ColorNo,
                     CellType = cell.Key.GetCellType(cellTypes),
                 });
         }

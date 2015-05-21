@@ -41,6 +41,8 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public CellType CellType { get; set; }
 
+        public int ColorNo { get; set; }
+
         public EnemyMapViewModel ParentMap { get; set; }
     }
 }

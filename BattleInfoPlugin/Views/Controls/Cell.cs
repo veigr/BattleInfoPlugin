@@ -61,19 +61,18 @@ namespace BattleInfoPlugin.Views.Controls
 
         #endregion
 
-        //セル表示は後まわし。Enum化した方がいい？
-        #region ColorNumber DependencyProperty
+        #region CellIconNumber DependencyProperty
 
 
-        public int ColorNumber
+        public int CellIconNumber
         {
-            get { return (int) this.GetValue(ColorNumberProperty); }
-            set { this.SetValue(ColorNumberProperty, value); }
+            get { return (int)this.GetValue(CellIconNumberProperty); }
+            set { this.SetValue(CellIconNumberProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ColorNumber.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ColorNumberProperty =
-            DependencyProperty.Register("ColorNumber", typeof(int), typeof(Cell), new PropertyMetadata(0));
+        // Using a DependencyProperty as the backing store for CellIconNumber.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CellIconNumberProperty =
+            DependencyProperty.Register("CellIconNumber", typeof(int), typeof(Cell), new PropertyMetadata(0));
 
         
         #endregion
