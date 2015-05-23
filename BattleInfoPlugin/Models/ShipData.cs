@@ -247,11 +247,11 @@ namespace BattleInfoPlugin.Models
         {
             get
             {
-                return this.Count(Type2.主砲) == 2 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主主
-                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主徹
-                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.電探) == 1 ? AttackType.カットイン主電
-                    : this.Count(Type2.主砲) >= 1 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主副
-                    : this.Count(Type2.主砲) >= 2 ? AttackType.連撃
+                return this.HasScout() && this.Count(Type2.主砲) == 2 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主主
+                    : this.HasScout() && this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主徹
+                    : this.HasScout() && this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.電探) == 1 ? AttackType.カットイン主電
+                    : this.HasScout() && this.Count(Type2.主砲) >= 1 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主副
+                    : this.HasScout() && this.Count(Type2.主砲) >= 2 ? AttackType.連撃
                     : AttackType.通常;
             }
         }
@@ -287,6 +287,14 @@ namespace BattleInfoPlugin.Models
         public static int Count(this ShipData data, Type2 type2)
         {
             return data.Slots.Count(x => x.Type2 == type2);
+        }
+
+        public static bool HasScout(this ShipData data)
+        {
+            return data.Slots
+                .Where(x => x.Source.Type == SlotItemType.水上偵察機
+                            || x.Source.Type == SlotItemType.水上爆撃機)
+                .Any(x => 0 < x.Current);
         }
     }
 
