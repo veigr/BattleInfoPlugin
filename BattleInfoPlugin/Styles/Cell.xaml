@@ -164,9 +164,76 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            
+
             <!-- 航空戦 -->
+            <Trigger Property="CellIconNumber" Value="7">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls:Cell}">
+                            <StackPanel Margin="-35.5, -22.5"
+                                        Orientation="Horizontal">
+
+                                <Canvas Width="71"
+                                        Height="45"
+                                        VerticalAlignment="Top">
+
+                                    <Ellipse HorizontalAlignment="Left" Height="19.25" Margin="25.75,5.5,0,0" Stroke="#FFD14747" VerticalAlignment="Top" Width="37.75" StrokeThickness="2">
+                                        <Ellipse.Fill>
+                                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <RotateTransform Angle="-134" CenterY="0.5" CenterX="0.5"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#FFFF7C7C"/>
+                                                <GradientStop Color="#FFB40000" Offset="1"/>
+                                                <GradientStop Color="#FFF0B2B2"/>
+                                            </LinearGradientBrush>
+                                        </Ellipse.Fill>
+                                        <Ellipse.Effect>
+                                            <BlurEffect/>
+                                        </Ellipse.Effect>
+                                    </Ellipse>
+
+                                    <Ellipse HorizontalAlignment="Left" Height="20.25" Margin="6.75,20.75,0,0" Stroke="#FF629BE0" VerticalAlignment="Top" Width="38.5" StrokeThickness="2">
+                                        <Ellipse.Fill>
+                                            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <RotateTransform Angle="-134" CenterY="0.5" CenterX="0.5"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#FF3D77BD"/>
+                                                <GradientStop Color="#FFBB1036" Offset="0.991"/>
+                                                <GradientStop Color="#FF9F7B9C" Offset="0.707"/>
+                                            </LinearGradientBrush>
+                                        </Ellipse.Fill>
+                                        <Ellipse.Effect>
+                                            <BlurEffect/>
+                                        </Ellipse.Effect>
+                                    </Ellipse>
+                                    <Path Data="M419.84079,30.443084 C419.84079,30.443084 448.34186,13.460914 474.05414,42.534896 485.99665,56.038815 484.21913,77.082716 484.21913,77.082716 L506.24329,71.900543 467.27748,127.17705 435.08832,63.263588 458.80662,75.35537 C458.80662,75.35537 460.50079,67.582117 448.64162,48.580833 438.13232,31.742358 419.84079,30.443084 419.84079,30.443084 z" HorizontalAlignment="Left" Height="15.874" Margin="44.166,2.155,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="14.918" Fill="#FF5C85B0"/>
+                                    <Path Data="M-538.66021,46.255472 L-560.14993,10.014103 -547,13.250042 C-547,13.250042 -549.84618,-24.624913 -529.5,-40.500457 -496.5,-66.249413 -454,-31.749901 -454,-31.749901 -454,-31.749901 -493.5,-57.999939 -518.5,-30.249903 -534.1258,-12.905245 -531.5,12.750042 -531.5,12.750042 -531.5,12.750042 -516.37592,8.6862189 -516.37592,8.6862189 -535.70536,38.273218 -538.66021,46.255472 -538.66021,46.255472 z" Fill="#FFBA2B35" HorizontalAlignment="Left" Height="25.579" Margin="14.292,3.671,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="28.166"/>
+                                    <Path Data="M285.90862,232.05487 C257.26078,187.35755 264.47308,115.95349 300.67355,89.774949 367.23727,41.639096 406.83814,108.68521 406.83814,108.68521 406.83814,108.68521 363.02419,72.583702 315.83992,116.42138 273.06755,156.16009 285.90862,232.05487 285.90862,232.05487 z" HorizontalAlignment="Left" Height="24.75" Margin="30.593,0,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="23.706" Fill="#FF78ADE7"/>
             
+                                </Canvas>
+                                <ContentControl Template="{StaticResource CellNoDisplayText}"
+                                                Margin="0"
+                                                VerticalAlignment="Center">
+                                    <TemplateBinding Property="Text"/>
+                                </ContentControl>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
             <!-- 母港 -->
         </Style.Triggers>
     </Style>
