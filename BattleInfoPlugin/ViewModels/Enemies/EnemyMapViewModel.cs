@@ -22,6 +22,8 @@ namespace BattleInfoPlugin.ViewModels.Enemies
     {
         public MapInfo Info { get; set; }
 
+        public HashSet<MapCellData> CellDatas { get; set; }
+
         #region EnemyCells
 
         private EnemyCellViewModel[] _EnemyCells;
@@ -65,10 +67,19 @@ namespace BattleInfoPlugin.ViewModels.Enemies
                     .Select(g => g.OrderBy(x => x.Key).First())
                     .ToDictionary(
                         x => x.Key.ToString(),
-                        x => Tuple.Create(x.Value,
-                            Master.Current.MapCells.Select(c => c.Value).Single(c => c.IdInEachMapInfo == x.Key && c.MapInfoId == this.Info.Id).ColorNo)
+                        x => Tuple.Create(x.Value, this.GetCellColorNo(x.Key))
                     );
             }
+        }
+
+        private int GetCellColorNo(int idInEachMapInfo)
+        {
+            var data = CellDatas.SingleOrDefault(x => x.No == idInEachMapInfo);
+            if (data != default(MapCellData)) return data.EventId;
+            return Master.Current.MapCells
+                .Select(c => c.Value)
+                .Single(c => c.IdInEachMapInfo == idInEachMapInfo && c.MapInfoId == this.Info.Id)
+                .ColorNo;
         }
 
         public override string Name

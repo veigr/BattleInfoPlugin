@@ -25,12 +25,21 @@ namespace BattleInfoPlugin.Models.Repositories
         [DataMember]
         private Dictionary<int, Formation> EnemyFormation { get; set; }
 
-
-        //以下はとりあえず保存だけする
-
         // EnemyId, api_eSlot
         [DataMember]
         private Dictionary<int, int[][]> EnemySlotItems { get; set; }
+
+        // EnemyId, api_eKyouka
+        [DataMember]
+        private Dictionary<int, int[][]> EnemyUpgraded { get; set; }
+
+        // EnemyId, api_eParam
+        [DataMember]
+        private Dictionary<int, int[][]> EnemyParams { get; set; }
+
+        // EnemyId, api_ship_lv
+        [DataMember]
+        private Dictionary<int, int[]> EnemyLevels { get; set; }
 
         // MapInfoID, CellNo, EnemyId
         [DataMember]
@@ -43,6 +52,10 @@ namespace BattleInfoPlugin.Models.Repositories
         // MapInfoID, FromCellNo, ToCellNo
         [DataMember]
         private Dictionary<int, HashSet<KeyValuePair<int, int>>> MapRoute { get; set; }
+
+        // MapInfoID, MapCellData
+        [DataMember]
+        private Dictionary<int, HashSet<MapCellData>> MapCellDatas { get; set; }
 
         // EnemyId, Name
         [DataMember]
@@ -63,10 +76,14 @@ namespace BattleInfoPlugin.Models.Repositories
             if (this.EnemyDictionary == null) this.EnemyDictionary = new Dictionary<int, int[]>();
             if (this.EnemyFormation == null) this.EnemyFormation = new Dictionary<int, Formation>();
             if (this.EnemySlotItems == null) this.EnemySlotItems = new Dictionary<int, int[][]>();
+            if (this.EnemyUpgraded == null) this.EnemyUpgraded = new Dictionary<int, int[][]>();
+            if (this.EnemyParams == null) this.EnemyParams = new Dictionary<int, int[][]>();
+            if (this.EnemyLevels == null) this.EnemyLevels = new Dictionary<int, int[]>();
             if (this.EnemyNames == null) this.EnemyNames = new Dictionary<int, string>();
             if (this.MapEnemyData == null) this.MapEnemyData = new Dictionary<int, Dictionary<int, HashSet<int>>>();
             if (this.MapCellBattleTypes == null) this.MapCellBattleTypes = new Dictionary<int, Dictionary<int, string>>();
             if (this.MapRoute == null) this.MapRoute = new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
+            if (this.MapCellDatas == null) this.MapCellDatas = new Dictionary<int, HashSet<MapCellData>>();
             this.previousCellNo = 0;
             this.currentStartNext = null;
             this.Dump("GetNextEnemyFormation");
@@ -88,6 +105,7 @@ namespace BattleInfoPlugin.Models.Repositories
             this.currentStartNext = startNext;
             this.UpdateMapEnemyData(startNext);
             this.UpdateMapRoute(startNext);
+            this.UpdateMapCellData(startNext);
             this.Save();
             this.Dump("UpdateMapData");
         }
@@ -141,6 +159,12 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             this.Reload();
             return this.MapCellBattleTypes;
+        }
+
+        public Dictionary<int, HashSet<MapCellData>> GetMapCellDatas()
+        {
+            this.Reload();
+            return this.MapCellDatas;
         }
 
         private string GetNextEnemyName(map_start_next startNext)
@@ -221,6 +245,27 @@ namespace BattleInfoPlugin.Models.Repositories
             this.previousCellNo = 0 < startNext.api_next ? startNext.api_no : 0;
         }
 
+        private void UpdateMapCellData(map_start_next startNext)
+        {
+            var mapInfo = GetMapInfo(startNext);
+            if (!this.MapCellDatas.ContainsKey(mapInfo))
+                this.MapCellDatas.Add(mapInfo, new HashSet<MapCellData>());
+
+            var mapCellData = new MapCellData
+            {
+                MapAreaId = startNext.api_maparea_id,
+                MapInfoIdInEachMapArea = startNext.api_mapinfo_no,
+                No = startNext.api_no,
+                ColorNo = startNext.api_color_no,
+                CommentKind = startNext.api_comment_kind,
+                EventId = startNext.api_event_id,
+                EventKind = startNext.api_event_kind,
+                ProductionKind = startNext.api_production_kind,
+                SelectCells = startNext.api_select_route != null ? startNext.api_select_route.api_select_cells : new int[0],
+            };
+            this.MapCellDatas[mapInfo].Add(mapCellData);
+        }
+
         private static int GetMapInfo(map_start_next startNext)
         {
             return Master.Current.MapInfos
@@ -230,7 +275,13 @@ namespace BattleInfoPlugin.Models.Repositories
                 .Id;
         }
 
-        public void UpdateEnemyData(int[] api_ship_ke, int[] api_formation, int[][] api_eSlot)
+        public void UpdateEnemyData(
+            int[] api_ship_ke,
+            int[] api_formation,
+            int[][] api_eSlot,
+            int[][] api_eKyouka,
+            int[][] api_eParam,
+            int[] api_ship_lv)
         {
             var enemies = api_ship_ke.Where(x => x != -1).ToArray();
             var formation = (Formation)api_formation[1];
@@ -249,6 +300,21 @@ namespace BattleInfoPlugin.Models.Repositories
                 this.EnemySlotItems[this.currentEnemyID] = api_eSlot;
             else
                 this.EnemySlotItems.Add(this.currentEnemyID, api_eSlot);
+
+            if (this.EnemyUpgraded.ContainsKey(this.currentEnemyID))
+                this.EnemyUpgraded[this.currentEnemyID] = api_eKyouka;
+            else
+                this.EnemyUpgraded.Add(this.currentEnemyID, api_eKyouka);
+
+            if (this.EnemyParams.ContainsKey(this.currentEnemyID))
+                this.EnemyParams[this.currentEnemyID] = api_eParam;
+            else
+                this.EnemyParams.Add(this.currentEnemyID, api_eParam);
+
+            if (this.EnemyLevels.ContainsKey(this.currentEnemyID))
+                this.EnemyLevels[this.currentEnemyID] = api_ship_lv;
+            else
+                this.EnemyLevels.Add(this.currentEnemyID, api_ship_lv);
 
             this.Save();
             this.Dump("UpdateEnemyData");
@@ -276,10 +342,14 @@ namespace BattleInfoPlugin.Models.Repositories
                 this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<int, int[]>();
                 this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<int, Formation>();
                 this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<int, int[][]>();
+                this.EnemyUpgraded = obj.EnemyUpgraded ?? new Dictionary<int, int[][]>();
+                this.EnemyParams = obj.EnemyParams ?? new Dictionary<int, int[][]>();
+                this.EnemyLevels = obj.EnemyLevels ?? new Dictionary<int, int[]>();
                 this.EnemyNames = obj.EnemyNames ?? new Dictionary<int, string>();
                 this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<int>>>();
                 this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
                 this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
+                this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, HashSet<MapCellData>>();
             }
         }
 

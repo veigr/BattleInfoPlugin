@@ -46,12 +46,14 @@ namespace BattleInfoPlugin.ViewModels
 
         public EnemyWindowViewModel(
             Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
-            Dictionary<MapCell, CellType> cellTypes)
+            Dictionary<MapCell, CellType> cellTypes,
+            Dictionary<int, HashSet<MapCellData>> cellDatas)
         {
             this.EnemyMaps = Master.Current.MapInfos
                 .Select(mi => new EnemyMapViewModel
                 {
                     Info = mi.Value,
+                    CellDatas = cellDatas.ContainsKey(mi.Key) ? cellDatas[mi.Key] : new HashSet<MapCellData>(),
                     //セルポイントデータに既知の敵データを外部結合して座標でマージ
                     EnemyCells = MapResource.HasMapSwf(mi.Value)
                         ? MapResource.GetMapCellPoints(mi.Value) //マップSWFがあったらそれを元に作る
