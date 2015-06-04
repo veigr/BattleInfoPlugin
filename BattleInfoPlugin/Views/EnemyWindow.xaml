@@ -12,6 +12,7 @@
                    xmlns:localconv="clr-namespace:BattleInfoPlugin.Views.Converters"
                    xmlns:local="clr-namespace:BattleInfoPlugin.Views.Controls"
                    xmlns:enemies="clr-namespace:BattleInfoPlugin.ViewModels.Enemies"
+                   xmlns:behaviors="clr-namespace:BattleInfoPlugin.Views.Behaviors"
                    mc:Ignorable="d" 
                    Title="既知の敵一覧"
                    Width="1000"
@@ -35,6 +36,9 @@
             <localconv:BrTagToNewLineConverter x:Key="BrTagToNewLineConverter"/>
             <localconv:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
             <localconv:AttackTypeToDisplayTextConverter x:Key="AttackTypeConverter"/>
+            <localconv:FleetBackgroundConverter x:Key="FleetBackgroundConverter"
+                                                Background1="{StaticResource ThemeBrushKey}"
+                                                Background2="{StaticResource SemiactiveBackgroundBrushKey}"/>
             <converters:HasFlagConverter x:Key="HasFlagConverter"/>
 
             <CollectionViewSource x:Key="EnemyMapsSource"
@@ -225,6 +229,7 @@
                                    TextWrapping="Wrap"/>
                     </StackPanel>
 
+                    <!-- Map Data Not Found メッセージ -->
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -251,6 +256,7 @@
                                    Style="{DynamicResource DefaultTextStyleKey}"/>
                     </StackPanel>
 
+                    <!-- Required Assembly Not Found メッセージ -->
                     <StackPanel Grid.Column="1"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -279,6 +285,7 @@
                                   PanningMode="Both">
                         <Canvas Width="768"
                                 Height="435">
+                            <!-- マップイメージ -->
                             <Image Source="{Binding /MapImage}"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
@@ -286,7 +293,7 @@
                                    Height="435"
                                    Margin="0"
                                    />
-                    
+                            <!-- セルアイコン -->
                             <ItemsControl ItemsSource="{Binding /CellPoints}"
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"
@@ -308,7 +315,12 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <local:Cell Text="{Binding Key}"
-                                                    CellIconNumber="{Binding Value.Item2}"/>
+                                                    CellIconNumber="{Binding Value.Item2}">
+                                            <i:Interaction.Behaviors>
+                                                <behaviors:ScrollToCellBehavior ScrollTargetName="EnemiesDataScrollViewer"
+                                                                                ParentElement="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}"/>
+                                            </i:Interaction.Behaviors>
+                                        </local:Cell>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -316,7 +328,7 @@
                     </ScrollViewer>
                 </Grid>
                 
-                <!-- 仮想化するとスクロールが重い。どうするか。 -->
+                <!-- 仮想化するとスクロールが重いのでやめた。。 -->
                 <ItemsControl ItemsSource="{Binding Source={StaticResource EnemiesSource}}"
                               Grid.IsSharedSizeScope="True"
                               VirtualizingPanel.IsVirtualizingWhenGrouping="False"
@@ -326,7 +338,8 @@
                     <ItemsControl.Template>
                         <ControlTemplate>
                             <Border Background="{DynamicResource ThemeBrushKey}">
-                                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                <ScrollViewer x:Name="EnemiesDataScrollViewer"
+                                              VerticalScrollBarVisibility="Auto"
                                               HorizontalScrollBarVisibility="Auto"
                                               PanningMode="Both">
                                     <ItemsPresenter/>
@@ -388,8 +401,14 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                <StackPanel DataContext="{Binding Name}">
-                                                    <Grid>
+                                                <StackPanel>
+                                                    <StackPanel.Background>
+                                                        <MultiBinding Converter="{StaticResource FleetBackgroundConverter}">
+                                                            <Binding Path="Name"/>
+                                                            <Binding Path="Name" RelativeSource="{RelativeSource PreviousData}"/>
+                                                        </MultiBinding>
+                                                    </StackPanel.Background>
+                                                    <Grid DataContext="{Binding Name}">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto" SharedSizeGroup="EnemyName"/>
                                                             <ColumnDefinition/>
@@ -513,7 +532,7 @@
                                                     <Rectangle Height="1"
                                                                Style="{DynamicResource SeparatorRectangleStyleKey}"
                                                                Opacity="1"
-                                                               Margin="10,-1,10,0" />
+                                                               Margin="0,-1,10,0" />
                                                 </StackPanel>
                                             </ControlTemplate>
                                         </Setter.Value>

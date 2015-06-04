@@ -74,7 +74,9 @@ namespace BattleInfoPlugin.ViewModels
                                 EnemyFleets = x.Where(y => y.cells != null) //敵データをEnemyIdでマージ
                                     .SelectMany(y => y.cells.EnemyFleets)
                                     .GroupBy(y => y.Key)
+                                    .OrderBy(y => y.Key)
                                     .Select(y => y.First())
+                                    .Distinct(new FleetComparer())  //同一編成の敵を除去
                                     .ToArray(),
                                 ColorNo = x.Where(y => y.cells != null).Select(y => y.cells.ColorNo).FirstOrDefault(),
                                 CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
@@ -110,6 +112,7 @@ namespace BattleInfoPlugin.ViewModels
                             EnemyShips = enemy.Value.Ships.Select(s => new EnemyShipViewModel { Ship = s }).ToArray(),
                         })
                         .OrderBy(enemy => enemy.Key)
+                        .Distinct(new FleetComparer())  //同一編成の敵を除去
                         .ToArray(),
                     ColorNo = cell.Key.ColorNo,
                     CellType = cell.Key.GetCellType(cellTypes),
@@ -118,6 +121,26 @@ namespace BattleInfoPlugin.ViewModels
 
         public void Initialize()
         {
+        }
+    }
+
+    class FleetComparer : IEqualityComparer<EnemyFleetViewModel>
+    {
+        public bool Equals(EnemyFleetViewModel x, EnemyFleetViewModel y)
+        {
+            return this.GetHashCode(x) == this.GetHashCode(y);
+        }
+
+        public int GetHashCode(EnemyFleetViewModel obj)
+        {
+            var name = obj.Fleet.Name;
+            var formation = obj.Fleet.Formation;
+            var ships = obj.Fleet.Ships.OfType<MastersShipData>().Where(x => x.Source != null).Select(x => x.Source.Id).ToArray();
+            var slots = obj.Fleet.Ships.SelectMany(x => x.Slots).Where(x => x.Source != null).Select(x => x.Source.Id).ToArray();
+            return name.GetHashCode()
+                   ^ formation.GetHashCode()
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.GetHashCode())
+                   ^ slots.Aggregate(0, (a, b) => a.GetHashCode() ^ b.GetHashCode());
         }
     }
 }

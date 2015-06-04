@@ -35,7 +35,8 @@
                 <!-- アイコンなし。デフォルト。 -->
                 <ControlTemplate TargetType="{x:Type controls:Cell}">
                     <StackPanel Margin="-11"
-                                Orientation="Horizontal">
+                                Orientation="Horizontal"
+                                Background="Transparent">
                         <Control Width="22"
                                  Height="22"
                                  Visibility="Hidden"/>
@@ -54,7 +55,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
                             <StackPanel Margin="-11"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
                                 <Ellipse Fill="{StaticResource No1FillBrushKey}"
                                          Stroke="{StaticResource No1StrokeBrushKey}"
                                          StrokeThickness="3"
@@ -77,7 +79,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
                             <StackPanel Margin="-11"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
                                 <Ellipse Fill="{StaticResource No2FillBrushKey}"
                                          Stroke="{StaticResource No2StrokeBrushKey}"
                                          StrokeThickness="3"
@@ -100,7 +103,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
                             <StackPanel Margin="-11"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
                                 <Ellipse Fill="{StaticResource No3FillBrushKey}"
                                          Stroke="{StaticResource No3StrokeBrushKey}"
                                          StrokeThickness="3"
@@ -123,7 +127,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
                             <StackPanel Margin="-11"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
                                 <Ellipse Fill="{StaticResource No4FillBrushKey}"
                                          Stroke="{StaticResource No4StrokeBrushKey}"
                                          StrokeThickness="3"
@@ -148,7 +153,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
                             <StackPanel Margin="-11"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
                                 <Ellipse Fill="{StaticResource No1FillBrushKey}"
                                          Stroke="{StaticResource No1StrokeBrushKey}"
                                          StrokeThickness="3"
@@ -171,7 +177,8 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
                             <StackPanel Margin="-35.5, -22.5"
-                                        Orientation="Horizontal">
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
 
                                 <Canvas Width="71"
                                         Height="45"
