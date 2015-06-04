@@ -55,7 +55,7 @@ namespace BattleInfoPlugin.Models.Repositories
 
         // MapInfoID, MapCellData
         [DataMember]
-        private Dictionary<int, HashSet<MapCellData>> MapCellDatas { get; set; }
+        private Dictionary<int, List<MapCellData>> MapCellDatas { get; set; }
 
         // EnemyId, Name
         [DataMember]
@@ -83,7 +83,7 @@ namespace BattleInfoPlugin.Models.Repositories
             if (this.MapEnemyData == null) this.MapEnemyData = new Dictionary<int, Dictionary<int, HashSet<int>>>();
             if (this.MapCellBattleTypes == null) this.MapCellBattleTypes = new Dictionary<int, Dictionary<int, string>>();
             if (this.MapRoute == null) this.MapRoute = new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-            if (this.MapCellDatas == null) this.MapCellDatas = new Dictionary<int, HashSet<MapCellData>>();
+            if (this.MapCellDatas == null) this.MapCellDatas = new Dictionary<int, List<MapCellData>>();
             this.previousCellNo = 0;
             this.currentStartNext = null;
             this.Dump("GetNextEnemyFormation");
@@ -161,7 +161,7 @@ namespace BattleInfoPlugin.Models.Repositories
             return this.MapCellBattleTypes;
         }
 
-        public Dictionary<int, HashSet<MapCellData>> GetMapCellDatas()
+        public Dictionary<int, List<MapCellData>> GetMapCellDatas()
         {
             this.Reload();
             return this.MapCellDatas;
@@ -249,7 +249,7 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             var mapInfo = GetMapInfo(startNext);
             if (!this.MapCellDatas.ContainsKey(mapInfo))
-                this.MapCellDatas.Add(mapInfo, new HashSet<MapCellData>());
+                this.MapCellDatas.Add(mapInfo, new List<MapCellData>());
 
             var mapCellData = new MapCellData
             {
@@ -263,6 +263,9 @@ namespace BattleInfoPlugin.Models.Repositories
                 ProductionKind = startNext.api_production_kind,
                 SelectCells = startNext.api_select_route != null ? startNext.api_select_route.api_select_cells : new int[0],
             };
+
+            var exists = this.MapCellDatas[mapInfo].SingleOrDefault(x => x.No == mapCellData.No);
+            if (exists != null) this.MapCellDatas[mapInfo].Remove(exists);
             this.MapCellDatas[mapInfo].Add(mapCellData);
         }
 
@@ -349,7 +352,7 @@ namespace BattleInfoPlugin.Models.Repositories
                 this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<int>>>();
                 this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
                 this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-                this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, HashSet<MapCellData>>();
+                this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
             }
         }
 

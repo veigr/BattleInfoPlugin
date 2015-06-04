@@ -22,7 +22,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
     {
         public MapInfo Info { get; set; }
 
-        public HashSet<MapCellData> CellDatas { get; set; }
+        public List<MapCellData> CellDatas { get; set; }
 
         #region EnemyCells
 
@@ -74,7 +74,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         private int GetCellColorNo(int idInEachMapInfo)
         {
-            var data = CellDatas.SingleOrDefault(x => x.No == idInEachMapInfo);
+            var data = this.CellDatas.SingleOrDefault(x => x.No == idInEachMapInfo);
             if (data != default(MapCellData)) return data.EventId;
             return Master.Current.MapCells
                 .Select(c => c.Value)

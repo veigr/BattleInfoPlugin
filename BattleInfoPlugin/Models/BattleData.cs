@@ -200,7 +200,7 @@ namespace BattleInfoPlugin.Models
             return this.provider.GetMapEnemies();
         }
 
-        public Dictionary<int, HashSet<MapCellData>> GetCellDatas()
+        public Dictionary<int, List<MapCellData>> GetCellDatas()
         {
             return this.provider.GetMapCellDatas();
         }
@@ -223,7 +223,7 @@ namespace BattleInfoPlugin.Models
                 .ToDictionary(x => x.cell, x => x.type);
         }
 
-        private CellType GetCellType(MapCell cell, Dictionary<int, HashSet<MapCellData>> cellData)
+        private CellType GetCellType(MapCell cell, Dictionary<int, List<MapCellData>> cellData)
         {
             if (!cellData.ContainsKey(cell.MapInfoId)) return CellType.None;
             var datas = cellData[cell.MapInfoId];
