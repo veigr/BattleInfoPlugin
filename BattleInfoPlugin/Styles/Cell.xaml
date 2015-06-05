@@ -144,9 +144,36 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            
+
             <!-- ボス -->
-            
+            <Trigger Property="CellIconNumber" Value="5">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls:Cell}">
+                            <StackPanel Margin="-18.5, -24"
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
+
+                                <Canvas Width="37"
+                                        Height="40"
+                                        VerticalAlignment="Top">
+                                    <Path Data="M-42.542548,15.518358 C-42.542548,24.079047 -50.73773,29.718158 -61.047229,29.718158 -71.356729,29.718158 -79.876548,24.079047 -79.876548,15.518358 -79.876548,13.329725 -79.302993,11.261034 -78.344788,9.3591771 -77.459548,7.6021403 -81.084548,-0.89775695 -75.376215,-7.6476753 -75.282137,-7.7589188 -74.938473,-7.828228 -74.792881,-7.7310077 -73.385493,-6.7912111 -70.042881,1.8522098 -69.285357,1.5395395 -66.853077,0.53560851 -64.102343,0.01785769 -61.209548,0.01785769 -58.402219,0.01785769 -55.787567,0.66784878&#xD;&#xA;-53.35112,1.4542227 -52.376215,1.7688775 -49.542881,-6.0646065 -47.203629,-8.4269039 -47.133172,-8.4980551 -46.763414,-8.4158354 -46.709548,-8.3148409 -41.221348,1.9750668 -44.584548,8.4771297 -43.628854,10.295211 -42.802011,11.86817 -42.542548,13.685621 -42.542548,15.518358 z" HorizontalAlignment="Left" Height="36.873" Margin="0.425,1.478,0,0" Stretch="Fill" VerticalAlignment="Top" Width="36.115" Fill="#FFCF2121" Stroke="#FF9C0505"/>
+                                    <Path Data="M16.440962,16.252555 C18.829962,17.974665 23.607964,21.418887 23.607964,21.418887 23.607964,21.418887 21.274748,23.169915 17.774631,21.919588 15.691649,20.169469 16.024847,17.335715 16.440962,16.252555 z" HorizontalAlignment="Left" Height="6.704" Margin="7.669,16.997,0,0" Stretch="Fill" VerticalAlignment="Top" Width="7.988" Fill="#FFFFBABA"/>
+                                    <Path Data="M32.193506,21.749388 C34.471396,19.749499 39.238662,15.972158 39.238662,15.972158 40.026907,17.083075 39.693073,20.166175 38.471524,21.632553 35.804988,22.965812 33.69388,22.582239 32.193506,21.749388 z" HorizontalAlignment="Left" Height="7.099" Margin="22.643,16.735,0,0" Stretch="Fill" VerticalAlignment="Top" Width="7.981" Fill="#FFFFBABA"/>
+                                </Canvas>
+                                
+                                <ContentControl Template="{StaticResource CellNoDisplayText}"
+                                                Margin="7,0,0,0"
+                                                VerticalAlignment="Center">
+                                    <TemplateBinding Property="Text"/>
+                                </ContentControl>
+                                
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
             <!-- 気のせい(変化前) -->
             <Trigger Property="CellIconNumber" Value="6">
                 <Setter Property="Template">
@@ -230,11 +257,13 @@
                                     <Path Data="M285.90862,232.05487 C257.26078,187.35755 264.47308,115.95349 300.67355,89.774949 367.23727,41.639096 406.83814,108.68521 406.83814,108.68521 406.83814,108.68521 363.02419,72.583702 315.83992,116.42138 273.06755,156.16009 285.90862,232.05487 285.90862,232.05487 z" HorizontalAlignment="Left" Height="24.75" Margin="30.593,0,0,0" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="23.706" Fill="#FF78ADE7"/>
             
                                 </Canvas>
+                                
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
                                                 Margin="0"
                                                 VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
+                                
                             </StackPanel>
                         </ControlTemplate>
                     </Setter.Value>
