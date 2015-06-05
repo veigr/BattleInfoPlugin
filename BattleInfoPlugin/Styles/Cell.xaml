@@ -168,7 +168,7 @@
                                 </Canvas>
                                 
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="7,0,0,0"
+                                                Margin="10,0,0,0"
                                                 VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
@@ -276,6 +276,42 @@
             </Trigger>
 
             <!-- 母港 -->
+            <Trigger Property="CellIconNumber" Value="8">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls:Cell}">
+                            <StackPanel Margin="-24.5, -24.5"
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
+
+                                <Canvas Width="49"
+                                        Height="49">
+                                    <Ellipse Fill="#FFFFFFA9" Height="41.459" Width="41.459" Canvas.Left="3.208" Canvas.Top="3.958">
+                                        <Ellipse.Effect>
+                                            <BlurEffect Radius="10"/>
+                                        </Ellipse.Effect>
+                                    </Ellipse>
+                                    <Ellipse Height="34.75" Canvas.Left="6.708" Canvas.Top="7.312" Width="34.75" Stroke="#FF436B8D" StrokeThickness="3" Fill="#FFDAE4E1"/>
+                                    <Ellipse Height="4.538" Canvas.Left="21.815" Stroke="#FF1C3E5D" Canvas.Top="12.692" Width="4.819"/>
+                                    <Path Data="M-273.66667,-66 L-273.66667,1.8333333" Height="18.833" Canvas.Left="22.71" Stretch="Fill" Stroke="#FF1C3E5D" Canvas.Top="16.17" Width="3"/>
+                                    <Ellipse Height="1.963" Canvas.Left="17.684" Stroke="#FF1C3E5D" Canvas.Top="20.04" Width="12.933" Fill="#FF1C3E5D"/>
+                                    <Path Data="M-267.62466,-79.501725 C-266.95781,-80.335428 -256.33327,-75.166592 -257.16632,-70.166331 -257.99937,-65.166069 -289.41817,-57.91538 -289.58467,-48.248913 -289.75117,-38.582446 -257.83267,-21.330892 -257.66566,-12.997209 -267.99991,-26.831124 -291.50116,-38.498619 -291.16813,-48.498925 -290.8351,-58.499231 -260.99963,-64.665843 -258.83275,-69.999606 -256.66588,-75.333368 -268.29151,-78.668022 -267.62466,-79.501725 z" Fill="#FF1C3E5D" Height="17.883" Canvas.Left="19.375" Stretch="Fill" Stroke="#FF1C3E5D" Canvas.Top="13.354" Width="9.521"/>
+                                    <Path Data="M-315.50068,-40.333333 C-310.01947,-26.807718 -296.41694,-20.011544 -285.83377,-11.666667 -280.57782,-7.5682325 -278.83371,-6.5 -275.50035,-4.1666667 -271.83365,-6.6666667 -268.29623,-10.393051 -264.16693,-13 -248.24558,-26.430389 -240.87121,-29.021093 -235.50003,-42.5 -241.59992,-18.46917 -252.4483,-9.1656045 -275.5,6.75 -295.29077,-4.8175204 -306.95582,-14.96734 -315.50068,-40.333333 z" Fill="#FF1C3E5D" Height="13.427" Canvas.Left="13.636" Stretch="Fill" Stroke="#FF1C3E5D" Canvas.Top="23.656" Width="21.329"/>
+                                    <Path Data="M-322.43634,-56.703371 C-323.02411,-53.711653 -324.78462,-41.224595 -325.12286,-37.735853 -323.14086,-39.188244 -317.9035,-42.534024 -316.29251,-39.034735 -317.28602,-42.758964 -313.58817,-46.744844 -313.46317,-47.260714 -313.46317,-48.010387 -320.28332,-54.574006 -322.43634,-56.703371 z" Fill="#FF1C3E5D" Height="4.784" Canvas.Left="11.489" Stretch="Fill" Stroke="#FF1C3E5D" Canvas.Top="18.912" Width="2.995"/>
+                                    <Path Data="M-235.8162,-31.829026 C-234.31351,-46.101707 -239.29013,-44.771683 -238.44102,-49.189657 -237.93355,-51.762195 -234.06637,-61.124852 -232.75566,-64.920573 -231.73553,-59.225908 -229.01655,-41.864133 -228.72676,-34.991557 -230.6675,-38.789652 -233.85101,-43.357557 -235.8162,-31.829026 z" Fill="#FF1C3E5D" Height="4.812" Canvas.Left="33.728" Stretch="Fill" Stroke="#FF1C3E5D" Canvas.Top="18.469" Width="3.105"/>
+                                </Canvas>
+
+                                <ContentControl Template="{StaticResource CellNoDisplayText}"
+                                                Margin="5,0,0,0"
+                                                VerticalAlignment="Center">
+                                    <TemplateBinding Property="Text"/>
+                                </ContentControl>
+
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
