@@ -127,6 +127,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KcsResourceWriter.cs" />
     <Compile Include="Models\AirSupremacy.cs" />
     <Compile Include="Models\AttackType.cs" />
     <Compile Include="Models\BattleData.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Models\MapArea.cs" />
     <Compile Include="Models\MapCell.cs" />
     <Compile Include="Models\MapCellData.cs" />
+    <Compile Include="Models\MapData.cs" />
     <Compile Include="Models\MapInfo.cs" />
     <Compile Include="Models\Notifiers\BattleEndNotifier.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />
@@ -156,12 +158,12 @@
     <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\Repositories\EnemyDataProvider.cs" />
-    <Compile Include="Models\Repositories\KcsResourceWriter.cs" />
     <Compile Include="Models\Repositories\MapResource.cs" />
     <Compile Include="Models\Repositories\Master.cs" />
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="Models\ShipSlotData.cs" />
     <Compile Include="Models\Type2.cs" />
+    <Compile Include="SortieDataListener.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyMapViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyCellViewModel.cs" />
@@ -193,7 +195,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="BattleInfoPlugin.cs" />
+    <Compile Include="Plugin.cs" />
     <Page Include="Views\EnemyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

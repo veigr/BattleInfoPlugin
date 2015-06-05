@@ -384,7 +384,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Name = this.Source.Name;
             var isEnemyID = 500 < this.Source.Id && this.Source.Id < 901;
-            var m = BattleInfoPlugin.RawStart2.api_mst_ship.Single(x => x.api_id == this.Source.Id);
+            var m = Plugin.RawStart2.api_mst_ship.Single(x => x.api_id == this.Source.Id);
             this.AdditionalName = isEnemyID ? m.api_yomi : "";
             this.TypeName = this.Source.ShipType.Name;
             this.NowHP = this.Source.HP;

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using BattleInfoPlugin.Models;
-using BattleInfoPlugin.Models.Notifiers;
-using BattleInfoPlugin.Models.Repositories;
 using BattleInfoPlugin.ViewModels;
 using BattleInfoPlugin.Views;
 using Grabacr07.KanColleViewer.Composition;
@@ -16,13 +13,14 @@ namespace BattleInfoPlugin
     [ExportMetadata("Description", "戦闘情報を表示します。")]
     [ExportMetadata("Version", "1.0.0")]
     [ExportMetadata("Author", "@veigr")]
-    public class BattleInfoPlugin : IToolPlugin
+    public class Plugin : IToolPlugin
     {
-        private readonly ToolViewModel vm = new ToolViewModel(new BattleData(), new BattleEndNotifier());
+        private readonly ToolViewModel vm = new ToolViewModel();
         internal static readonly KcsResourceWriter ResourceWriter = new KcsResourceWriter();
+        internal static readonly SortieDataListener SortieListener = new SortieDataListener();
         internal static kcsapi_start2 RawStart2 { get; private set; }
 
-        public BattleInfoPlugin()
+        public Plugin()
         {
             KanColleClient.Current.Proxy.api_start2.TryParse<kcsapi_start2>().Subscribe(x =>
             {

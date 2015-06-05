@@ -8,7 +8,6 @@ using System.Runtime.Serialization.Json;
 using BattleInfoPlugin.Models.Raw;
 using BattleInfoPlugin.Properties;
 using Grabacr07.KanColleWrapper;
-using Grabacr07.KanColleWrapper.Models;
 
 namespace BattleInfoPlugin.Models.Repositories
 {
@@ -86,14 +85,13 @@ namespace BattleInfoPlugin.Models.Repositories
             if (this.MapCellDatas == null) this.MapCellDatas = new Dictionary<int, List<MapCellData>>();
             this.previousCellNo = 0;
             this.currentStartNext = null;
-            this.Dump("GetNextEnemyFormation");
         }
         
         public FleetData GetNextEnemyFleet(map_start_next startNext)
         {
-            this.Dump("GetNextEnemyFleet");
             if (startNext.api_enemy == null) return new FleetData();
             this.currentEnemyID = startNext.api_enemy.api_enemy_id;
+            this.Reload();
             return new FleetData(
                 this.GetNextEnemies(startNext),
                 this.GetNextEnemyFormation(startNext),
@@ -107,7 +105,6 @@ namespace BattleInfoPlugin.Models.Repositories
             this.UpdateMapRoute(startNext);
             this.UpdateMapCellData(startNext);
             this.Save();
-            this.Dump("UpdateMapData");
         }
 
         public void UpdateBattleTypes<T>(T battleApi)
@@ -207,7 +204,7 @@ namespace BattleInfoPlugin.Models.Repositories
             var shipInfos = KanColleClient.Current.Master.Ships;
             var slotInfos = KanColleClient.Current.Master.SlotItems;
             if (!this.EnemyDictionary.ContainsKey(enemyId)) return Enumerable.Repeat(new MastersShipData(), 6).ToArray();
-            var enemies = this.EnemyDictionary[enemyId]
+            return this.EnemyDictionary[enemyId]
                 .Select((x, i) => new MastersShipData(shipInfos[x])
                 {
                     Slots = this.EnemySlotItems.ContainsKey(enemyId)
@@ -217,7 +214,6 @@ namespace BattleInfoPlugin.Models.Repositories
                             .Select((s, si) => new ShipSlotData(s, shipInfos[x].Slots[si], shipInfos[x].Slots[si]))
                         : new ShipSlotData[0],
                 }).ToArray();
-            return enemies;
         }
 
         private void UpdateMapEnemyData(map_start_next startNext)
@@ -320,16 +316,6 @@ namespace BattleInfoPlugin.Models.Repositories
                 this.EnemyLevels.Add(this.currentEnemyID, api_ship_lv);
 
             this.Save();
-            this.Dump("UpdateEnemyData");
-        }
-
-        public void Dump(string title = "")
-        {
-            Debug.WriteLine(title);
-            //this.EnemyDictionary.SelectMany(x => x.Value, (key, value) => new { key, value })
-            //    .ToList().ForEach(x => Debug.WriteLine(x.key + " : " + x.value));
-            //this.EnemyFormation
-            //    .ToList().ForEach(x => Debug.WriteLine(x.Key + " : " + x.Value));
         }
 
         private void Reload()

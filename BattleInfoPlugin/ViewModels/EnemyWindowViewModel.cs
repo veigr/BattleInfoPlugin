@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
 using BattleInfoPlugin.Models;
-using BattleInfoPlugin.ViewModels.Enemies;
 using BattleInfoPlugin.Models.Repositories;
+using BattleInfoPlugin.ViewModels.Enemies;
+using Livet;
 
 namespace BattleInfoPlugin.ViewModels
 {
     public class EnemyWindowViewModel : ViewModel
     {
+        private readonly MapData mapData = new MapData();
+
         public EnemyMapViewModel[] EnemyMaps { get; set; }
 
 
@@ -42,13 +34,9 @@ namespace BattleInfoPlugin.ViewModels
 
         public EnemyWindowViewModel()
         {
-        }
-
-        public EnemyWindowViewModel(
-            Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
-            Dictionary<MapCell, CellType> cellTypes,
-            Dictionary<int, List<MapCellData>> cellDatas)
-        {
+            var mapEnemies = this.mapData.GetMapEnemies();
+            var cellTypes = this.mapData.GetCellTypes();
+            var cellDatas = this.mapData.GetCellDatas();
             this.EnemyMaps = Master.Current.MapInfos
                 .Select(mi => new EnemyMapViewModel
                 {
@@ -95,8 +83,8 @@ namespace BattleInfoPlugin.ViewModels
 
         private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
             KeyValuePair<int, MapInfo> mi,
-            Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
-            Dictionary<MapCell, CellType> cellTypes)
+            IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
+            IReadOnlyDictionary<MapCell, CellType> cellTypes)
         {
             return mapEnemies.Where(info => info.Key.Id == mi.Key)
                 .Select(info => info.Value)

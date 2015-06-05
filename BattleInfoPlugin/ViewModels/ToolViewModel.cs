@@ -9,16 +9,16 @@ namespace BattleInfoPlugin.ViewModels
 {
     public class ToolViewModel : ViewModel
     {
-        private readonly BattleEndNotifier notifier;
+        private readonly BattleEndNotifier notifier = new BattleEndNotifier();
 
-        public BattleData Data { get; set; }
+        private readonly BattleData battleData = new BattleData();
 
         public string UpdatedTime
         {
             get
             {
-                return this.Data != null && this.Data.UpdatedTime != default(DateTimeOffset)
-                    ? this.Data.UpdatedTime.ToString("yyyy/MM/dd HH:mm:ss")
+                return this.battleData != null && this.battleData.UpdatedTime != default(DateTimeOffset)
+                    ? this.battleData.UpdatedTime.ToString("yyyy/MM/dd HH:mm:ss")
                     : "No Data";
             }
         }
@@ -27,8 +27,8 @@ namespace BattleInfoPlugin.ViewModels
         {
             get
             {
-                return this.Data != null && this.Data.BattleSituation != Models.BattleSituation.なし
-                    ? this.Data.BattleSituation.ToString()
+                return this.battleData != null && this.battleData.BattleSituation != Models.BattleSituation.なし
+                    ? this.battleData.BattleSituation.ToString()
                     : "";
             }
         }
@@ -37,8 +37,8 @@ namespace BattleInfoPlugin.ViewModels
         {
             get
             {
-                return this.Data != null && this.Data.FriendAirSupremacy != AirSupremacy.航空戦なし
-                    ? this.Data.FriendAirSupremacy.ToString()
+                return this.battleData != null && this.battleData.FriendAirSupremacy != AirSupremacy.航空戦なし
+                    ? this.battleData.FriendAirSupremacy.ToString()
                     : "";
             }
         }
@@ -115,41 +115,37 @@ namespace BattleInfoPlugin.ViewModels
         #endregion
 
 
-        public ToolViewModel(BattleData data, BattleEndNotifier notifier)
+        public ToolViewModel()
         {
             this.FirstFleet = new FleetViewModel("自艦隊");
             this.SecondFleet = new FleetViewModel("護衛艦隊");
             this.Enemies = new FleetViewModel("敵艦隊");
 
-            this.notifier = notifier;
-
-            this.Data = data;
-
-            this.CompositeDisposable.Add(new PropertyChangedEventListener(this.Data)
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(this.battleData)
             {
                 {
-                    () => this.Data.UpdatedTime,
+                    () => this.battleData.UpdatedTime,
                     (_, __) => this.RaisePropertyChanged(() => this.UpdatedTime)
                 },
                 {
-                    () => this.Data.BattleSituation,
+                    () => this.battleData.BattleSituation,
                     (_, __) => this.RaisePropertyChanged(() => this.BattleSituation)
                 },
                 {
-                    () => this.Data.FriendAirSupremacy,
+                    () => this.battleData.FriendAirSupremacy,
                     (_, __) => this.RaisePropertyChanged(() => this.FriendAirSupremacy)
                 },
                 {
-                    () => this.Data.FirstFleet,
-                    (_, __) => this.FirstFleet.Fleet = this.Data.FirstFleet
+                    () => this.battleData.FirstFleet,
+                    (_, __) => this.FirstFleet.Fleet = this.battleData.FirstFleet
                 },
                 {
-                    () => this.Data.SecondFleet,
-                    (_, __) => this.SecondFleet.Fleet = this.Data.SecondFleet
+                    () => this.battleData.SecondFleet,
+                    (_, __) => this.SecondFleet.Fleet = this.battleData.SecondFleet
                 },
                 {
-                    () => this.Data.Enemies,
-                    (_, __) => this.Enemies.Fleet = this.Data.Enemies
+                    () => this.battleData.Enemies,
+                    (_, __) => this.Enemies.Fleet = this.battleData.Enemies
                 },
             });
         }
@@ -158,7 +154,7 @@ namespace BattleInfoPlugin.ViewModels
         {
             var message = new TransitionMessage("Show/EnemyWindow")
             {
-                TransitionViewModel = new EnemyWindowViewModel(this.Data.GetMapEnemies(), this.Data.GetCellTypes(), this.Data.GetCellDatas())
+                TransitionViewModel = new EnemyWindowViewModel()
             };
             this.Messenger.RaiseAsync(message);
         }

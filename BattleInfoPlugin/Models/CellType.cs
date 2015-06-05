@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleInfoPlugin.Models
 {
@@ -38,7 +36,7 @@ namespace BattleInfoPlugin.Models
                 : CellType.None;
         }
 
-        public static CellType GetCellType(this MapCell cell, Dictionary<MapCell, CellType> knownTypes)
+        public static CellType GetCellType(this MapCell cell, IReadOnlyDictionary<MapCell, CellType> knownTypes)
         {
             var result = CellType.None;
             if (knownTypes.ContainsKey(cell)) result = result | knownTypes[cell];

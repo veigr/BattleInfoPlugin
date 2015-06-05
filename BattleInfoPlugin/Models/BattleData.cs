@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using BattleInfoPlugin.Models.Raw;
 using BattleInfoPlugin.Models.Repositories;
 using Grabacr07.KanColleWrapper;
-using Grabacr07.KanColleWrapper.Models;
 using Livet;
 
 namespace BattleInfoPlugin.Models
@@ -187,49 +186,6 @@ namespace BattleInfoPlugin.Models
             proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next")
                 .TryParse<map_start_next>().Subscribe(x => this.UpdateFleetsByStartNext(x.Data));
 
-            proxy.api_req_sortie_battleresult
-                .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
-
-            proxy.api_req_combined_battle_battleresult
-                .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
-
-        }
-
-        public Dictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> GetMapEnemies()
-        {
-            return this.provider.GetMapEnemies();
-        }
-
-        public Dictionary<int, List<MapCellData>> GetCellDatas()
-        {
-            return this.provider.GetMapCellDatas();
-        }
-
-        public Dictionary<MapCell, CellType> GetCellTypes()
-        {
-            var cells = Repositories.Master.Current.MapCells.Select(c => c.Value);
-            var cellDatas = this.provider.GetMapCellDatas();
-            return this.provider.GetMapCellBattleTypes()
-                .SelectMany(x => x.Value, (x, y) => new
-                {
-                    cell = cells.Single(c => c.MapInfoId == x.Key && c.IdInEachMapInfo == y.Key),
-                    type = y.Value,
-                })
-                .Select(x => new
-                {
-                    x.cell,
-                    type = x.type.ToCellType() | x.cell.ColorNo.ToCellType() | this.GetCellType(x.cell, cellDatas)
-                })
-                .ToDictionary(x => x.cell, x => x.type);
-        }
-
-        private CellType GetCellType(MapCell cell, Dictionary<int, List<MapCellData>> cellData)
-        {
-            if (!cellData.ContainsKey(cell.MapInfoId)) return CellType.None;
-            var datas = cellData[cell.MapInfoId];
-            var data = datas.SingleOrDefault(x => cell.IdInEachMapInfo == x.No);
-            if (data == default(MapCellData)) return CellType.None;
-            return data.EventId.ToCellType();
         }
 
         #region Update From Battle SvData
@@ -251,7 +207,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Name = "通常 - 開幕夜戦";
 
-            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
@@ -260,15 +216,13 @@ namespace BattleInfoPlugin.Models
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_airbattle data)
         {
             this.Name = "連合艦隊 - 航空戦 - 昼戦";
 
-            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
@@ -289,15 +243,13 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); //航空戦2回目はスルー
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_battle data)
         {
             this.Name = "連合艦隊 - 機動部隊 - 昼戦";
 
-            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
@@ -325,15 +277,13 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_battle_water data)
         {
             this.Name = "連合艦隊 - 水上部隊 - 昼戦";
 
-            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
@@ -361,8 +311,6 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(combined_battle_midnight_battle data)
@@ -382,7 +330,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Name = "連合艦隊 - 開幕夜戦";
 
-            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
             this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
@@ -391,15 +339,13 @@ namespace BattleInfoPlugin.Models
             this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         public void Update(practice_battle data)
         {
             this.Name = "演習 - 昼戦";
 
-            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, null, null, null, null, false);
+            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
@@ -426,7 +372,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Name = "演習 - 夜戦";
 
-            this.UpdateFleets(data.api_deck_id, data.api_ship_ke, null, null, null, null, null, false);
+            this.UpdateFleets(data.api_deck_id, data.api_ship_ke);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
@@ -439,7 +385,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Name = "航空戦 - 昼戦";
 
-            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
@@ -455,15 +401,13 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); // 航空戦2回目はスルー
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         private void Update(sortie_battle data)
         {
             this.Name = "通常 - 昼戦";
 
-            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation, data.api_eSlot, data.api_eKyouka, data.api_eParam, data.api_ship_lv);
+            this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation);
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
@@ -485,8 +429,6 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
-
-            this.provider.UpdateBattleTypes(data);
         }
 
         #endregion
@@ -495,8 +437,6 @@ namespace BattleInfoPlugin.Models
         {
             this.UpdatedTime = DateTimeOffset.Now;
             this.Name = "次マス情報";
-
-            this.provider.UpdateMapData(startNext);
 
             this.BattleSituation = BattleSituation.なし;
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
@@ -509,20 +449,10 @@ namespace BattleInfoPlugin.Models
             this.UpdateFriendFleets(this.CurrentDeckId);
         }
 
-        private void Update(battle_result result)
-        {
-            this.provider.UpdateEnemyName(result);
-        }
-
         private void UpdateFleets(
             int api_deck_id,
             int[] api_ship_ke,
-            int[] api_formation = null,
-            int[][] api_eSlot = null,
-            int[][] api_eKyouka = null,
-            int[][] api_eParam = null,
-            int[] api_ship_lv = null,
-            bool isUpdateEnemyData = true)
+            int[] api_formation = null)
         {
             this.UpdatedTime = DateTimeOffset.Now;
             this.UpdateFriendFleets(api_deck_id);
@@ -538,7 +468,6 @@ namespace BattleInfoPlugin.Models
                 this.BattleSituation = (BattleSituation)api_formation[2];
                 if (this.FirstFleet != null) this.FirstFleet.Formation = (Formation)api_formation[0];
                 if (this.Enemies != null) this.Enemies.Formation = (Formation)api_formation[1];
-                if (isUpdateEnemyData) this.provider.UpdateEnemyData(api_ship_ke, api_formation, api_eSlot, api_eKyouka, api_eParam, api_ship_lv);
             }
 
             this.CurrentDeckId = api_deck_id;

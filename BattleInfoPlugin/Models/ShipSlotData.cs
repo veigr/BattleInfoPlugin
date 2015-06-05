@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
 
@@ -73,7 +71,7 @@ namespace BattleInfoPlugin.Models
 
             if (item == null) return;
 
-            var m = BattleInfoPlugin.RawStart2.api_mst_slotitem.SingleOrDefault(x => x.api_id == item.Id);
+            var m = Plugin.RawStart2.api_mst_slotitem.SingleOrDefault(x => x.api_id == item.Id);
             if (m == null) return;
             this.Armer = m.api_souk;
             this.Firepower = m.api_houg;
