@@ -90,7 +90,6 @@ namespace BattleInfoPlugin.Models.Repositories
         public FleetData GetNextEnemyFleet(map_start_next startNext)
         {
             if (startNext.api_enemy == null) return new FleetData();
-            this.currentEnemyID = startNext.api_enemy.api_enemy_id;
             this.Reload();
             return new FleetData(
                 this.GetNextEnemies(startNext),
@@ -101,9 +100,13 @@ namespace BattleInfoPlugin.Models.Repositories
         public void UpdateMapData(map_start_next startNext)
         {
             this.currentStartNext = startNext;
+            if (startNext.api_enemy != null)
+                this.currentEnemyID = startNext.api_enemy.api_enemy_id;
+
             this.UpdateMapEnemyData(startNext);
             this.UpdateMapRoute(startNext);
             this.UpdateMapCellData(startNext);
+
             this.Save();
         }
 
@@ -320,10 +323,12 @@ namespace BattleInfoPlugin.Models.Repositories
 
         private void Reload()
         {
+            Debug.WriteLine("Start Reload");
             //deserialize
             var path = Environment.CurrentDirectory + "\\" + Settings.Default.EnemyDataFilePath;
             if (!File.Exists(path)) return;
 
+            lock (serializer)
             using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
             {
                 var obj = serializer.ReadObject(stream) as EnemyDataProvider;
@@ -340,16 +345,20 @@ namespace BattleInfoPlugin.Models.Repositories
                 this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
                 this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
             }
+            Debug.WriteLine("End  Reload");
         }
 
         private void Save()
         {
+            Debug.WriteLine("Start Save");
             //serialize
             var path = Environment.CurrentDirectory + "\\" + Settings.Default.EnemyDataFilePath;
+            lock (serializer)
             using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
             {
                 serializer.WriteObject(stream, this);
             }
+            Debug.WriteLine("End  Save");
         }
     }
 }
