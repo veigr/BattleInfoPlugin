@@ -63,6 +63,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
             get
             {
                 return MapResource.GetMapCellPoints(this.Info)
+                    .Where(kvp => kvp.Value != default(Point))  //座標データがないものを除去 e.g. 6-3-13
                     .GroupBy(kvp => kvp.Value) //重複ポイントを除去
                     .Select(g => g.OrderBy(x => x.Key).First())
                     .ToDictionary(

@@ -13,6 +13,9 @@
 
     <SolidColorBrush x:Key="No4FillBrushKey" Color="#FF7979"/>
     <SolidColorBrush x:Key="No4StrokeBrushKey" Color="#EF1A1A"/>
+
+    <SolidColorBrush x:Key="No9FillBrushKey" Color="#FF929A11"/>
+    <SolidColorBrush x:Key="No9StrokeBrushKey" Color="#FF557C1D"/>
     
     <ControlTemplate x:Key="CellNoDisplayText"
                      TargetType="{x:Type ContentControl}">
@@ -307,6 +310,30 @@
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
 
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <!-- 航空偵察 -->
+            <Trigger Property="CellIconNumber" Value="9">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls:Cell}">
+                            <StackPanel Margin="-11"
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
+                                <Ellipse Fill="{StaticResource No9FillBrushKey}"
+                                         Stroke="{StaticResource No9StrokeBrushKey}"
+                                         StrokeThickness="3"
+                                         Width="22"
+                                         Height="22"
+                                         VerticalAlignment="Top"/>
+                                <ContentControl Template="{StaticResource CellNoDisplayText}"
+                                                Margin="15,0">
+                                    <TemplateBinding Property="Text"/>
+                                </ContentControl>
                             </StackPanel>
                         </ControlTemplate>
                     </Setter.Value>
