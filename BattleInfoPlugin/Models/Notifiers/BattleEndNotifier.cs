@@ -56,10 +56,13 @@ namespace BattleInfoPlugin.Models.Notifiers
                 {
                     Activated = () =>
                     {
-                        var window = Application.Current.MainWindow;
-                        if (window.WindowState == WindowState.Minimized)
-                            window.WindowState = WindowState.Normal;
-                        window.Activate();
+                        DispatcherHelper.UIDispatcher.Invoke(() =>
+                        {
+                            var window = Application.Current.MainWindow;
+                            if (window.WindowState == WindowState.Minimized)
+                                window.WindowState = WindowState.Normal;
+                            window.Activate();
+                        });
                     },
                 });
         }
