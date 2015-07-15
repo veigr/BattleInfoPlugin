@@ -11,104 +11,66 @@ namespace BattleInfoPlugin.Models.Raw
         #region 支援
 
         public static FleetDamages GetEnemyDamages(this Api_Support_Info support)
-        {
-            return support?.api_support_airatack?.api_stage3?.api_edam?.GetDamages()
-                ?? support?.api_support_hourai?.api_damage?.GetDamages()
-                ?? defaultValue;
-        }
+            => support?.api_support_airatack?.api_stage3?.api_edam?.GetDamages()
+               ?? support?.api_support_hourai?.api_damage?.GetDamages()
+               ?? defaultValue;
 
         #endregion
 
         #region 砲撃
 
         public static FleetDamages GetFriendDamages(this Hougeki hougeki)
-        {
-            return hougeki != null
-                ? hougeki.api_damage != null
-                    ? hougeki.api_damage.GetFriendDamages(hougeki.api_df_list)
-                    : defaultValue : defaultValue;
-        }
+            => hougeki?.api_damage?.GetFriendDamages(hougeki.api_df_list)
+               ?? defaultValue;
 
         public static FleetDamages GetEnemyDamages(this Hougeki hougeki)
-        {
-            return hougeki != null
-                ? hougeki.api_damage != null
-                    ? hougeki.api_damage.GetEnemyDamages(hougeki.api_df_list)
-                    : defaultValue : defaultValue;
-        }
+            => hougeki?.api_damage?.GetEnemyDamages(hougeki.api_df_list)
+               ?? defaultValue;
 
         #endregion
 
         #region 夜戦
 
         public static FleetDamages GetFriendDamages(this Midnight_Hougeki hougeki)
-        {
-            return hougeki != null
-                ? hougeki.api_damage != null
-                    ? hougeki.api_damage.GetFriendDamages(hougeki.api_df_list)
-                    : defaultValue : defaultValue;
-        }
+            => hougeki?.api_damage?.GetFriendDamages(hougeki.api_df_list)
+               ?? defaultValue;
+
         public static FleetDamages GetEnemyDamages(this Midnight_Hougeki hougeki)
-        {
-            return hougeki != null
-                ? hougeki.api_damage != null
-                    ? hougeki.api_damage.GetEnemyDamages(hougeki.api_df_list)
-                    : defaultValue : defaultValue;
-        }
+            => hougeki?.api_damage?.GetEnemyDamages(hougeki.api_df_list)
+               ?? defaultValue;
 
         #endregion
 
         #region 航空戦
 
         public static FleetDamages GetFirstFleetDamages(this Api_Kouku kouku)
-        {
-            return kouku != null
-                ? kouku.api_stage3 != null
-                    ? kouku.api_stage3.api_fdam.GetDamages()
-                    : defaultValue : defaultValue;
-        }
+            => kouku?.api_stage3?.api_fdam.GetDamages()
+               ?? defaultValue;
+
         public static FleetDamages GetSecondFleetDamages(this Api_Kouku kouku)
-        {
-            return kouku != null
-                ? kouku.api_stage3_combined != null
-                    ? kouku.api_stage3_combined.api_fdam != null
-                        ? kouku.api_stage3_combined.api_fdam.GetDamages()
-                        : defaultValue : defaultValue : defaultValue;
-        }
+            => kouku?.api_stage3_combined?.api_fdam?.GetDamages()
+               ?? defaultValue;
+
         public static FleetDamages GetEnemyDamages(this Api_Kouku kouku)
-        {
-            return kouku != null
-                ? kouku.api_stage3 != null
-                    ? kouku.api_stage3.api_edam != null
-                        ? kouku.api_stage3.api_edam.GetDamages()
-                        : defaultValue : defaultValue : defaultValue;
-        }
+            => kouku?.api_stage3?.api_edam?.GetDamages()
+               ?? defaultValue;
 
         public static AirSupremacy GetAirSupremacy(this Api_Kouku kouku)
-        {
-            return kouku != null && kouku.api_stage1 != null
-                ? (AirSupremacy) kouku.api_stage1.api_disp_seiku
+            => kouku?.api_stage1 != null
+                ? (AirSupremacy) kouku?.api_stage1?.api_disp_seiku
                 : AirSupremacy.航空戦なし;
-        }
 
         #endregion
 
         #region 雷撃戦
 
         public static FleetDamages GetFriendDamages(this Raigeki raigeki)
-        {
-            return raigeki != null
-                ? raigeki.api_fdam != null
-                    ? raigeki.api_fdam.GetDamages()
-                    : defaultValue : defaultValue;
-        }
+            => raigeki?.api_fdam?.GetDamages()
+               ?? defaultValue;
+
         public static FleetDamages GetEnemyDamages(this Raigeki raigeki)
-        {
-            return raigeki != null
-                ? raigeki.api_edam != null
-                    ? raigeki.api_edam.GetDamages()
-                    : defaultValue : defaultValue;
-        }
+            => raigeki?.api_edam?.GetDamages()
+               ?? defaultValue;
 
         #endregion
 
@@ -122,9 +84,7 @@ namespace BattleInfoPlugin.Models.Raw
         /// <param name="origin">ゴミ-1が付いてる場合1オリジン</param>
         /// <returns></returns>
         public static IEnumerable<T> GetFriendData<T>(this IEnumerable<T> source, int origin = 1)
-        {
-            return source.Skip(origin).Take(6);
-        }
+            => source.Skip(origin).Take(6);
 
         /// <summary>
         /// 12項目中末尾6項目取得
@@ -134,9 +94,7 @@ namespace BattleInfoPlugin.Models.Raw
         /// <param name="origin">ゴミ-1が付いてる場合1オリジン</param>
         /// <returns></returns>
         public static IEnumerable<T> GetEnemyData<T>(this IEnumerable<T> source, int origin = 1)
-        {
-            return source.Skip(origin + 6).Take(6);
-        }
+            => source.Skip(origin + 6).Take(6);
 
         /// <summary>
         /// 雷撃・航空戦ダメージリスト算出
@@ -144,13 +102,11 @@ namespace BattleInfoPlugin.Models.Raw
         /// <param name="damages">api_fdam/api_edam</param>
         /// <returns></returns>
         public static FleetDamages GetDamages(this double[] damages)
-        {
-            return damages
-                .GetFriendData()    //敵味方共通
+            => damages
+                .GetFriendData() //敵味方共通
                 .Select(Convert.ToInt32)
                 .ToArray()
                 .ToFleetDamages();
-        }
 
         #region 砲撃戦ダメージリスト算出
 
@@ -161,13 +117,11 @@ namespace BattleInfoPlugin.Models.Raw
         /// <param name="df_list">api_df_list</param>
         /// <returns></returns>
         public static FleetDamages GetFriendDamages(this object[] damages, object[] df_list)
-        {
-            return damages
+            => damages
                 .ToIntArray()
                 .ToSortedDamages(df_list.ToIntArray())
                 .GetFriendData(0)
                 .ToFleetDamages();
-        }
 
         /// <summary>
         /// 砲撃戦敵軍ダメージリスト算出
@@ -176,13 +130,11 @@ namespace BattleInfoPlugin.Models.Raw
         /// <param name="df_list">api_df_list</param>
         /// <returns></returns>
         public static FleetDamages GetEnemyDamages(this object[] damages, object[] df_list)
-        {
-            return damages
+            => damages
                 .ToIntArray()
                 .ToSortedDamages(df_list.ToIntArray())
                 .GetEnemyData(0)
                 .ToFleetDamages();
-        }
 
         /// <summary>
         /// 砲撃戦ダメージリストint配列化
@@ -192,13 +144,11 @@ namespace BattleInfoPlugin.Models.Raw
         /// <param name="damages">api_damage</param>
         /// <returns></returns>
         private static int[] ToIntArray(this object[] damages)
-        {
-            return damages
+            => damages
                 .Where(x => x is Array)
-                .Select(x => ((Array)x).Cast<object>())
+                .Select(x => ((Array) x).Cast<object>())
                 .SelectMany(x => x.Select(Convert.ToInt32))
                 .ToArray();
-        }
 
         /// <summary>
         /// フラット化したapi_damageとapi_df_listを元に
@@ -209,9 +159,10 @@ namespace BattleInfoPlugin.Models.Raw
         /// <returns></returns>
         private static int[] ToSortedDamages(this int[] damages, int[] dfList)
         {
-            var zip = damages.Zip(dfList, (da, df) => new { df, da });
+            var zip = damages.Zip(dfList, (da, df) => new {df, da});
             var ret = new int[12];
-            foreach (var d in zip.Where(d => 0 < d.df)) {
+            foreach (var d in zip.Where(d => 0 < d.df))
+            {
                 ret[d.df - 1] += d.da;
             }
             return ret;

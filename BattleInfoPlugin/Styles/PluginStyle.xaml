@@ -23,6 +23,8 @@
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.ListView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.PinButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.TabControl.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.Text.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.Text.xaml" />
+
+		<ResourceDictionary Source="pack://application:,,,/BattleInfoPlugin;component/Styles/Cell.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

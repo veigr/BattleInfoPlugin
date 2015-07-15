@@ -32,6 +32,8 @@ namespace BattleInfoPlugin
         {
             lock (lockObj)
             {
+                var dir = Directory.GetParent(filePath);
+                if (!dir.Exists) dir.Create();
                 File.WriteAllBytes(filePath, session.Response.Body);
             }
         }
