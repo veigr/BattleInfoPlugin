@@ -9,17 +9,17 @@ using Livet;
 
 namespace BattleInfoPlugin.Models.Notifiers
 {
-    public class BattleEndNotifier: NotificationObject
+    public class BattleEndNotifier : NotificationObject
     {
         private static readonly Settings settings = Settings.Default;
 
         private readonly Plugin plugin;
 
         #region IsEnabled変更通知プロパティ
+
         public bool IsEnabled
         {
-            get
-            { return settings.IsEnabledBattleEndNotify; }
+            get { return settings.IsEnabledBattleEndNotify; }
             set
             {
                 if (settings.IsEnabledBattleEndNotify == value)
@@ -29,6 +29,7 @@ namespace BattleInfoPlugin.Models.Notifiers
                 this.RaisePropertyChanged();
             }
         }
+
         #endregion
 
 
@@ -51,7 +52,16 @@ namespace BattleInfoPlugin.Models.Notifiers
         {
             var isActive = DispatcherHelper.UIDispatcher.Invoke(() => Application.Current.MainWindow.IsActive);
             if (this.IsEnabled && !isActive)
-                this.plugin.InvokeNotifyRequested(new NotifyEventArgs("戦闘終了", "戦闘が終了しました。"));
+                this.plugin.InvokeNotifyRequested(new NotifyEventArgs("戦闘終了", "戦闘が終了しました。")
+                {
+                    Activated = () =>
+                    {
+                        var window = Application.Current.MainWindow;
+                        if (window.WindowState == WindowState.Minimized)
+                            window.WindowState = WindowState.Normal;
+                        window.Activate();
+                    },
+                });
         }
     }
 }
