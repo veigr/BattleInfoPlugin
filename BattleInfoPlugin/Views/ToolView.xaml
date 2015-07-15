@@ -20,8 +20,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/PluginStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:AddDoubleValueConverter x:Key="WidthConverter" Value="-16"/>
-            <converters:AddDoubleValueConverter x:Key="HeightConverter" Value="-8"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -34,15 +32,9 @@
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
 
-    <!-- 親に縦だけAutoなScrollViewerがいるので、自前でScrollBarを出したいなら
-         ViewPortサイズからMargin削った分をサイズに設定する必要がある -->
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
-                  PanningMode="Both"
-                  Width="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
-                                  Path=ViewportWidth, Converter={StaticResource WidthConverter}}"
-                  Height="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer},
-                                   Path=ViewportHeight, Converter={StaticResource HeightConverter}}">
+                  PanningMode="Both">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
