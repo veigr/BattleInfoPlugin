@@ -147,10 +147,10 @@ namespace BattleInfoPlugin.Models
         {
             var proxy = KanColleClient.Current.Proxy;
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/battle")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_battle_midnight/battle")
                 .TryParse<battle_midnight_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight")
                 .TryParse<battle_midnight_sp_midnight>().Subscribe(x => this.Update(x.Data));
 
             proxy.api_req_combined_battle_airbattle
@@ -159,31 +159,31 @@ namespace BattleInfoPlugin.Models
             proxy.api_req_combined_battle_battle
                 .TryParse<combined_battle_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_combined_battle/battle_water")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/battle_water")
                 .TryParse<combined_battle_battle_water>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_combined_battle/midnight_battle")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/midnight_battle")
                 .TryParse<combined_battle_midnight_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_combined_battle/sp_midnight")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/sp_midnight")
                 .TryParse<combined_battle_sp_midnight>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/battle")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle")
                 .TryParse<practice_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/midnight_battle")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/midnight_battle")
                 .TryParse<practice_midnight_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/airbattle")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_sortie/airbattle")
                 .TryParse<sortie_airbattle>().Subscribe(x => this.Update(x.Data));
 
             proxy.api_req_sortie_battle
                 .TryParse<sortie_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/start")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/start")
                 .TryParse<map_start_next>().Subscribe(x => this.UpdateFleetsByStartNext(x.Data, x.Request["api_deck_id"]));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/next")
                 .TryParse<map_start_next>().Subscribe(x => this.UpdateFleetsByStartNext(x.Data));
 
         }
@@ -460,8 +460,8 @@ namespace BattleInfoPlugin.Models
             var master = KanColleClient.Current.Master.Ships;
             this.Enemies = new FleetData(
                 api_ship_ke.Where(x => x != -1).Select(x => new MastersShipData(master[x])).ToArray(),
-                this.Enemies != null ? this.Enemies.Formation : Formation.なし,
-                this.Enemies != null ? this.Enemies.Name : "");
+                this.Enemies?.Formation ?? Formation.なし,
+                this.Enemies?.Name ?? "");
 
             if (api_formation != null)
             {
@@ -478,13 +478,13 @@ namespace BattleInfoPlugin.Models
             var organization = KanColleClient.Current.Homeport.Organization;
             this.FirstFleet = new FleetData(
                 organization.Fleets[deckID].Ships.Select(s => new MembersShipData(s)).ToArray(),
-                this.FirstFleet != null ? this.FirstFleet.Formation : Formation.なし,
+                this.FirstFleet?.Formation ?? Formation.なし,
                 organization.Fleets[deckID].Name);
             this.SecondFleet = new FleetData(
                 organization.Combined && deckID == 1
                     ? organization.Fleets[2].Ships.Select(s => new MembersShipData(s)).ToArray()
                     : new MembersShipData[0],
-                this.SecondFleet != null ? this.SecondFleet.Formation : Formation.なし,
+                this.SecondFleet?.Formation ?? Formation.なし,
                 organization.Fleets[2].Name);
         }
 

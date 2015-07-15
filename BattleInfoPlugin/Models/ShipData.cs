@@ -225,52 +225,39 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
-        public int SlotsFirepower { get { return this.Slots.Sum(x => x.Firepower); } }
-        public int SlotsTorpedo { get { return this.Slots.Sum(x => x.Torpedo); } }
-        public int SlotsAA { get { return this.Slots.Sum(x => x.AA); } }
-        public int SlotsArmer { get { return this.Slots.Sum(x => x.Armer); } }
-        public int SlotsASW { get { return this.Slots.Sum(x => x.ASW); } }
-        public int SlotsHit { get { return this.Slots.Sum(x => x.Hit); } }
-        public int SlotsEvade { get { return this.Slots.Sum(x => x.Evade); } }
+        public int SlotsFirepower => this.Slots.Sum(x => x.Firepower);
+        public int SlotsTorpedo => this.Slots.Sum(x => x.Torpedo);
+        public int SlotsAA => this.Slots.Sum(x => x.AA);
+        public int SlotsArmer => this.Slots.Sum(x => x.Armer);
+        public int SlotsASW => this.Slots.Sum(x => x.ASW);
+        public int SlotsHit => this.Slots.Sum(x => x.Hit);
+        public int SlotsEvade => this.Slots.Sum(x => x.Evade);
 
-        public int SumFirepower { get { return this.Firepower + this.SlotsFirepower; } }
-        public int SumTorpedo { get { return this.Torpedo + this.SlotsTorpedo; } }
-        public int SumAA { get { return this.AA + this.SlotsAA; } }
-        public int SumArmer { get { return this.Armer + this.SlotsArmer; } }
+        public int SumFirepower => this.Firepower + this.SlotsFirepower;
+        public int SumTorpedo => this.Torpedo + this.SlotsTorpedo;
+        public int SumAA => this.AA + this.SlotsAA;
+        public int SumArmer => this.Armer + this.SlotsArmer;
 
-        public LimitedValue HP
-        {
-            get { return new LimitedValue(this.NowHP, this.MaxHP, 0); }
-        }
+        public LimitedValue HP => new LimitedValue(this.NowHP, this.MaxHP, 0);
 
         public AttackType DayAttackType
-        {
-            get
-            {
-                return this.HasScout() && this.Count(Type2.主砲) == 2 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主主
-                    : this.HasScout() && this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主徹
-                    : this.HasScout() && this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.電探) == 1 ? AttackType.カットイン主電
-                    : this.HasScout() && this.Count(Type2.主砲) >= 1 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主副
-                    : this.HasScout() && this.Count(Type2.主砲) >= 2 ? AttackType.連撃
-                    : AttackType.通常;
-            }
-        }
+            => this.HasScout() && this.Count(Type2.主砲) == 2 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主主
+            : this.HasScout() && this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.徹甲弾) == 1 ? AttackType.カットイン主徹
+            : this.HasScout() && this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) == 1 && this.Count(Type2.電探) == 1 ? AttackType.カットイン主電
+            : this.HasScout() && this.Count(Type2.主砲) >= 1 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主副
+            : this.HasScout() && this.Count(Type2.主砲) >= 2 ? AttackType.連撃
+            : AttackType.通常;
 
         public AttackType NightAttackType
-        {
-            get
-            {
-                return this.Count(Type2.魚雷) >= 2 ? AttackType.カットイン雷
-                    : this.Count(Type2.主砲) >= 3 ? AttackType.カットイン主主主
-                    : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主主副
-                    : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) == 0 && this.Count(Type2.魚雷) == 1 ? AttackType.カットイン主雷
-                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.魚雷) == 1 ? AttackType.カットイン主雷
-                    : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) == 0 && this.Count(Type2.魚雷) == 0 ? AttackType.連撃
-                    : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) >= 1 && this.Count(Type2.魚雷) == 0 ? AttackType.連撃
-                    : this.Count(Type2.主砲) == 0 && this.Count(Type2.副砲) >= 2 && this.Count(Type2.魚雷) <= 1 ? AttackType.連撃
-                    : AttackType.通常;
-            }
-        }
+            => this.Count(Type2.魚雷) >= 2 ? AttackType.カットイン雷
+            : this.Count(Type2.主砲) >= 3 ? AttackType.カットイン主主主
+            : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) >= 1 ? AttackType.カットイン主主副
+            : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) == 0 && this.Count(Type2.魚雷) == 1 ? AttackType.カットイン主雷
+            : this.Count(Type2.主砲) == 1 && this.Count(Type2.魚雷) == 1 ? AttackType.カットイン主雷
+            : this.Count(Type2.主砲) == 2 && this.Count(Type2.副砲) == 0 && this.Count(Type2.魚雷) == 0 ? AttackType.連撃
+            : this.Count(Type2.主砲) == 1 && this.Count(Type2.副砲) >= 1 && this.Count(Type2.魚雷) == 0 ? AttackType.連撃
+            : this.Count(Type2.主砲) == 0 && this.Count(Type2.副砲) >= 2 && this.Count(Type2.魚雷) <= 1 ? AttackType.連撃
+            : AttackType.通常;
 
         public ShipData()
         {

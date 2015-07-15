@@ -24,16 +24,11 @@ namespace BattleInfoPlugin.Models
 
         #region static members
 
-        private static MapArea dummy = new MapArea(new kcsapi_mst_maparea()
+        public static MapArea Dummy { get; } = new MapArea(new kcsapi_mst_maparea
         {
             api_id = 0,
             api_name = "？？？",
         });
-
-        public static MapArea Dummy
-        {
-            get { return dummy; }
-        }
 
         #endregion
     }

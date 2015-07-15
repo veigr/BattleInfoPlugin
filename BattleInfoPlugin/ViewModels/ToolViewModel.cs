@@ -9,40 +9,24 @@ namespace BattleInfoPlugin.ViewModels
 {
     public class ToolViewModel : ViewModel
     {
-        private readonly BattleEndNotifier notifier = new BattleEndNotifier();
+        private readonly BattleEndNotifier notifier;
 
         private readonly BattleData battleData = new BattleData();
 
         public string UpdatedTime
-        {
-            get
-            {
-                return this.battleData != null && this.battleData.UpdatedTime != default(DateTimeOffset)
-                    ? this.battleData.UpdatedTime.ToString("yyyy/MM/dd HH:mm:ss")
-                    : "No Data";
-            }
-        }
+            => this.battleData != null && this.battleData.UpdatedTime != default(DateTimeOffset)
+                ? this.battleData.UpdatedTime.ToString("yyyy/MM/dd HH:mm:ss")
+                : "No Data";
 
         public string BattleSituation
-        {
-            get
-            {
-                return this.battleData != null && this.battleData.BattleSituation != Models.BattleSituation.なし
-                    ? this.battleData.BattleSituation.ToString()
-                    : "";
-            }
-        }
+            => this.battleData != null && this.battleData.BattleSituation != Models.BattleSituation.なし
+                ? this.battleData.BattleSituation.ToString()
+                : "";
 
         public string FriendAirSupremacy
-        {
-            get
-            {
-                return this.battleData != null && this.battleData.FriendAirSupremacy != AirSupremacy.航空戦なし
-                    ? this.battleData.FriendAirSupremacy.ToString()
-                    : "";
-            }
-        }
-
+            => this.battleData != null && this.battleData.FriendAirSupremacy != AirSupremacy.航空戦なし
+                ? this.battleData.FriendAirSupremacy.ToString()
+                : "";
 
         #region FirstFleet変更通知プロパティ
         private FleetViewModel _FirstFleet;
@@ -115,8 +99,9 @@ namespace BattleInfoPlugin.ViewModels
         #endregion
 
 
-        public ToolViewModel()
+        public ToolViewModel(Plugin plugin)
         {
+            this.notifier = new BattleEndNotifier(plugin);
             this.FirstFleet = new FleetViewModel("自艦隊");
             this.SecondFleet = new FleetViewModel("護衛艦隊");
             this.Enemies = new FleetViewModel("敵艦隊");

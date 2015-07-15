@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using Fiddler;
+using Nekoxy;
 using Grabacr07.KanColleWrapper;
 
 namespace BattleInfoPlugin
@@ -11,16 +12,9 @@ namespace BattleInfoPlugin
         public KcsResourceWriter()
         {
             var resources = KanColleClient.Current.Proxy.SessionSource
-                .Where(s => s.PathAndQuery.StartsWith("/kcs/resources/swf/map"));
+                .Where(s => s.Request.PathAndQuery.StartsWith("/kcs/resources/swf/map"));
 
-            resources
-                .Where(s => s.NeedDecode())
-                .Where(s => s.utilDecodeResponse(true)) //chunkedはDecodeが必要っぽい
-                .Subscribe(s => s.SaveResponseBody(s.GetSaveFilePath()));
-
-            resources
-                .Where(s => !s.NeedDecode())
-                .Subscribe(s => s.SaveResponseBody(s.GetSaveFilePath()));
+            resources.Subscribe(s => s.SaveResponseBody(s.GetSaveFilePath()));
         }
     }
 
@@ -29,14 +23,17 @@ namespace BattleInfoPlugin
         public static string GetSaveFilePath(this Session session)
         {
             return Properties.Settings.Default.CacheDirPath
-                   + session.PathAndQuery.Split('?').First();
+                   + session.Request.PathAndQuery.Split('?').First();
         }
 
-        public static bool NeedDecode(this Session session)
+        private static readonly object lockObj = new object();
+
+        public static void SaveResponseBody(this Session session, string filePath)
         {
-            return session.oResponse.headers
-                    .Where(h => h.Name == "Transfer-Encoding")
-                    .Any(h => h.Value == "chunked");
+            lock (lockObj)
+            {
+                File.WriteAllBytes(filePath, session.Response.Body);
+            }
         }
     }
 }

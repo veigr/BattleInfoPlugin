@@ -127,8 +127,7 @@ namespace BattleInfoPlugin.Models.Repositories
 
         public void UpdateEnemyName(battle_result result)
         {
-            if (result == null) return;
-            if (result.api_enemy_info == null) return;
+            if (result?.api_enemy_info == null) return;
 
             if (this.EnemyNames.ContainsKey(this.currentEnemyID))
                 this.EnemyNames[this.currentEnemyID] = result.api_enemy_info.api_deck_name;

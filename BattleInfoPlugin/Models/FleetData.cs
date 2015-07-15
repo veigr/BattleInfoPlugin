@@ -79,9 +79,9 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
-        public int AirParityRequirements { get { return this.AirSuperiorityPotential * 2 / 3; } }
-        public int AirSuperiorityRequirements { get { return this.AirSuperiorityPotential * 3 / 2; } }
-        public int AirSupremacyRequirements { get { return this.AirSuperiorityPotential * 3; } }
+        public int AirParityRequirements => this.AirSuperiorityPotential * 2 / 3;
+        public int AirSuperiorityRequirements => this.AirSuperiorityPotential * 3 / 2;
+        public int AirSupremacyRequirements => this.AirSuperiorityPotential * 3;
 
         public FleetData() : this(new ShipData[0], Formation.なし, "")
         {

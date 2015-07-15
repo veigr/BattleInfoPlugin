@@ -13,6 +13,8 @@ namespace BattleInfoPlugin.Models.Notifiers
     {
         private static readonly Settings settings = Settings.Default;
 
+        private readonly Plugin plugin;
+
         #region IsEnabled変更通知プロパティ
         public bool IsEnabled
         {
@@ -30,14 +32,16 @@ namespace BattleInfoPlugin.Models.Notifiers
         #endregion
 
 
-        public BattleEndNotifier()
+        public BattleEndNotifier(Plugin plugin)
         {
+            this.plugin = plugin;
+
             settings.Reload();
 
             var proxy = KanColleClient.Current.Proxy;
             proxy.api_req_combined_battle_battleresult
                 .Subscribe(_ => this.Notify());
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_practice/battle_result")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle_result")
                 .Subscribe(_ => this.Notify());
             proxy.api_req_sortie_battleresult
                 .Subscribe(_ => this.Notify());
@@ -47,11 +51,7 @@ namespace BattleInfoPlugin.Models.Notifiers
         {
             var isActive = DispatcherHelper.UIDispatcher.Invoke(() => Application.Current.MainWindow.IsActive);
             if (this.IsEnabled && !isActive)
-                PluginHost.Instance.GetNotifier().Show(
-                    NotifyType.Other,
-                    "戦闘終了",
-                    "戦闘が終了しました。",
-                    () => App.ViewModelRoot.Activate());
+                this.plugin.InvokeNotifyRequested(new NotifyEventArgs("戦闘終了", "戦闘が終了しました。"));
         }
     }
 }

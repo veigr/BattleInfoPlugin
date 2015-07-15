@@ -55,9 +55,8 @@ namespace BattleInfoPlugin.Models.Repositories
             public static BitmapSource GetMapImage(MapInfo map)
             {
                 var swf = map.ToSwf();
-                if (swf == null) return null;
 
-                return swf.Tags
+                return swf?.Tags
                     .SkipWhile(x => x.TagType != TagType.ShowFrame) //1フレーム飛ばす
                     .OfType<DefineBitsTag>()
                     .FirstOrDefault(x => x.TagType == TagType.DefineBitsJPEG3)

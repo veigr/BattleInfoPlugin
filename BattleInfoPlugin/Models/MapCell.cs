@@ -21,7 +21,7 @@ namespace BattleInfoPlugin.Models
         [DataMember]
         public int MapInfoId { get; private set; }
 
-        public MapInfo MapInfo { get { return Master.Current.MapInfos[this.MapInfoId] ?? MapInfo.Dummy; } }
+        public MapInfo MapInfo => Master.Current.MapInfos[this.MapInfoId] ?? MapInfo.Dummy;
 
         [DataMember]
         public int MapAreaId { get; private set; }

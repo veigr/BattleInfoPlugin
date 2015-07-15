@@ -14,7 +14,7 @@ namespace BattleInfoPlugin
         {
             var proxy = KanColleClient.Current.Proxy;
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_battle_midnight/sp_midnight")
                 .TryParse<battle_midnight_sp_midnight>().Subscribe(x => this.Update(x.Data));
 
             proxy.api_req_combined_battle_airbattle
@@ -23,23 +23,23 @@ namespace BattleInfoPlugin
             proxy.api_req_combined_battle_battle
                 .TryParse<combined_battle_battle>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_combined_battle/battle_water")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/battle_water")
                 .TryParse<combined_battle_battle_water>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_combined_battle/sp_midnight")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/sp_midnight")
                 .TryParse<combined_battle_sp_midnight>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_sortie/airbattle")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_sortie/airbattle")
                 .TryParse<sortie_airbattle>().Subscribe(x => this.Update(x.Data));
 
             proxy.api_req_sortie_battle
                 .TryParse<sortie_battle>().Subscribe(x => this.Update(x.Data));
 
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/start")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/start")
                 .TryParse<map_start_next>().Subscribe(x => this.Update(x.Data));
 
-            proxy.ApiSessionSource.Where(x => x.PathAndQuery == "/kcsapi/api_req_map/next")
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/next")
                 .TryParse<map_start_next>().Subscribe(x => this.Update(x.Data));
 
 

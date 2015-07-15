@@ -20,7 +20,7 @@ namespace BattleInfoPlugin.Models
         [DataMember]
         public int MapAreaId { get; private set; }
 
-        public MapArea MapArea { get { return Master.Current.MapAreas[this.MapAreaId] ?? MapArea.Dummy; } }
+        public MapArea MapArea => Master.Current.MapAreas[this.MapAreaId] ?? MapArea.Dummy;
 
         [DataMember]
         public int IdInEachMapArea { get; private set; }

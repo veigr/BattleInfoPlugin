@@ -12,19 +12,9 @@ namespace BattleInfoPlugin.Models.Raw
 
         public static FleetDamages GetEnemyDamages(this Api_Support_Info support)
         {
-            if (support == null) return defaultValue;
-            if (support.api_support_airatack != null
-                && support.api_support_airatack.api_stage3 != null
-                && support.api_support_airatack.api_stage3.api_edam != null)
-            {
-                return support.api_support_airatack.api_stage3.api_edam.GetDamages();
-            }
-            if (support.api_support_hourai != null
-                && support.api_support_hourai.api_damage != null)
-            {
-                return support.api_support_hourai.api_damage.GetDamages();
-            }
-            return defaultValue;
+            return support?.api_support_airatack?.api_stage3?.api_edam?.GetDamages()
+                ?? support?.api_support_hourai?.api_damage?.GetDamages()
+                ?? defaultValue;
         }
 
         #endregion
