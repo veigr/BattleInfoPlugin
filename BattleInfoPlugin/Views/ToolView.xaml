@@ -34,9 +34,8 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
-                  PanningMode="Both"
-                  Margin="8,4">
-        <Grid>
+                  PanningMode="Both">
+        <Grid Margin="8,4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
