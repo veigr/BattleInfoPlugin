@@ -20,7 +20,10 @@ namespace BattleInfoPlugin.Views
         public EnemyWindow()
         {
             this.InitializeComponent();
-            Application.Current.MainWindow.Closed += (sender, args) => this.Close();
+            WeakEventManager<Window, EventArgs>.AddHandler(
+                Application.Current.MainWindow,
+                "Closed",
+                (_, __) => this.Close());
         }
     }
 }
