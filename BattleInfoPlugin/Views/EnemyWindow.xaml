@@ -39,6 +39,7 @@
             <localconv:FleetBackgroundConverter x:Key="FleetBackgroundConverter"
                                                 Background1="{StaticResource ThemeBrushKey}"
                                                 Background2="{StaticResource SemiactiveBackgroundBrushKey}"/>
+            <localconv:UnknownValueConverter x:Key="UnknownValueConverter"/>
             <converters:HasFlagConverter x:Key="HasFlagConverter"/>
 
             <CollectionViewSource x:Key="EnemyMapsSource"
@@ -424,10 +425,6 @@
                                                                 </Style>
                                                             </StackPanel.Resources>
 
-                                                            <TextBlock FontSize="11">
-                                                                <Run Text="Enemy ID:"/>
-                                                                <Run Text="{Binding Key, Mode=OneTime}"/>
-                                                            </TextBlock>
                                                             <TextBlock Text="{Binding Name}"
                                                                        Style="{DynamicResource EmphaticTextStyleKey}"
                                                                        Margin="5,0"
@@ -505,24 +502,6 @@
                                                                      Style="{DynamicResource EmphaticTextElementStyleKey}"
                                                                      FontSize="12"/>
                                                             </TextBlock>
-
-                                                            <TextBlock Text="必要制空値"
-                                                                       Margin="5,10,5,0"/>
-                                                            <TextBlock FontSize="11">
-                                                                <Run Text="均衡:"/>
-                                                                <Run Text="{Binding Fleet.AirParityRequirements, Mode=OneTime}"
-                                                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                                                            </TextBlock>
-                                                            <TextBlock FontSize="11">
-                                                                <Run Text="優勢:"/>
-                                                                <Run Text="{Binding Fleet.AirSuperiorityRequirements, Mode=OneTime}"
-                                                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                                                            </TextBlock>
-                                                            <TextBlock FontSize="11">
-                                                                <Run Text="確保:"/>
-                                                                <Run Text="{Binding Fleet.AirSupremacyRequirements, Mode=OneTime}"
-                                                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                                                            </TextBlock>
                                                         </StackPanel>
 
                                                         <!--Ships-->
@@ -575,6 +554,7 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" MinWidth="130" SharedSizeGroup="Name" />
+                                        <ColumnDefinition Width="Auto" MinWidth="37" SharedSizeGroup="Lv" />
                                         <ColumnDefinition Width="Auto" MinWidth="37" SharedSizeGroup="HP" />
                                         <ColumnDefinition Width="Auto" MinWidth="96" SharedSizeGroup="Attack" />
                                         <ColumnDefinition Width="Auto" MinWidth="96" SharedSizeGroup="Tropedo" />
@@ -583,7 +563,6 @@
                                         <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="ASW" />
                                         <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="Hit" />
                                         <ColumnDefinition Width="Auto" MinWidth="44" SharedSizeGroup="Evade" />
-                                        <ColumnDefinition Width="Auto" MinWidth="28" SharedSizeGroup="Luck" />
                                         <ColumnDefinition Width="Auto" MinWidth="130" SharedSizeGroup="AttackType" />
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
@@ -602,112 +581,115 @@
 
                                     <TextBlock Grid.Column="1"
                                                Grid.Row="0"
-                                               Text="HP"/>
+                                               Text="Lv"/>
                                     <TextBlock Grid.Column="1"
                                                Grid.Row="1"
-                                               Text="{Binding MaxHP, Mode=OneTime}"
+                                               Text="{Binding Level, Mode=OneTime, Converter={StaticResource UnknownValueConverter}}"
                                                Style="{DynamicResource ValueTextStyle}"/>
-
 
                                     <TextBlock Grid.Column="2"
                                                Grid.Row="0"
-                                               Text="火力"/>
+                                               Text="HP"/>
                                     <TextBlock Grid.Column="2"
+                                               Grid.Row="1"
+                                               Text="{Binding MaxHP, Mode=OneTime, Converter={StaticResource UnknownValueConverter}}"
+                                               Style="{DynamicResource ValueTextStyle}"/>
+
+
+                                    <TextBlock Grid.Column="3"
+                                               Grid.Row="0"
+                                               Text="火力"/>
+                                    <TextBlock Grid.Column="3"
                                                Grid.Row="1">
-                                        <Run Text="{Binding SumFirepower, Mode=OneTime}"
+                                        <Run Text="{Binding SumFirepower, Mode=OneTime, Converter={StaticResource UnknownValueConverter}}"
                                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                                         <Run>
                                             <Run.Text>
                                                 <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
-                                                    <Binding Path="Firepower"/>
+                                                    <Binding Path="Firepower"
+                                                             Converter="{StaticResource UnknownValueConverter}"/>
                                                     <Binding Path="SlotsFirepower"/>
                                                 </MultiBinding>
                                             </Run.Text>
                                         </Run>
                                     </TextBlock>
 
-                                    <TextBlock Grid.Column="3"
+                                    <TextBlock Grid.Column="4"
                                                Grid.Row="0"
                                                Text="雷装"/>
-                                    <TextBlock Grid.Column="3"
+                                    <TextBlock Grid.Column="4"
                                                Grid.Row="1">
-                                        <Run Text="{Binding SumTorpedo, Mode=OneTime}"
+                                        <Run Text="{Binding SumTorpedo, Mode=OneTime, Converter={StaticResource UnknownValueConverter}}"
                                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                                         <Run>
                                             <Run.Text>
                                                 <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
-                                                    <Binding Path="Torpedo"/>
+                                                    <Binding Path="Torpedo"
+                                                             Converter="{StaticResource UnknownValueConverter}"/>
                                                     <Binding Path="SlotsTorpedo"/>
                                                 </MultiBinding>
                                             </Run.Text>
                                         </Run>
                                     </TextBlock>
 
-                                    <TextBlock Grid.Column="4"
+                                    <TextBlock Grid.Column="5"
                                                Grid.Row="0"
                                                Text="対空"/>
-                                    <TextBlock Grid.Column="4"
+                                    <TextBlock Grid.Column="5"
                                                Grid.Row="1">
-                                        <Run Text="{Binding SumAA, Mode=OneTime}"
+                                        <Run Text="{Binding SumAA, Mode=OneTime, Converter={StaticResource UnknownValueConverter}}"
                                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                                         <Run>
                                             <Run.Text>
                                                 <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
-                                                    <Binding Path="AA"/>
+                                                    <Binding Path="AA"
+                                                             Converter="{StaticResource UnknownValueConverter}"/>
                                                     <Binding Path="SlotsAA"/>
                                                 </MultiBinding>
                                             </Run.Text>
                                         </Run>
                                     </TextBlock>
 
-                                    <TextBlock Grid.Column="5"
+                                    <TextBlock Grid.Column="6"
                                                Grid.Row="0"
                                                Text="装甲"/>
-                                    <TextBlock Grid.Column="5"
+                                    <TextBlock Grid.Column="6"
                                                Grid.Row="1">
-                                        <Run Text="{Binding SumArmer, Mode=OneTime}"
+                                        <Run Text="{Binding SumArmer, Mode=OneTime, Converter={StaticResource UnknownValueConverter}}"
                                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                                         <Run>
                                             <Run.Text>
                                                 <MultiBinding StringFormat="{}({0}+{1})" Mode="OneTime">
-                                                    <Binding Path="Armer"/>
+                                                    <Binding Path="Armer"
+                                                             Converter="{StaticResource UnknownValueConverter}"/>
                                                     <Binding Path="SlotsArmer"/>
                                                 </MultiBinding>
                                             </Run.Text>
                                         </Run>
                                     </TextBlock>
 
-                                    <TextBlock Grid.Column="6"
+                                    <TextBlock Grid.Column="7"
                                                Grid.Row="0"
                                                Text="対潜"/>
-                                    <TextBlock Grid.Column="6"
+                                    <TextBlock Grid.Column="7"
                                                Grid.Row="1"
                                                Text="{Binding SlotsASW, Mode=OneTime, StringFormat={}(+{0})}"/>
 
 
-                                    <TextBlock Grid.Column="7"
+                                    <TextBlock Grid.Column="8"
                                                Grid.Row="0"
                                                Text="命中"/>
-                                    <TextBlock Grid.Column="7"
+                                    <TextBlock Grid.Column="8"
                                                Grid.Row="1"
                                                Text="{Binding SlotsHit, Mode=OneTime, StringFormat={}(+{0})}"/>
 
 
-                                    <TextBlock Grid.Column="8"
+                                    <TextBlock Grid.Column="9"
                                                Grid.Row="0"
                                                Text="回避"/>
-                                    <TextBlock Grid.Column="8"
+                                    <TextBlock Grid.Column="9"
                                                Grid.Row="1"
                                                Text="{Binding SlotsEvade, Mode=OneTime, StringFormat={}(+{0})}"/>
-
-
-                                    <TextBlock Grid.Column="9"
-                                               Grid.Row="0"
-                                               Text="運"/>
-                                    <TextBlock Grid.Column="9"
-                                               Grid.Row="1"
-                                               Text="{Binding Luck, Mode=OneTime}"
-                                               Style="{DynamicResource ValueTextStyle}"/>
 
 
                                     <TextBlock Grid.Column="10"
@@ -742,7 +724,6 @@
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="14"/>
                                                         <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
                                                     <controls:SlotItemIcon Grid.Column="0"
                                                                            Type="{Binding Source.IconType, Mode=OneWay}"
@@ -753,12 +734,6 @@
                                                                Style="{DynamicResource DefaultTextStyleKey}"
                                                                Text="{Binding Source.Name, Mode=OneWay}"
                                                                Margin="5,1"/>
-                                                    <TextBlock Grid.Column="2"
-                                                               HorizontalAlignment="Center"
-                                                               Margin="5,1"
-                                                               Visibility="{Binding Source.IsNumerable, Converter={StaticResource TrueToVisibleConverter}}"
-                                                               Text="{Binding Current, StringFormat=[{0:00}]}"
-                                                               Style="{DynamicResource DefaultTextStyleKey}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>

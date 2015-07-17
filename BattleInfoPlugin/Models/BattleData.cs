@@ -141,8 +141,6 @@ namespace BattleInfoPlugin.Models
 
         private int CurrentDeckId { get; set; }
 
-        private readonly EnemyDataProvider provider = new EnemyDataProvider();
-
         public BattleData()
         {
             var proxy = KanColleClient.Current.Proxy;
@@ -436,12 +434,12 @@ namespace BattleInfoPlugin.Models
         private void UpdateFleetsByStartNext(map_start_next startNext, string api_deck_id = null)
         {
             this.UpdatedTime = DateTimeOffset.Now;
-            this.Name = "次マス情報";
+            this.Name = "";
 
             this.BattleSituation = BattleSituation.なし;
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
             if (this.FirstFleet != null) this.FirstFleet.Formation = Formation.なし;
-            this.Enemies = this.provider.GetNextEnemyFleet(startNext);
+            this.Enemies = new FleetData();
 
             if (api_deck_id != null) this.CurrentDeckId = int.Parse(api_deck_id);
             if (this.CurrentDeckId < 1) return;

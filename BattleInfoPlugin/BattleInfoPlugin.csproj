@@ -158,6 +158,7 @@
     <Compile Include="Models\Raw\sortie_airbattle.cs" />
     <Compile Include="Models\Raw\sortie_battle.cs" />
     <Compile Include="Models\Repositories\EnemyDataProvider.cs" />
+    <Compile Include="Models\Repositories\Extensions.cs" />
     <Compile Include="Models\Repositories\MapResource.cs" />
     <Compile Include="Models\Repositories\Master.cs" />
     <Compile Include="Models\ShipData.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Views\Converters\AttackTypeToDisplayTextConverter.cs" />
     <Compile Include="Views\Converters\BrTagToNewLineConverter.cs" />
     <Compile Include="Views\Converters\FleetBackgroundConverter.cs" />
+    <Compile Include="Views\Converters\UnknownValueConverter.cs" />
     <Compile Include="Views\EnemyWindow.xaml.cs">
       <DependentUpon>EnemyWindow.xaml</DependentUpon>
     </Compile>

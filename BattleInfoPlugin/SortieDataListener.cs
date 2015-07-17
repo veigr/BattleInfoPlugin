@@ -60,7 +60,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -72,7 +73,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -84,7 +86,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -96,7 +99,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -108,7 +112,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -120,7 +125,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -132,7 +138,8 @@ namespace BattleInfoPlugin
                 data.api_eSlot,
                 data.api_eKyouka,
                 data.api_eParam,
-                data.api_ship_lv);
+                data.api_ship_lv,
+                data.api_maxhps);
             this.provider.UpdateBattleTypes(data);
         }
 
@@ -141,14 +148,10 @@ namespace BattleInfoPlugin
         #region StartNext
 
         private void Update(map_start_next startNext)
-        {
-            this.provider.UpdateMapData(startNext);
-        }
+            => this.provider.UpdateMapData(startNext);
 
         private void Update(battle_result result)
-        {
-            this.provider.UpdateEnemyName(result);
-        }
+            => this.provider.UpdateEnemyName(result);
 
         #endregion
     }

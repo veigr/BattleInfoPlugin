@@ -63,7 +63,7 @@ namespace BattleInfoPlugin.Models
             }
         }
 
-        public ShipSlotData(SlotItemInfo item, int maximum, int current)
+        public ShipSlotData(SlotItemInfo item, int maximum = -1, int current = -1)
         {
             this.Source = item;
             this.Maximum = maximum;

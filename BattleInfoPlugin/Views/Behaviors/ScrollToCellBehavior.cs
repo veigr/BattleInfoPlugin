@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using BattleInfoPlugin.ViewModels.Enemies;
 using BattleInfoPlugin.Views.Controls;
 
@@ -23,8 +25,7 @@ namespace BattleInfoPlugin.Views.Behaviors
             get { return (DependencyObject)this.GetValue(ParentElementProperty); }
             set { this.SetValue(ParentElementProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ParentElement.  This enables animation, styling, binding, etc...
+        
         public static readonly DependencyProperty ParentElementProperty =
             DependencyProperty.Register("ParentElement", typeof(DependencyObject), typeof(ScrollToCellBehavior), new PropertyMetadata(null));
 
@@ -39,12 +40,27 @@ namespace BattleInfoPlugin.Views.Behaviors
             get { return (string)this.GetValue(ScrollTargetNameProperty); }
             set { this.SetValue(ScrollTargetNameProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ScrollTargetName.  This enables animation, styling, binding, etc...
+        
         public static readonly DependencyProperty ScrollTargetNameProperty =
             DependencyProperty.Register("ScrollTargetName", typeof(string), typeof(ScrollToCellBehavior), new PropertyMetadata(""));
 
-        
+
+        #endregion
+
+        #region VerticalOffset AttatchedProperty
+
+        public static double GetVerticalOffset(DependencyObject obj)
+            => (double)obj.GetValue(VerticalOffsetProperty);
+
+        public static void SetVerticalOffset(DependencyObject obj, double value)
+            => obj.SetValue(VerticalOffsetProperty, value);
+
+        public static readonly DependencyProperty VerticalOffsetProperty =
+            DependencyProperty.RegisterAttached("VerticalOffset", typeof(double), typeof(ScrollToCellBehavior), new PropertyMetadata(0.0, OnVerticalOffsetChanged));
+
+        private static void OnVerticalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+            => (d as ScrollViewer)?.ScrollToVerticalOffset((double)e.NewValue);
+
         #endregion
 
         protected override void OnAttached()
@@ -77,7 +93,20 @@ namespace BattleInfoPlugin.Views.Behaviors
             var scrollHeight = cellsGroupItems
                 .TakeWhile(x => !x.Equals(targetCellGroup))
                 .Sum(x => x.ActualHeight);
-            scrollTarget.ScrollToVerticalOffset(scrollHeight);
+
+            var animation = new DoubleAnimation
+            {
+                From = scrollTarget.VerticalOffset,
+                To = scrollHeight,
+                Duration = new Duration(TimeSpan.FromMilliseconds(200)),
+                AccelerationRatio = 0.1,
+                DecelerationRatio = 0.9,
+            };
+            var storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            Storyboard.SetTarget(animation, scrollTarget);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(VerticalOffsetProperty));
+            storyboard.Begin();
         }
 
         private ScrollViewer GetScrollTarget()
