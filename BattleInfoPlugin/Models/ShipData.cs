@@ -60,6 +60,21 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
+        #region Level変更通知プロパティ
+        private int _Level;
+        public int Level
+        {
+            get { return this._Level; }
+            set
+            {
+                if (this._Level == value)
+                    return;
+                this._Level = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         #region Situation変更通知プロパティ
         private ShipSituation _Situation;
 
@@ -233,10 +248,10 @@ namespace BattleInfoPlugin.Models
         public int SlotsHit => this.Slots.Sum(x => x.Hit);
         public int SlotsEvade => this.Slots.Sum(x => x.Evade);
 
-        public int SumFirepower => this.Firepower + this.SlotsFirepower;
-        public int SumTorpedo => this.Torpedo + this.SlotsTorpedo;
-        public int SumAA => this.AA + this.SlotsAA;
-        public int SumArmer => this.Armer + this.SlotsArmer;
+        public int SumFirepower => 0 < this.Firepower ? this.Firepower + this.SlotsFirepower : this.Firepower;
+        public int SumTorpedo => 0 < this.Torpedo ? this.Torpedo + this.SlotsTorpedo : this.Torpedo;
+        public int SumAA => 0 < this.AA ? this.AA + this.SlotsAA : this.AA;
+        public int SumArmer => 0 < this.Armer ? this.Armer + this.SlotsArmer : this.Armer;
 
         public LimitedValue HP => new LimitedValue(this.NowHP, this.MaxHP, 0);
 
@@ -320,6 +335,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Name = this.Source.Info.Name;
             this.TypeName = this.Source.Info.ShipType.Name;
+            this.Level = this.Source.Level;
             this.Situation = this.Source.Situation;
             this.NowHP = this.Source.HP.Current;
             this.MaxHP = this.Source.HP.Maximum;
@@ -374,13 +390,6 @@ namespace BattleInfoPlugin.Models
             var m = Plugin.RawStart2.api_mst_ship.Single(x => x.api_id == this.Source.Id);
             this.AdditionalName = isEnemyID ? m.api_yomi : "";
             this.TypeName = this.Source.ShipType.Name;
-            this.NowHP = this.Source.HP;
-            this.MaxHP = this.Source.HP;
-            this.Firepower = this.Source.MaxFirepower;
-            this.Torpedo = this.Source.MaxTorpedo;
-            this.AA = this.Source.MaxAA;
-            this.Armer = this.Source.MaxArmer;
-            this.Luck = m.api_luck[0];
         }
     }
 }

@@ -11,7 +11,7 @@ namespace BattleInfoPlugin.Models
     {
         private readonly EnemyDataProvider provider = new EnemyDataProvider();
 
-        public IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> GetMapEnemies()
+        public IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> GetMapEnemies()
         {
             return this.provider.GetMapEnemies();
         }

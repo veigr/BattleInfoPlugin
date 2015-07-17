@@ -17,7 +17,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 {
     public class EnemyFleetViewModel : ViewModel
     {
-        public int Key { get; set; }
+        public string Key { get; set; }
 
         public string Name
             => !string.IsNullOrWhiteSpace(this.Fleet.Name)

@@ -62,26 +62,26 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
-        #region AirSuperiorityPotential変更通知プロパティ
-        private int _AirSuperiorityPotential;
+        //#region AirSuperiorityPotential変更通知プロパティ
+        //private int _AirSuperiorityPotential;
 
-        public int AirSuperiorityPotential
-        {
-            get
-            { return this._AirSuperiorityPotential; }
-            set
-            { 
-                if (this._AirSuperiorityPotential == value)
-                    return;
-                this._AirSuperiorityPotential = value;
-                this.RaisePropertyChanged();
-            }
-        }
-        #endregion
+        //public int AirSuperiorityPotential
+        //{
+        //    get
+        //    { return this._AirSuperiorityPotential; }
+        //    set
+        //    { 
+        //        if (this._AirSuperiorityPotential == value)
+        //            return;
+        //        this._AirSuperiorityPotential = value;
+        //        this.RaisePropertyChanged();
+        //    }
+        //}
+        //#endregion
 
-        public int AirParityRequirements => this.AirSuperiorityPotential * 2 / 3;
-        public int AirSuperiorityRequirements => this.AirSuperiorityPotential * 3 / 2;
-        public int AirSupremacyRequirements => this.AirSuperiorityPotential * 3;
+        //public int AirParityRequirements => this.AirSuperiorityPotential * 2 / 3;
+        //public int AirSuperiorityRequirements => this.AirSuperiorityPotential * 3 / 2;
+        //public int AirSupremacyRequirements => this.AirSuperiorityPotential * 3;
 
         public FleetData() : this(new ShipData[0], Formation.なし, "")
         {
@@ -92,11 +92,11 @@ namespace BattleInfoPlugin.Models
             this._Ships = ships;
             this._Formation = formation;
             this._Name = name;
-            this._AirSuperiorityPotential = this._Ships
-                .SelectMany(s => s.Slots)
-                .Where(s => s.Source.IsAirSuperiorityFighter)
-                .Sum(s => (int)(s.AA * Math.Sqrt(s.Current)))
-                ;
+            //this._AirSuperiorityPotential = this._Ships
+            //    .SelectMany(s => s.Slots)
+            //    .Where(s => s.Source.IsAirSuperiorityFighter)
+            //    .Sum(s => (int)(s.AA * Math.Sqrt(s.Current)))
+            //    ;
         }
     }
 

@@ -53,7 +53,7 @@ namespace BattleInfoPlugin.Models
                                  + (this.Evade != 0 ? " 回避:" + this.Evade : "")
                                  + (this.LOS != 0 ? " 索敵:" + this.LOS : "");
 
-        public ShipSlotData(SlotItemInfo item, int maximum, int current)
+        public ShipSlotData(SlotItemInfo item, int maximum = -1, int current = -1)
         {
             this.Source = item;
             this.Maximum = maximum;

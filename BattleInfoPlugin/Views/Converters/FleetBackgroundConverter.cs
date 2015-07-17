@@ -39,7 +39,7 @@ namespace BattleInfoPlugin.Views.Converters
 
             if (value2 == null)
                 this.SwapBackground();
-            else if (value1.Key != value2.Key || value1.ParentCell.Key != value2.Key)
+            else if (value1.Key != value2.Key || value1.ParentCell.Key != value2.ParentCell.Key)
                 this.SwapBackground();
 
             return this.CurrentBackground;

@@ -31,7 +31,7 @@
 
     public class Api_Enemy
     {
-        public int api_enemy_id { get; set; }
+        //public int api_enemy_id { get; set; }
         public int api_result { get; set; }
         public string api_result_str { get; set; }
     }

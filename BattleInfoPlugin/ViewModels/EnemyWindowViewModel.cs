@@ -83,7 +83,7 @@ namespace BattleInfoPlugin.ViewModels
 
         private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
             KeyValuePair<int, MapInfo> mi,
-            IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<int, FleetData>>> mapEnemies,
+            IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> mapEnemies,
             IReadOnlyDictionary<MapCell, CellType> cellTypes)
         {
             return mapEnemies.Where(info => info.Key.Id == mi.Key)
@@ -123,11 +123,17 @@ namespace BattleInfoPlugin.ViewModels
         {
             var name = obj.Fleet.Name;
             var formation = obj.Fleet.Formation;
-            var ships = obj.Fleet.Ships.OfType<MastersShipData>().Where(x => x.Source != null).Select(x => x.Source.Id).ToArray();
+            var ships = obj.Fleet.Ships.OfType<MastersShipData>().Where(x => x.Source != null).ToArray();
             var slots = obj.Fleet.Ships.SelectMany(x => x.Slots).Where(x => x.Source != null).Select(x => x.Source.Id).ToArray();
             return name.GetHashCode()
                    ^ formation.GetHashCode()
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Source.Id.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.MaxHP.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Level.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Firepower.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Torpedo.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.AA.GetHashCode())
+                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Armer.GetHashCode())
                    ^ slots.Aggregate(0, (a, b) => a.GetHashCode() ^ b.GetHashCode());
         }
     }
