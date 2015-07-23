@@ -57,7 +57,7 @@ namespace BattleInfoPlugin.Models
         {
             this.Source = item;
             this.Maximum = maximum;
-            this.Current = current;
+            this._Current = current;
 
             if (item == null) return;
 

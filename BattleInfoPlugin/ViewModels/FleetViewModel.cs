@@ -82,9 +82,11 @@ namespace BattleInfoPlugin.ViewModels
 
         public FleetViewModel(string name, FleetData fleet = null)
         {
-            this.Name = name;
-            this.Fleet = fleet;
             this.defaultName = name;
+            this._Fleet = fleet;
+            this._Name = !string.IsNullOrWhiteSpace(fleet?.Name)
+                    ? fleet.Name
+                    : name;
         }
 
         private readonly string defaultName;

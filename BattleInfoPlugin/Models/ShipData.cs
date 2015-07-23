@@ -328,7 +328,8 @@ namespace BattleInfoPlugin.Models
 
         public MembersShipData(Ship ship) : this()
         {
-            this.Source = ship;
+            this._Source = ship;
+            this.UpdateFromSource();
         }
 
         private void UpdateFromSource()
@@ -380,7 +381,8 @@ namespace BattleInfoPlugin.Models
 
         public MastersShipData(ShipInfo info) : this()
         {
-            this.Source = info;
+            this._Source = info;
+            this.UpdateFromSource();
         }
 
         private void UpdateFromSource()

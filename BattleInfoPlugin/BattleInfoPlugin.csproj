@@ -244,6 +244,7 @@
     <Folder Include="KanColleViewerAssemblies\" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="KanColleViewerAssemblies\KanColleViewer.Composition.dll" />
     <Analyzer Include="KanColleViewerAssemblies\KanColleViewer.PluginAnalyzer.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

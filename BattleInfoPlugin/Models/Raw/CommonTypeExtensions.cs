@@ -56,9 +56,7 @@ namespace BattleInfoPlugin.Models.Raw
                ?? defaultValue;
 
         public static AirSupremacy GetAirSupremacy(this Api_Kouku kouku)
-            => kouku?.api_stage1 != null
-                ? (AirSupremacy) kouku?.api_stage1?.api_disp_seiku
-                : AirSupremacy.航空戦なし;
+            => (AirSupremacy)(kouku?.api_stage1?.api_disp_seiku ?? (int)AirSupremacy.航空戦なし);
 
         #endregion
 

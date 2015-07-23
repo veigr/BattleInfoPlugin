@@ -102,9 +102,9 @@ namespace BattleInfoPlugin.ViewModels
         public ToolViewModel(Plugin plugin)
         {
             this.notifier = new BattleEndNotifier(plugin);
-            this.FirstFleet = new FleetViewModel("自艦隊");
-            this.SecondFleet = new FleetViewModel("護衛艦隊");
-            this.Enemies = new FleetViewModel("敵艦隊");
+            this._FirstFleet = new FleetViewModel("自艦隊");
+            this._SecondFleet = new FleetViewModel("護衛艦隊");
+            this._Enemies = new FleetViewModel("敵艦隊");
 
             this.CompositeDisposable.Add(new PropertyChangedEventListener(this.battleData)
             {
