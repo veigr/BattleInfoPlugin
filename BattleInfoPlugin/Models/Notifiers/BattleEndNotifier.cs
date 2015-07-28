@@ -52,7 +52,7 @@ namespace BattleInfoPlugin.Models.Notifiers
         {
             var isActive = DispatcherHelper.UIDispatcher.Invoke(() => Application.Current.MainWindow.IsActive);
             if (this.IsEnabled && !isActive)
-                this.plugin.InvokeNotifyRequested(new NotifyEventArgs("戦闘終了", "戦闘が終了しました。")
+                this.plugin.InvokeNotifyRequested(new NotifyEventArgs(NotificationType.BattleEnd, "戦闘終了", "戦闘が終了しました。")
                 {
                     Activated = () =>
                     {

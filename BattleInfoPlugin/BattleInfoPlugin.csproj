@@ -135,6 +135,7 @@
     <Compile Include="Models\MapData.cs" />
     <Compile Include="Models\MapInfo.cs" />
     <Compile Include="Models\Notifiers\BattleEndNotifier.cs" />
+    <Compile Include="NotificationType.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />
     <Compile Include="Models\Raw\battle_midnight_sp_midnight.cs" />
     <Compile Include="Models\Raw\battle_result.cs" />

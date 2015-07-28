@@ -32,7 +32,7 @@ namespace BattleInfoPlugin.Models
         [DataMember]
         public int IdInEachMapInfo { get; private set; }
 
-        public MapCell(Api_Mst_Mapcell cell)
+        public MapCell(kcsapi_mst_mapcell cell)
         {
             this.ColorNo = cell.api_color_no;
             this.Id = cell.api_id;
