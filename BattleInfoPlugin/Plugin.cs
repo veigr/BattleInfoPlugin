@@ -18,14 +18,14 @@ namespace BattleInfoPlugin
     [ExportMetadata("Author", "@veigr")]
     public class Plugin : IPlugin, ITool, IRequestNotify
     {
-        private readonly ToolView v;
+        private readonly ToolViewModel vm;
         internal static KcsResourceWriter ResourceWriter { get; private set; }
         internal static SortieDataListener SortieListener { get; private set; }
         internal static kcsapi_start2 RawStart2 { get; private set; }
 
         public Plugin()
         {
-            this.v = new ToolView { DataContext = new ToolViewModel(this) };
+            this.vm = new ToolViewModel(this);
         }
 
         public void Initialize()
@@ -41,7 +41,7 @@ namespace BattleInfoPlugin
 
         public string Name => "BattleInfo";
 
-        public object View => this.v;
+        public object View => new ToolView {DataContext = this.vm};
 
         public event EventHandler<NotifyEventArgs> NotifyRequested;
 

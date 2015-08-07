@@ -11,21 +11,24 @@ namespace BattleInfoPlugin.ViewModels
     {
         private readonly BattleEndNotifier notifier;
 
-        private readonly BattleData battleData = new BattleData();
+        private BattleData BattleData { get; } = new BattleData();
+
+        public string BattleName
+            => this.BattleData?.Name ?? "";
 
         public string UpdatedTime
-            => this.battleData != null && this.battleData.UpdatedTime != default(DateTimeOffset)
-                ? this.battleData.UpdatedTime.ToString("yyyy/MM/dd HH:mm:ss")
+            => this.BattleData != null && this.BattleData.UpdatedTime != default(DateTimeOffset)
+                ? this.BattleData.UpdatedTime.ToString("yyyy/MM/dd HH:mm:ss")
                 : "No Data";
 
         public string BattleSituation
-            => this.battleData != null && this.battleData.BattleSituation != Models.BattleSituation.なし
-                ? this.battleData.BattleSituation.ToString()
+            => this.BattleData != null && this.BattleData.BattleSituation != Models.BattleSituation.なし
+                ? this.BattleData.BattleSituation.ToString()
                 : "";
 
         public string FriendAirSupremacy
-            => this.battleData != null && this.battleData.FriendAirSupremacy != AirSupremacy.航空戦なし
-                ? this.battleData.FriendAirSupremacy.ToString()
+            => this.BattleData != null && this.BattleData.FriendAirSupremacy != AirSupremacy.航空戦なし
+                ? this.BattleData.FriendAirSupremacy.ToString()
                 : "";
 
         #region FirstFleet変更通知プロパティ
@@ -106,31 +109,35 @@ namespace BattleInfoPlugin.ViewModels
             this._SecondFleet = new FleetViewModel("護衛艦隊");
             this._Enemies = new FleetViewModel("敵艦隊");
 
-            this.CompositeDisposable.Add(new PropertyChangedEventListener(this.battleData)
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(this.BattleData)
             {
                 {
-                    () => this.battleData.UpdatedTime,
+                    () => this.BattleData.Name,
+                    (_, __) => this.RaisePropertyChanged(() => this.BattleName)
+                },
+                {
+                    () => this.BattleData.UpdatedTime,
                     (_, __) => this.RaisePropertyChanged(() => this.UpdatedTime)
                 },
                 {
-                    () => this.battleData.BattleSituation,
+                    () => this.BattleData.BattleSituation,
                     (_, __) => this.RaisePropertyChanged(() => this.BattleSituation)
                 },
                 {
-                    () => this.battleData.FriendAirSupremacy,
+                    () => this.BattleData.FriendAirSupremacy,
                     (_, __) => this.RaisePropertyChanged(() => this.FriendAirSupremacy)
                 },
                 {
-                    () => this.battleData.FirstFleet,
-                    (_, __) => this.FirstFleet.Fleet = this.battleData.FirstFleet
+                    () => this.BattleData.FirstFleet,
+                    (_, __) => this.FirstFleet.Fleet = this.BattleData.FirstFleet
                 },
                 {
-                    () => this.battleData.SecondFleet,
-                    (_, __) => this.SecondFleet.Fleet = this.battleData.SecondFleet
+                    () => this.BattleData.SecondFleet,
+                    (_, __) => this.SecondFleet.Fleet = this.BattleData.SecondFleet
                 },
                 {
-                    () => this.battleData.Enemies,
-                    (_, __) => this.Enemies.Fleet = this.battleData.Enemies
+                    () => this.BattleData.Enemies,
+                    (_, __) => this.Enemies.Fleet = this.BattleData.Enemies
                 },
             });
         }
