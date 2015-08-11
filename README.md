@@ -39,6 +39,16 @@
 
 * **ライセンス :** zlib/libpng
 
+#### [StatefulModel](http://ugaya40.hateblo.jp/entry/StatefulModel)
+
+> The MIT License (MIT)
+>
+> Copyright (c) 2015 Masanori Onoue
+
+* **用途 :** M-V-Whatever の Model 向けインフラストラクチャ
+* **ライセンス :** The MIT License (MIT)
+* **ライセンス全文 :** [licenses/StatefulModel.txt](licenses/StatefulModel.txt)
+
 #### [Nekoxy](https://github.com/veigr/Nekoxy)
 
 > The MIT License (MIT)
