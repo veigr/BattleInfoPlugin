@@ -41,6 +41,7 @@ namespace BattleInfoPlugin
 
         public string Name => "BattleInfo";
 
+        // タブ表示するたびに new されてしまうが、今のところ new しないとマルチウィンドウで正常に表示されない
         public object View => new ToolView {DataContext = this.vm};
 
         public event EventHandler<NotifyEventArgs> NotifyRequested;
