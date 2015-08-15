@@ -74,7 +74,7 @@ namespace BattleInfoPlugin.Models.Repositories
         private void Reload()
         {
             //deserialize
-            var path = Environment.CurrentDirectory + "\\" + Settings.Default.MasterDataFilePath;
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
             if (!File.Exists(path)) return;
 
             using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
@@ -90,7 +90,7 @@ namespace BattleInfoPlugin.Models.Repositories
         private void Save()
         {
             //serialize
-            var path = Environment.CurrentDirectory + "\\" + Settings.Default.MasterDataFilePath;
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
             using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
             {
                 serializer.WriteObject(stream, this);

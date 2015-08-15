@@ -354,7 +354,7 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             Debug.WriteLine("Start Reload");
             //deserialize
-            var path = Environment.CurrentDirectory + "\\" + Settings.Default.EnemyDataFilePath;
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
             if (!File.Exists(path)) return;
 
             lock (serializer)
@@ -382,7 +382,7 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             Debug.WriteLine("Start Save");
             //serialize
-            var path = Environment.CurrentDirectory + "\\" + Settings.Default.EnemyDataFilePath;
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
             lock (serializer)
             using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
             {
