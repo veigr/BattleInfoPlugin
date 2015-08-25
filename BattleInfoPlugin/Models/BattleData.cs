@@ -140,6 +140,24 @@ namespace BattleInfoPlugin.Models
         #endregion
 
 
+        #region AirCombatResults変更通知プロパティ
+        private AirCombatResult[] _AirCombatResults = new AirCombatResult[0];
+
+        public AirCombatResult[] AirCombatResults
+        {
+            get
+            { return this._AirCombatResults; }
+            set
+            {
+                if (this._AirCombatResults.Equals(value))
+                    return;
+                this._AirCombatResults = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+        
+
         #region DropShipName変更通知プロパティ
         private string _DropShipName;
 
@@ -268,6 +286,9 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); //航空戦2回目はスルー
+
+            this.AirCombatResults = data.api_kouku.ToResult("1戦目/")
+                .Concat(data.api_kouku2.ToResult("2戦目/")).ToArray();
         }
 
         public void Update(combined_battle_battle data)
@@ -302,6 +323,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
         }
 
         public void Update(combined_battle_battle_water data)
@@ -336,6 +359,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
         }
 
         public void Update(combined_battle_midnight_battle data)
@@ -393,6 +418,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
         }
 
         public void Update(practice_midnight_battle data)
@@ -428,6 +455,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); // 航空戦2回目はスルー
+
+            this.AirCombatResults = data.api_kouku.ToResult();
         }
 
         private void Update(sortie_battle data)
@@ -456,6 +485,8 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
         }
 
         #endregion
@@ -536,10 +567,11 @@ namespace BattleInfoPlugin.Models
         {
             this.UpdatedTime = DateTimeOffset.Now;
             this.Name = "";
-            this.DropShipName = "";
+            this.DropShipName = null;
 
             this.BattleSituation = BattleSituation.なし;
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
+            this.AirCombatResults = new AirCombatResult[0];
             if (this.FirstFleet != null) this.FirstFleet.Formation = Formation.なし;
             this.Enemies = new FleetData();
         }

@@ -11,6 +11,27 @@
                           BattleName="連合艦隊 - 水上部隊 - 昼戦"
                           DropShipName="ほっぽ">
 
+    <viewModels:ToolViewModel.AirCombatResults>
+        <models:AirCombatResult Name="1戦目/空対空"/>
+        <models:AirCombatResult Name="1戦目/空対艦"
+                                IsHappen="True"
+                                FriendCount="400"
+                                FriendLostCount="100"
+                                FriendRemainingCount="300"
+                                EnemyCount="900"
+                                EnemyLostCount="200"
+                                EnemyRemainingCount="700"/>
+        <models:AirCombatResult Name="空対空"
+                                IsHappen="True"
+                                FriendCount="400"
+                                FriendLostCount="100"
+                                FriendRemainingCount="300"
+                                EnemyCount="900"
+                                EnemyLostCount="200"
+                                EnemyRemainingCount="700"/>
+        <models:AirCombatResult Name="空対艦"/>
+    </viewModels:ToolViewModel.AirCombatResults>
+
     <viewModels:ToolViewModel.Enemies>
         <viewModels:FleetViewModel Name="敵艦隊" FleetFormation="輪形陣" IsVisible="True">
             <viewModels:FleetViewModel.Fleet>

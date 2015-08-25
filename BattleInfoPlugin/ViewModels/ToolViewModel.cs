@@ -32,7 +32,10 @@ namespace BattleInfoPlugin.ViewModels
                 : "";
 
         public string DropShipName
-            => this.BattleData?.DropShipName ?? "";
+            => this.BattleData?.DropShipName;
+
+        public AirCombatResult[] AirCombatResults
+            => this.BattleData?.AirCombatResults ?? new AirCombatResult[0];
 
         #region FirstFleet変更通知プロパティ
         private FleetViewModel _FirstFleet;
@@ -129,6 +132,10 @@ namespace BattleInfoPlugin.ViewModels
                 {
                     () => this.BattleData.FriendAirSupremacy,
                     (_, __) => this.RaisePropertyChanged(() => this.FriendAirSupremacy)
+                },
+                {
+                    () => this.BattleData.AirCombatResults,
+                    (_, __) => this.RaisePropertyChanged(() => this.AirCombatResults)
                 },
                 {
                     () => this.BattleData.DropShipName,

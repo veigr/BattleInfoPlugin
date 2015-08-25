@@ -58,6 +58,25 @@ namespace BattleInfoPlugin.Models.Raw
         public static AirSupremacy GetAirSupremacy(this Api_Kouku kouku)
             => (AirSupremacy)(kouku?.api_stage1?.api_disp_seiku ?? (int)AirSupremacy.航空戦なし);
 
+        public static AirCombatResult[] ToResult(this Api_Kouku kouku, string prefixName = "")
+        {
+            return kouku != null
+                ? new []
+                {
+                    kouku.api_stage1.ToResult($"{prefixName}空対空"),
+                    kouku.api_stage2.ToResult($"{prefixName}空対艦")
+                }
+                : new AirCombatResult[0];
+        }
+
+        public static AirCombatResult ToResult(this Api_Stage1 stage1, string name)
+            => stage1 == null ? new AirCombatResult(name)
+            : new AirCombatResult(name, stage1.api_f_count, stage1.api_f_lostcount, stage1.api_e_count, stage1.api_e_lostcount);
+
+        public static AirCombatResult ToResult(this Api_Stage2 stage2, string name)
+            => stage2 == null ? new AirCombatResult(name)
+            : new AirCombatResult(name, stage2.api_f_count, stage2.api_f_lostcount, stage2.api_e_count, stage2.api_e_lostcount);
+
         #endregion
 
         #region 雷撃戦
