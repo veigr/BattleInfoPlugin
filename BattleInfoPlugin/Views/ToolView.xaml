@@ -61,6 +61,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="戦闘情報"
                                Style="{DynamicResource HeaderTextStyleKey}"
@@ -85,10 +86,18 @@
                              Style="{DynamicResource EmphaticTextElementStyleKey}"/>
                     </TextBlock>
 
+                    <TextBlock Grid.Column="1"
+                               Grid.Row="2"
+                               Style="{DynamicResource DefaultTextStyleKey}">
+                        <Run Text="ドロップ : "/>
+                        <Run Text="{Binding DropShipName, Mode=OneWay}"
+                             FontSize="12"
+                             Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                    </TextBlock>
 
                     <Button Grid.Column="3"
                             Grid.Row="0"
-                            Grid.RowSpan="2"
+                            Grid.RowSpan="3"
                             Content="既知の敵一覧"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Right"

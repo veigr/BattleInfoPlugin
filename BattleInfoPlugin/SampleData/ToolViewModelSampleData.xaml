@@ -8,7 +8,8 @@
                           UpdatedTime="2015/03/08 15:15:15"
                           BattleSituation="T字有利"
                           FriendAirSupremacy="制空権確保"
-                          BattleName="連合艦隊 - 水上部隊 - 昼戦">
+                          BattleName="連合艦隊 - 水上部隊 - 昼戦"
+                          DropShipName="ほっぽ">
 
     <viewModels:ToolViewModel.Enemies>
         <viewModels:FleetViewModel Name="敵艦隊" FleetFormation="輪形陣" IsVisible="True">

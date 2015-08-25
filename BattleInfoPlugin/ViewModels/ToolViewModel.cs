@@ -31,6 +31,9 @@ namespace BattleInfoPlugin.ViewModels
                 ? this.BattleData.FriendAirSupremacy.ToString()
                 : "";
 
+        public string DropShipName
+            => this.BattleData?.DropShipName ?? "";
+
         #region FirstFleet変更通知プロパティ
         private FleetViewModel _FirstFleet;
 
@@ -126,6 +129,10 @@ namespace BattleInfoPlugin.ViewModels
                 {
                     () => this.BattleData.FriendAirSupremacy,
                     (_, __) => this.RaisePropertyChanged(() => this.FriendAirSupremacy)
+                },
+                {
+                    () => this.BattleData.DropShipName,
+                    (_, __) => this.RaisePropertyChanged(() => this.DropShipName)
                 },
                 {
                     () => this.BattleData.FirstFleet,

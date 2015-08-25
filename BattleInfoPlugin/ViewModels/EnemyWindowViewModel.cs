@@ -4,6 +4,8 @@ using BattleInfoPlugin.Models;
 using BattleInfoPlugin.Models.Repositories;
 using BattleInfoPlugin.ViewModels.Enemies;
 using Livet;
+using Livet.Messaging;
+using System.Windows;
 
 namespace BattleInfoPlugin.ViewModels
 {
@@ -11,8 +13,22 @@ namespace BattleInfoPlugin.ViewModels
     {
         private readonly MapData mapData = new MapData();
 
-        public EnemyMapViewModel[] EnemyMaps { get; set; }
+        #region EnemyMaps変更通知プロパティ
+        private EnemyMapViewModel[] _EnemyMaps;
 
+        public EnemyMapViewModel[] EnemyMaps
+        {
+            get
+            { return this._EnemyMaps; }
+            set
+            {
+                if (this._EnemyMaps == value)
+                    return;
+                this._EnemyMaps = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         #region SelectedMap変更通知プロパティ
         private EnemyMapViewModel _SelectedMap;
@@ -34,10 +50,34 @@ namespace BattleInfoPlugin.ViewModels
 
         public EnemyWindowViewModel()
         {
+            this._EnemyMaps = this.CreateEnemyMaps();
+            this.mapData.MergeResult += MapData_MergeResult;
+        }
+
+        private void MapData_MergeResult(bool result, string message)
+        {
+            if (result)
+            {
+                this.Messenger.Raise(new InformationMessage(message, "マージ成功", MessageBoxImage.Information, "MergeResult"));
+                this.EnemyMaps = this.CreateEnemyMaps();
+            }
+            else
+            {
+                this.Messenger.Raise(new InformationMessage(message, "マージ失敗", MessageBoxImage.Warning, "MergeResult"));
+            }
+        }
+
+        public void Merge(string[] filePathList)
+        {
+            this.mapData.Merge(filePathList);
+        }
+
+        private EnemyMapViewModel[] CreateEnemyMaps()
+        {
             var mapEnemies = this.mapData.GetMapEnemies();
             var cellTypes = this.mapData.GetCellTypes();
             var cellDatas = this.mapData.GetCellDatas();
-            this.EnemyMaps = Master.Current.MapInfos
+            return Master.Current.MapInfos
                 .Select(mi => new EnemyMapViewModel
                 {
                     Info = mi.Value,
@@ -45,7 +85,7 @@ namespace BattleInfoPlugin.ViewModels
                     //セルポイントデータに既知の敵データを外部結合して座標でマージ
                     EnemyCells = MapResource.HasMapSwf(mi.Value)
                         ? MapResource.GetMapCellPoints(mi.Value) //マップSWFがあったらそれを元に作る
-                            //外部結合
+                                                                 //外部結合
                             .GroupJoin(
                                 CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes),
                                 outer => outer.Key,
@@ -78,7 +118,6 @@ namespace BattleInfoPlugin.ViewModels
                 })
                 .OrderBy(info => info.Info.Id)
                 .ToArray();
-
         }
 
         private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(

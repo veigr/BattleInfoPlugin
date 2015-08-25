@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Json;
 using BattleInfoPlugin.Models.Raw;
 using BattleInfoPlugin.Properties;
 using Grabacr07.KanColleWrapper;
+using System.Threading.Tasks;
 
 namespace BattleInfoPlugin.Models.Repositories
 {
@@ -131,7 +132,9 @@ namespace BattleInfoPlugin.Models.Repositories
         public Dictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> GetMapEnemies()
         {
             this.Reload();
-            return this.MapEnemyData.ToDictionary(
+            return this.MapEnemyData
+                .Where(x => Master.Current.MapInfos.ContainsKey(x.Key))
+                .ToDictionary(
                 info => Master.Current.MapInfos[info.Key],
                 info => info.Value.ToDictionary(
                     cell => Master.Current.MapCells
@@ -348,6 +351,38 @@ namespace BattleInfoPlugin.Models.Repositories
 
             keys = keys.OrderBy(x => x).ToArray();
             return keys.Any() ? keys.First() : Guid.NewGuid().ToString();
+        }
+
+        public Task<bool> Merge(string path)
+        {
+            return Task.Run(() =>
+            {
+                if (!File.Exists(path)) return false;
+
+                lock (serializer)
+                {
+                    using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open)))
+                    {
+                        var obj = serializer.ReadObject(stream) as EnemyDataProvider;
+                        if (obj == null) return false;
+                        this.EnemyDictionary = this.EnemyDictionary.Merge(obj.EnemyDictionary);
+                        this.EnemyFormation = this.EnemyFormation.Merge(obj.EnemyFormation);
+                        this.EnemySlotItems = this.EnemySlotItems.Merge(obj.EnemySlotItems);
+                        this.EnemyUpgraded = this.EnemyUpgraded.Merge(obj.EnemyUpgraded);
+                        this.EnemyParams = this.EnemyParams.Merge(obj.EnemyParams);
+                        this.EnemyLevels = this.EnemyLevels.Merge(obj.EnemyLevels);
+                        this.EnemyHPs = this.EnemyHPs.Merge(obj.EnemyHPs);
+                        this.EnemyNames = this.EnemyNames.Merge(obj.EnemyNames);
+                        this.MapEnemyData = this.MapEnemyData.Merge(obj.MapEnemyData, (v1, v2) => v1.Merge(v2, (h1, h2) => h1.Merge(h2)));
+                        this.MapCellBattleTypes = this.MapCellBattleTypes.Merge(obj.MapCellBattleTypes, (v1, v2) => v1.Merge(v2));
+                        this.MapRoute = this.MapRoute.Merge(obj.MapRoute, (v1, v2) => v1.Merge(v2));
+                        this.MapCellDatas = this.MapCellDatas.Merge(obj.MapCellDatas, (v1, v2) => v1.Merge(v2).ToList());
+                    }
+                }
+
+                this.Save();
+                return true;
+            });
         }
 
         private void Reload()

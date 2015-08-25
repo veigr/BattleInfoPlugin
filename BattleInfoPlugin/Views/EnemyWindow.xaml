@@ -23,6 +23,8 @@
                    IsRestoringWindowPlacement="True"
                    SnapsToDevicePixels="True"
                    TextOptions.TextFormattingMode="Display"
+                   AllowDrop="True"
+                   Drop="Window_Drop"
                    d:DataContext="{d:DesignInstance vm:EnemyWindowViewModel, IsDesignTimeCreatable=True}">
 
     <metro:MetroWindow.Resources>
@@ -68,6 +70,10 @@
         <i:EventTrigger EventName="Closed">
             <l:DataContextDisposeAction/>
         </i:EventTrigger>
+
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="MergeResult">
+            <l:InformationDialogInteractionMessageAction/>
+        </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>

@@ -71,6 +71,29 @@ namespace BattleInfoPlugin.Models.Repositories
         //    }
         //}
 
+        public Task<bool> Merge(string path)
+        {
+            return Task.Run(() =>
+            {
+                if (!File.Exists(path)) return false;
+
+                lock (serializer)
+                {
+                    using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open)))
+                    {
+                        var obj = serializer.ReadObject(stream) as Master;
+                        if (obj == null) return false;
+                        this.MapAreas = new ConcurrentDictionary<int, MapArea>(this.MapAreas.Merge(obj.MapAreas));
+                        this.MapInfos = new ConcurrentDictionary<int, MapInfo>(this.MapInfos.Merge(obj.MapInfos));
+                        this.MapCells = new ConcurrentDictionary<int, MapCell>(this.MapCells.Merge(obj.MapCells));
+                    }
+                }
+
+                this.Save();
+                return true;
+            });
+        }
+
         private void Reload()
         {
             //deserialize

@@ -139,6 +139,25 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
+
+        #region DropShipName変更通知プロパティ
+        private string _DropShipName;
+
+        public string DropShipName
+        {
+            get
+            { return this._DropShipName; }
+            set
+            {
+                if (this._DropShipName == value)
+                    return;
+                this._DropShipName = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         private int CurrentDeckId { get; set; }
 
         public BattleData()
@@ -177,6 +196,14 @@ namespace BattleInfoPlugin.Models
 
             proxy.api_req_sortie_battle
                 .TryParse<sortie_battle>().Subscribe(x => this.Update(x.Data));
+
+            
+            proxy.api_req_sortie_battleresult
+                .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
+
+            proxy.api_req_combined_battle_battleresult
+                .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
+
 
             proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_map/start")
                 .TryParse<map_start_next>().Subscribe(x => this.UpdateFleetsByStartNext(x.Data, x.Request["api_deck_id"]));
@@ -341,6 +368,8 @@ namespace BattleInfoPlugin.Models
 
         public void Update(practice_battle data)
         {
+            this.Clear();
+
             this.Name = "演習 - 昼戦";
 
             this.UpdateFleets(data.api_dock_id, data.api_ship_ke, data.api_formation);
@@ -431,15 +460,14 @@ namespace BattleInfoPlugin.Models
 
         #endregion
 
+        public void Update(battle_result data)
+        {
+            this.DropShipName = data.api_get_ship?.api_ship_name;
+        }
+
         private void UpdateFleetsByStartNext(map_start_next startNext, string api_deck_id = null)
         {
-            this.UpdatedTime = DateTimeOffset.Now;
-            this.Name = "";
-
-            this.BattleSituation = BattleSituation.なし;
-            this.FriendAirSupremacy = AirSupremacy.航空戦なし;
-            if (this.FirstFleet != null) this.FirstFleet.Formation = Formation.なし;
-            this.Enemies = new FleetData();
+            this.Clear();
 
             if (api_deck_id != null) this.CurrentDeckId = int.Parse(api_deck_id);
             if (this.CurrentDeckId < 1) return;
@@ -502,6 +530,18 @@ namespace BattleInfoPlugin.Models
 
             if (api_nowhps_combined == null) return;
             this.SecondFleet.Ships.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
+        }
+
+        private void Clear()
+        {
+            this.UpdatedTime = DateTimeOffset.Now;
+            this.Name = "";
+            this.DropShipName = "";
+
+            this.BattleSituation = BattleSituation.なし;
+            this.FriendAirSupremacy = AirSupremacy.航空戦なし;
+            if (this.FirstFleet != null) this.FirstFleet.Formation = Formation.なし;
+            this.Enemies = new FleetData();
         }
     }
 }
