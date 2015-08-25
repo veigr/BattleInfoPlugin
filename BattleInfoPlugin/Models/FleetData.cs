@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Livet;
+using Grabacr07.KanColleWrapper.Models;
 
 namespace BattleInfoPlugin.Models
 {
@@ -131,7 +132,28 @@ namespace BattleInfoPlugin.Models
             foreach (var damage in damages)
             {
                 fleet.Ships.SetValues(damage.ToArray(), (s, d) => s.NowHP -= d);
+
+                // ダメコンによる回復処理。同一戦闘で2度目が発生する事はないという前提……
+                var dameconState = fleet.Ships.Select(x => new { HasDamecon = x.HasDamecon(), HasMegami = x.HasMegami() });
+                fleet.Ships.SetValues(dameconState, (s, d) =>
+                {
+                    if (0 < s.NowHP) return;
+                    if (d.HasDamecon)   // クライアント表示ロジック上は女神よりダメコンを優先して使用するようになってる
+                        s.NowHP = (int)Math.Floor(s.MaxHP * 0.2);
+                    else if (d.HasMegami)
+                        s.NowHP = s.MaxHP;
+                });
             }
+        }
+
+        public static bool HasDamecon(this ShipData ship)
+        {
+            return ship?.Slots.Any(x => x?.Source.Id == 42) ?? false;
+        }
+
+        public static bool HasMegami(this ShipData ship)
+        {
+            return ship?.Slots.Any(x => x?.Source.Id == 43) ?? false;
         }
     }
 }
