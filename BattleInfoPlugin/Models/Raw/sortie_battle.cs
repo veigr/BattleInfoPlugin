@@ -3,7 +3,7 @@
     /// <summary>
     /// 昼戦
     /// </summary>
-    public class sortie_battle
+    public class sortie_battle: ICommonBattleMembers
     {
         public int api_dock_id { get; set; }
         public int[] api_ship_ke { get; set; }

@@ -3,7 +3,7 @@
     /// <summary>
     /// 演習-夜戦
     /// </summary>
-    public class practice_midnight_battle
+    public class practice_midnight_battle : ICommonBattleMembers
     {
         public int api_deck_id { get; set; }
         public int[] api_nowhps { get; set; }

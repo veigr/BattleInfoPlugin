@@ -32,17 +32,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/PluginStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <l:VisibilityAndBooleanConverter x:Key="TrueToVisibleConverter"
-                                             ConvertWhenTrue="Visible"
-                                             ConvertWhenFalse="Collapsed"/>
-            <localconv:BrTagToNewLineConverter x:Key="BrTagToNewLineConverter"/>
-            <localconv:AdditionalNameColorConverter x:Key="AdditionalNameColorConverter"/>
-            <localconv:AttackTypeToDisplayTextConverter x:Key="AttackTypeConverter"/>
-            <localconv:FleetBackgroundConverter x:Key="FleetBackgroundConverter"
-                                                Background1="{StaticResource ThemeBrushKey}"
-                                                Background2="{StaticResource SemiactiveBackgroundBrushKey}"/>
-            <localconv:UnknownValueConverter x:Key="UnknownValueConverter"/>
-            <converters:HasFlagConverter x:Key="HasFlagConverter"/>
 
             <CollectionViewSource x:Key="EnemyMapsSource"
                                   Source="{Binding EnemyMaps}">

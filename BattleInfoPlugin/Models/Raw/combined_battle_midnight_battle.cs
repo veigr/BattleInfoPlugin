@@ -3,7 +3,7 @@
     /// <summary>
     /// 連合艦隊-夜戦
     /// </summary>
-    public class combined_battle_midnight_battle
+    public class combined_battle_midnight_battle : ICommonBattleMembers
     {
         public int api_deck_id { get; set; }
         public int[] api_ship_ke { get; set; }

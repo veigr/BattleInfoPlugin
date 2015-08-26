@@ -203,6 +203,7 @@ namespace BattleInfoPlugin.Models.Repositories
                                 .Where(s => s != -1)
                                 .Select(s => slotInfos[s])
                                 .Select((s, si) => new ShipSlotData(s))
+                                .ToArray()
                             : new ShipSlotData[0],
                     };
                 }).ToArray();
