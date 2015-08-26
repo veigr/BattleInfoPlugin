@@ -37,4 +37,7 @@
     <l:VisibilityAndBooleanConverter x:Key="FalseToVisibleConverter"
                                      ConvertWhenTrue="Collapsed"
                                      ConvertWhenFalse="Visible"/>
+    <l:VisibilityAndBooleanConverter x:Key="FalseToHiddenConverter"
+                                     ConvertWhenTrue="Visible"
+                                     ConvertWhenFalse="Hidden"/>
 </ResourceDictionary>

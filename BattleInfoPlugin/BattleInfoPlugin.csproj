@@ -154,6 +154,7 @@
     <Compile Include="Models\CellType.cs" />
     <Compile Include="Models\FleetDamages.cs" />
     <Compile Include="Models\FleetData.cs" />
+    <Compile Include="Models\FleetType.cs" />
     <Compile Include="Models\Formation.cs" />
     <Compile Include="Models\MapArea.cs" />
     <Compile Include="Models\MapCell.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="Models\ShipSlotData.cs" />
     <Compile Include="Models\Type2.cs" />
     <Compile Include="SortieDataListener.cs" />
+    <Compile Include="ViewModels\AirCombatResultViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyMapViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyCellViewModel.cs" />

@@ -9,6 +9,7 @@
              xmlns:models="clr-namespace:BattleInfoPlugin.Models"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:localConv="clr-namespace:BattleInfoPlugin.Views.Converters"
+             xmlns:viewModels="clr-namespace:BattleInfoPlugin.ViewModels"
              Background="{DynamicResource ThemeBrushKey}"
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              mc:Ignorable="d" 
@@ -72,9 +73,71 @@
                      FontSize="12"
                      Style="{DynamicResource EmphaticTextElementStyleKey}"/>
         </TextBlock>
+
         <Rectangle Height="1"
-                   Margin="3, 4"
+                   Margin="3,4"
                    Style="{DynamicResource SeparatorRectangleStyleKey}" />
+
+        <ItemsControl ItemsSource="{Binding AirCombatResults}"
+                      Margin="3,0,0,0">
+            <ItemsControl.Style>
+                <Style TargetType="{x:Type ItemsControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Fleet.FleetType, Converter={StaticResource HasFlagConverter}, ConverterParameter=Second}"
+                                     Value="True">
+                            <Setter Property="Visibility"
+                                    Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModels:AirCombatResultViewModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name, StringFormat={}{0}:}"
+                                   Style="{DynamicResource DefaultTextStyleKey}"
+                                   Margin="0,0,5,0"/>
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsHappen, Converter={StaticResource TrueToVisibleConverter}}">
+                            <TextBlock Style="{DynamicResource EmphaticTextStyleKey}"
+                                       FontSize="12"
+                                       Margin="0,0,5,0">
+                                <Run Text="{Binding RemainingCount, Mode=OneWay}"/>
+                                <Run Text="/"/>
+                                <Run Text="{Binding Count, Mode=OneWay}"/>
+                                <Run Text="{Binding LostCount, Mode=OneWay, StringFormat=(-{0})}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <TextBlock Text="なし"
+                                   Style="{DynamicResource EmphaticTextStyleKey}"
+                                   FontSize="12"
+                                   Visibility="{Binding IsHappen, Converter={StaticResource FalseToVisibleConverter}}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Rectangle Height="1"
+                   Margin="3,4">
+            <Rectangle.Style>
+                <Style TargetType="{x:Type Rectangle}"
+                       BasedOn="{StaticResource SeparatorRectangleStyleKey}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AirCombatResults}"
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding AirCombatResults.Length}"
+                                     Value="0">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
+        
         <ItemsControl ItemsSource="{Binding Fleet.Ships}"
                       Background="Transparent"
                       Grid.IsSharedSizeScope="True" DataContext="{Binding}"

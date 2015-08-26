@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BattleInfoPlugin.Models;
 using Livet;
@@ -76,17 +77,33 @@ namespace BattleInfoPlugin.ViewModels
 
         #endregion
 
+
+        #region AirCombatResults変更通知プロパティ
+        private AirCombatResultViewModel[] _AirCombatResults;
+
+        public AirCombatResultViewModel[] AirCombatResults
+        {
+            get
+            { return this._AirCombatResults; }
+            set
+            {
+                if (this._AirCombatResults == value)
+                    return;
+                this._AirCombatResults = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public FleetViewModel() : this("")
         {
         }
 
-        public FleetViewModel(string name, FleetData fleet = null)
+        public FleetViewModel(string name)
         {
             this.defaultName = name;
-            this._Fleet = fleet;
-            this._Name = !string.IsNullOrWhiteSpace(fleet?.Name)
-                    ? fleet.Name
-                    : name;
+            this._Name = name;
         }
 
         private readonly string defaultName;

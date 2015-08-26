@@ -8,8 +8,23 @@
                            FleetFormation="戦闘陣形"
                            IsVisible="True">
 
+    <viewModels:FleetViewModel.AirCombatResults>
+        <viewModels:AirCombatResultViewModel Name="1回目/空対空"/>
+        <viewModels:AirCombatResultViewModel Name="1回目/空対艦"
+                                IsHappen="True"
+                                Count="400"
+                                LostCount="100"
+                                RemainingCount="300"/>
+        <viewModels:AirCombatResultViewModel Name="空対空"
+                                IsHappen="True"
+                                Count="900"
+                                LostCount="200"
+                                RemainingCount="700"/>
+        <viewModels:AirCombatResultViewModel Name="空対艦"/>
+    </viewModels:FleetViewModel.AirCombatResults>
+
     <viewModels:FleetViewModel.Fleet>
-        <models:FleetData Formation="戦闘陣形">
+        <models:FleetData Formation="戦闘陣形" FleetType="Enemy">
             <models:FleetData.Ships>
                 <models:MembersShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
                     <models:MembersShipData.HP>

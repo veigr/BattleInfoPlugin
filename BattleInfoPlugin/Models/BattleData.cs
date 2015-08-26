@@ -287,8 +287,8 @@ namespace BattleInfoPlugin.Models
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); //航空戦2回目はスルー
 
-            this.AirCombatResults = data.api_kouku.ToResult("1戦目/")
-                .Concat(data.api_kouku2.ToResult("2戦目/")).ToArray();
+            this.AirCombatResults = data.api_kouku.ToResult("1回目/")
+                            .Concat(data.api_kouku2.ToResult("2回目/")).ToArray();
         }
 
         public void Update(combined_battle_battle data)
@@ -455,8 +455,9 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); // 航空戦2回目はスルー
-
-            this.AirCombatResults = data.api_kouku.ToResult();
+            
+            this.AirCombatResults = data.api_kouku.ToResult("1回目/")
+                            .Concat(data.api_kouku2.ToResult("2回目/")).ToArray();
         }
 
         private void Update(sortie_battle data)
@@ -518,7 +519,8 @@ namespace BattleInfoPlugin.Models
             this.Enemies = new FleetData(
                 api_ship_ke.Where(x => x != -1).Select(x => new MastersShipData(master[x])).ToArray(),
                 this.Enemies?.Formation ?? Formation.なし,
-                this.Enemies?.Name ?? "");
+                this.Enemies?.Name ?? "",
+                FleetType.Enemy);
 
             if (api_formation != null)
             {
@@ -536,13 +538,15 @@ namespace BattleInfoPlugin.Models
             this.FirstFleet = new FleetData(
                 organization.Fleets[deckID].Ships.Select(s => new MembersShipData(s)).ToArray(),
                 this.FirstFleet?.Formation ?? Formation.なし,
-                organization.Fleets[deckID].Name);
+                organization.Fleets[deckID].Name,
+                FleetType.First);
             this.SecondFleet = new FleetData(
                 organization.Combined && deckID == 1
                     ? organization.Fleets[2].Ships.Select(s => new MembersShipData(s)).ToArray()
                     : new MembersShipData[0],
                 this.SecondFleet?.Formation ?? Formation.なし,
-                organization.Fleets[2].Name);
+                organization.Fleets[2].Name,
+                FleetType.Second);
         }
 
         private void UpdateMaxHP(int[] api_maxhps, int[] api_maxhps_combined = null)

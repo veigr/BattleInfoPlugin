@@ -240,6 +240,25 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
+        #region IsUsedDamecon 変更通知プロパティ
+
+        private bool _IsUsedDamecon;
+
+        /// <summary>
+        /// 運のステータス値を取得します。
+        /// </summary>
+        public bool IsUsedDamecon
+        {
+            get { return this._IsUsedDamecon; }
+            set
+            {
+                this._IsUsedDamecon = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        #endregion
+
         public int SlotsFirepower => this.Slots.Sum(x => x.Firepower);
         public int SlotsTorpedo => this.Slots.Sum(x => x.Torpedo);
         public int SlotsAA => this.Slots.Sum(x => x.AA);

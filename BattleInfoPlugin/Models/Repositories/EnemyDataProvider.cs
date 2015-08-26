@@ -145,7 +145,8 @@ namespace BattleInfoPlugin.Models.Repositories
                         enemy => new FleetData(
                             this.GetEnemiesFromId(enemy),
                             this.GetEnemyFormationFromId(enemy),
-                            this.GetEnemyNameFromId(enemy)
+                            this.GetEnemyNameFromId(enemy),
+                            FleetType.Enemy
                             ))));
         }
 

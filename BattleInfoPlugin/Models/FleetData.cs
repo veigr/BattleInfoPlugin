@@ -11,6 +11,22 @@ namespace BattleInfoPlugin.Models
 {
     public class FleetData : NotificationObject
     {
+        #region FleetType変更通知プロパティ
+        private FleetType _FleetType;
+
+        public FleetType FleetType
+        {
+            get
+            { return this._FleetType; }
+            set
+            {
+                if (this._FleetType == value)
+                    return;
+                this._FleetType = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
 
         #region Name変更通知プロパティ
         private string _Name;
@@ -45,7 +61,7 @@ namespace BattleInfoPlugin.Models
             }
         }
         #endregion
-
+        
         #region Formation変更通知プロパティ
         private Formation _Formation;
 
@@ -84,15 +100,16 @@ namespace BattleInfoPlugin.Models
         //public int AirSuperiorityRequirements => this.AirSuperiorityPotential * 3 / 2;
         //public int AirSupremacyRequirements => this.AirSuperiorityPotential * 3;
 
-        public FleetData() : this(new ShipData[0], Formation.なし, "")
+        public FleetData() : this(new ShipData[0], Formation.なし, "", FleetType.Enemy)
         {
         }
 
-        public FleetData(IEnumerable<ShipData> ships, Formation formation, string name)
+        public FleetData(IEnumerable<ShipData> ships, Formation formation, string name, FleetType type)
         {
             this._Ships = ships;
             this._Formation = formation;
             this._Name = name;
+            this._FleetType = type;
             //this._AirSuperiorityPotential = this._Ships
             //    .SelectMany(s => s.Slots)
             //    .Where(s => s.Source.IsAirSuperiorityFighter)
@@ -138,6 +155,7 @@ namespace BattleInfoPlugin.Models
                 fleet.Ships.SetValues(dameconState, (s, d) =>
                 {
                     if (0 < s.NowHP) return;
+                    s.IsUsedDamecon = true;
                     if (d.HasDamecon)   // クライアント表示ロジック上は女神よりダメコンを優先して使用するようになってる
                         s.NowHP = (int)Math.Floor(s.MaxHP * 0.2);
                     else if (d.HasMegami)

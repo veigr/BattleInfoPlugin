@@ -42,169 +42,93 @@
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="0"
-                    Grid.Row="0"
-                    Grid.ColumnSpan="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="195"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                    
+            
+            <DockPanel Grid.Row="0">
                 <TextBlock Text="戦闘情報"
-                            VerticalAlignment="Top"
-                            Style="{DynamicResource HeaderTextStyleKey}"
-                            Margin="0,0,16,0"
-                            Grid.Column="0"
-                            Grid.Row="0"/>
+                           VerticalAlignment="Top"
+                           Style="{DynamicResource HeaderTextStyleKey}"
+                           Margin="0,0,16,0"/>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="195"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="1"
-                            Grid.Row="0"
-                            Margin="0,0,10,0">
-                    <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
-                        <Run Text="戦闘種別:"/>
-                        <Run Text="{Binding BattleName, Mode=OneWay}"
-                                FontSize="12"
-                                Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                    </TextBlock>
-                    <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
-                        <Run Text="交戦形態:"/>
-                        <Run Text="{Binding BattleSituation, Mode=OneWay}"
-                                FontSize="12"
-                                Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                    </TextBlock>
-                    <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
-                        <Run Text="制空結果:"/>
-                        <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
-                                FontSize="12"
-                                Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                    </TextBlock>
-                </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    Margin="0,0,10,0">
+                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
+                                <Run Text="戦闘種別:"/>
+                                <Run Text="{Binding BattleName, Mode=OneWay}"
+                                     FontSize="12"
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                            </TextBlock>
+                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
+                                <Run Text="交戦形態:"/>
+                                <Run Text="{Binding BattleSituation, Mode=OneWay}"
+                                     FontSize="12"
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                            </TextBlock>
+                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
+                                <Run Text="制空結果:"/>
+                                <Run Text="{Binding FriendAirSupremacy, Mode=OneWay}"
+                                     FontSize="12"
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                            </TextBlock>
+                        </StackPanel>
 
 
-                <StackPanel Grid.Column="2"
-                            Grid.Row="0"
-                            Margin="0,0,5,0">
-                    <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
-                        <Run Text="更新日時:"/>
-                        <Run Text="{Binding UpdatedTime, Mode=OneWay}"
-                                FontSize="12"
-                                Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                    </TextBlock>
-                    <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
-                        <Run Text="ドロップ:"/>
-                        <Run Text="{Binding DropShipName, Mode=OneWay}"
-                                FontSize="12"
-                                Style="{DynamicResource EmphaticTextElementStyleKey}"/>
-                    </TextBlock>
-                </StackPanel>
+                        <StackPanel Grid.Column="2"
+                                    Margin="0,0,5,0">
+                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
+                                <Run Text="更新日時:"/>
+                                <Run Text="{Binding UpdatedTime, Mode=OneWay}"
+                                     FontSize="12"
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                            </TextBlock>
+                            <TextBlock Style="{DynamicResource DefaultTextStyleKey}">
+                                <Run Text="ドロップ:"/>
+                                <Run Text="{Binding DropShipName, Mode=OneWay}"
+                                     FontSize="12"
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}"/>
+                            </TextBlock>
+                        </StackPanel>
 
-                <Button Grid.Column="3"
-                        Grid.Row="0"
-                        Content="既知の敵一覧"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Right"
-                        Margin="0,3,4,0">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction TargetObject="{Binding}"
-                                                    MethodName="OpenEnemyWindow"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
+                        <Button Grid.Column="3"
+                                Content="既知の敵一覧"
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Right"
+                                Margin="0,3,4,0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <ei:CallMethodAction TargetObject="{Binding}"
+                                                         MethodName="OpenEnemyWindow"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </Grid>
                     
-                <Rectangle Grid.Column="1"
-                            Grid.ColumnSpan="3"
-                            Grid.Row="1"
-                            Height="1"
-                            Margin="3, 4"
-                            Style="{DynamicResource SeparatorRectangleStyleKey}" />
-                    
-                <StackPanel Grid.Column="1"
-                            Grid.ColumnSpan="2"
-                            Grid.Row="2"
-                            Orientation="Horizontal">
-                    <TextBlock Style="{DynamicResource DefaultTextStyleKey}"
-                               Text="航空戦:"
-                               Margin="0,0,5,0"
-                               VerticalAlignment="Top"/>
-                    <ItemsControl ItemsSource="{Binding AirCombatResults}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type models:AirCombatResult}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name, StringFormat={}{0}:}"
-                                               Style="{DynamicResource DefaultTextStyleKey}"
-                                               Margin="0,0,5,0"/>
-                                    <StackPanel Orientation="Horizontal"
-                                                Visibility="{Binding IsHappen, Converter={StaticResource TrueToVisibleConverter}}">
-                                        <TextBlock Text="自軍"
-                                                   Style="{DynamicResource DefaultTextStyleKey}"
-                                                   Margin="0,0,5,0"/>
-                                        <TextBlock Style="{DynamicResource EmphaticTextStyleKey}"
-                                                   FontSize="12"
-                                                   Margin="0,0,5,0">
-                                            <Run Text="{Binding FriendRemainingCount, Mode=OneWay}"/>
-                                            <Run Text="/"/>
-                                            <Run Text="{Binding FriendCount, Mode=OneWay}"/>
-                                            <Run Text="{Binding FriendLostCount, Mode=OneWay, StringFormat=(-{0})}"/>
-                                        </TextBlock>
-                                        <TextBlock Text="敵軍"
-                                                   Style="{DynamicResource DefaultTextStyleKey}"
-                                                   Margin="0,0,5,0"/>
-                                        <TextBlock Style="{DynamicResource EmphaticTextStyleKey}"
-                                                   FontSize="12"
-                                                   Margin="0,0,5,0">
-                                            <Run Text="{Binding EnemyRemainingCount, Mode=OneWay}"/>
-                                            <Run Text="/"/>
-                                            <Run Text="{Binding EnemyCount, Mode=OneWay}"/>
-                                            <Run Text="{Binding EnemyLostCount, Mode=OneWay, StringFormat=(-{0})}"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <TextBlock Text="なし"
-                                               Style="{DynamicResource EmphaticTextStyleKey}"
-                                               FontSize="12"
-                                               Visibility="{Binding IsHappen, Converter={StaticResource FalseToVisibleConverter}}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <Rectangle Height="1"
+                               Margin="3, 4"
+                               Style="{DynamicResource SeparatorRectangleStyleKey}" />
                 </StackPanel>
+            </DockPanel>
 
-                <Rectangle Grid.Column="0"
-                           Grid.ColumnSpan="4"
-                           Grid.Row="3"
-                           Height="1"
-                           Margin="3, 4"
-                           Style="{DynamicResource SeparatorRectangleStyleKey}" />
-            </Grid>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1">
+                <views:Fleet Margin="0,6,0,0"
+                             DataContext="{Binding FirstFleet}"/>
 
-            <views:Fleet Grid.Column="0" Grid.Row="1"
-                         Margin="0,6,0,0"
-                         DataContext="{Binding FirstFleet}"/>
+                <views:Fleet Margin="0,6,0,0"
+                             DataContext="{Binding SecondFleet}"/>
 
-            <views:Fleet Grid.Column="1" Grid.Row="1"
-                         Margin="0,6,0,0"
-                         DataContext="{Binding SecondFleet}"/>
+                <views:Fleet Margin="0,6,0,0"
+                             DataContext="{Binding Enemies}"/>
+            </StackPanel>
 
-            <views:Fleet Grid.Column="2" Grid.Row="1"
-                         Margin="0,6,0,0"
-                         DataContext="{Binding Enemies}"/>
-
-            <CheckBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4"
+            <CheckBox Grid.Row="2"
                       HorizontalAlignment="Right"
                       Content="戦闘終了通知"
                       IsChecked="{Binding IsNotifierEnabled}"
