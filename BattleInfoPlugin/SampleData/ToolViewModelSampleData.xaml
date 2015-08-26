@@ -138,7 +138,7 @@
             <viewModels:FleetViewModel.Fleet>
                 <models:FleetData FleetType="Second">
                     <models:FleetData.Ships>
-                        <models:MembersShipData MaxHP="76" NowHP="63" Name="夕立改二" Situation="HeavilyDamaged" TypeName="ぽいぬ">
+                        <models:MembersShipData MaxHP="76" NowHP="63" Name="夕立改二" Situation="HeavilyDamaged" TypeName="ぽいぬ" IsUsedDamecon="True">
                             <models:MembersShipData.HP>
                                 <wrapper:LimitedValue Current="28" Maximum="99" Minimum="0"/>
                             </models:MembersShipData.HP>

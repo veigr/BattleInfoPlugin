@@ -156,6 +156,7 @@
                                                   SharedSizeGroup="Name" />
                                 <ColumnDefinition Width="Auto"
                                                   SharedSizeGroup="HP" />
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock>
@@ -232,6 +233,20 @@
                                            Style="{DynamicResource EmphaticTextStyleKey}"
                                            HorizontalAlignment="Center" />
                             </Grid>
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2">
+                                <controls:SlotItemIcon Type="DamageControl"
+                                                       Width="14"
+                                                       Visibility="{Binding IsUsedDamecon, Converter={StaticResource TrueToVisibleConverter}}"
+                                                       Margin="0,0,3,0"/>
+                                <TextBlock Text="使用"
+                                           Style="{DynamicResource EmphaticTextStyleKey}"
+                                           FontSize="12"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsUsedDamecon, Converter={StaticResource TrueToVisibleConverter}}"
+                                           Margin="0,0,0,3"/>
+                            </StackPanel>
                         </Grid>
                         <Rectangle Height="1"
                                    Margin="0,4,0,0"

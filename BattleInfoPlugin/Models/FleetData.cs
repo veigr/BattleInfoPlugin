@@ -155,7 +155,7 @@ namespace BattleInfoPlugin.Models
                 fleet.Ships.SetValues(dameconState, (s, d) =>
                 {
                     if (0 < s.NowHP) return;
-                    s.IsUsedDamecon = true;
+                    s.IsUsedDamecon = d.HasDamecon || d.HasMegami;
                     if (d.HasDamecon)   // クライアント表示ロジック上は女神よりダメコンを優先して使用するようになってる
                         s.NowHP = (int)Math.Floor(s.MaxHP * 0.2);
                     else if (d.HasMegami)
