@@ -19,6 +19,8 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 {
     public class EnemyMapViewModel : TabItemViewModel
     {
+        public EnemyWindowViewModel WindowViewModel { get; set; }
+
         public MapInfo Info { get; set; }
 
         public List<MapCellData> CellDatas { get; set; }
@@ -38,6 +40,8 @@ namespace BattleInfoPlugin.ViewModels.Enemies
                 {
                     val.ParentMap = this;
                 }
+                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(nameof(this.EnemyShips));
             }
         }
 

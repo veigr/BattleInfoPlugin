@@ -11,23 +11,23 @@ namespace BattleInfoPlugin.Models
 {
     public class MapData
     {
-        private readonly EnemyDataProvider provider = new EnemyDataProvider();
+        public EnemyDataProvider EnemyData { get; } = new EnemyDataProvider();
 
         public IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> GetMapEnemies()
         {
-            return this.provider.GetMapEnemies();
+            return this.EnemyData.GetMapEnemies();
         }
 
         public IReadOnlyDictionary<int, List<MapCellData>> GetCellDatas()
         {
-            return this.provider.GetMapCellDatas();
+            return this.EnemyData.GetMapCellDatas();
         }
 
         public IReadOnlyDictionary<MapCell, CellType> GetCellTypes()
         {
             var cells = Master.Current.MapCells.Select(c => c.Value);
-            var cellDatas = this.provider.GetMapCellDatas();
-            return this.provider.GetMapCellBattleTypes()
+            var cellDatas = this.EnemyData.GetMapCellDatas();
+            return this.EnemyData.GetMapCellBattleTypes()
                 .SelectMany(x => x.Value, (x, y) => new
                 {
                     cell = cells.Single(c => c.MapInfoId == x.Key && c.IdInEachMapInfo == y.Key),
@@ -73,7 +73,7 @@ namespace BattleInfoPlugin.Models
                 var info = new FileInfo(filePath);
                 if (info.Name == Settings.Default.EnemyDataFilePath)
                 {
-                    this.provider.Merge(filePath)
+                    this.EnemyData.Merge(filePath)
                         .ContinueWith(continuationAction, TaskScheduler.FromCurrentSynchronizationContext());
                 }else if (info.Name == Settings.Default.MasterDataFilePath)
                 {

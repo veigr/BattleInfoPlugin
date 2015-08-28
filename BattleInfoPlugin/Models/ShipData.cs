@@ -9,6 +9,23 @@ namespace BattleInfoPlugin.Models
     public class ShipData : NotificationObject
     {
 
+        #region Id変更通知プロパティ
+        private int _Id;
+
+        public int Id
+        {
+            get
+            { return this._Id; }
+            set
+            {
+                if (this._Id == value)
+                    return;
+                this._Id = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         #region Name変更通知プロパティ
         private string _Name;
 
@@ -353,6 +370,7 @@ namespace BattleInfoPlugin.Models
 
         private void UpdateFromSource()
         {
+            this.Id = this.Source.Id;
             this.Name = this.Source.Info.Name;
             this.TypeName = this.Source.Info.ShipType.Name;
             this.Level = this.Source.Level;
@@ -406,6 +424,7 @@ namespace BattleInfoPlugin.Models
 
         private void UpdateFromSource()
         {
+            this.Id = this.Source.Id;
             this.Name = this.Source.Name;
             var isEnemyID = 500 < this.Source.Id && this.Source.Id < 901;
             var m = Plugin.RawStart2.api_mst_ship.Single(x => x.api_id == this.Source.Id);

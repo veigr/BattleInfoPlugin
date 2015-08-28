@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BattleInfoPlugin.Models;
 using BattleInfoPlugin.Models.Repositories;
 using BattleInfoPlugin.ViewModels.Enemies;
 using Livet;
 using Livet.Messaging;
+using MetroTrilithon.Mvvm;
 using System.Windows;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace BattleInfoPlugin.ViewModels
 {
@@ -54,22 +58,20 @@ namespace BattleInfoPlugin.ViewModels
             this.mapData.MergeResult += MapData_MergeResult;
         }
 
-        private void MapData_MergeResult(bool result, string message)
+        public void Initialize()
         {
-            if (result)
-            {
-                this.Messenger.Raise(new InformationMessage(message, "マージ成功", MessageBoxImage.Information, "MergeResult"));
-                this.EnemyMaps = this.CreateEnemyMaps();
-            }
-            else
-            {
-                this.Messenger.Raise(new InformationMessage(message, "マージ失敗", MessageBoxImage.Warning, "MergeResult"));
-            }
         }
 
         public void Merge(string[] filePathList)
         {
             this.mapData.Merge(filePathList);
+        }
+
+        public void RemoveEnemy(string enemyId)
+        {
+            this.mapData.EnemyData.RemoveEnemy(enemyId);
+            
+            this.SelectedMap.EnemyCells = CreateEnemyCells(this.SelectedMap.Info, this.mapData.GetMapEnemies(), this.mapData.GetCellTypes());
         }
 
         private EnemyMapViewModel[] CreateEnemyMaps()
@@ -80,52 +82,60 @@ namespace BattleInfoPlugin.ViewModels
             return Master.Current.MapInfos
                 .Select(mi => new EnemyMapViewModel
                 {
+                    WindowViewModel = this,
                     Info = mi.Value,
                     CellDatas = cellDatas.ContainsKey(mi.Key) ? cellDatas[mi.Key] : new List<MapCellData>(),
                     //セルポイントデータに既知の敵データを外部結合して座標でマージ
-                    EnemyCells = MapResource.HasMapSwf(mi.Value)
-                        ? MapResource.GetMapCellPoints(mi.Value) //マップSWFがあったらそれを元に作る
-                                                                 //外部結合
-                            .GroupJoin(
-                                CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes),
-                                outer => outer.Key,
-                                inner => inner.Key,
-                                (o, ie) => new { point = o, cells = ie })
-                            .SelectMany(
-                                x => x.cells.DefaultIfEmpty(),
-                                (x, y) => new { x.point, cells = y })
-                            //座標マージ
-                            .GroupBy(x => x.point.Value)
-                            .Select(x => new EnemyCellViewModel
-                            {
-                                Key = x.Min(y => y.point.Key), //若い番号を採用
-                                EnemyFleets = x.Where(y => y.cells != null) //敵データをEnemyIdでマージ
-                                    .SelectMany(y => y.cells.EnemyFleets)
-                                    .GroupBy(y => y.Key)
-                                    .OrderBy(y => y.Key)
-                                    .Select(y => y.First())
-                                    .Distinct(new FleetComparer())  //同一編成の敵を除去
-                                    .ToArray(),
-                                ColorNo = x.Where(y => y.cells != null).Select(y => y.cells.ColorNo).FirstOrDefault(),
-                                CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
-                            })
-                            //敵データのないセルは除外
-                            .Where(x => x.EnemyFleets.Any())
-                            .ToArray()
-                        : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes) //なかったら敵データだけ(重複るが仕方ない)
-                            .OrderBy(cell => cell.Key)
-                            .ToArray(),
+                    EnemyCells = CreateEnemyCells(mi.Value, mapEnemies, cellTypes),
                 })
                 .OrderBy(info => info.Info.Id)
                 .ToArray();
         }
 
-        private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
-            KeyValuePair<int, MapInfo> mi,
+        private static EnemyCellViewModel[] CreateEnemyCells(
+            MapInfo mi,
             IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> mapEnemies,
             IReadOnlyDictionary<MapCell, CellType> cellTypes)
         {
-            return mapEnemies.Where(info => info.Key.Id == mi.Key)
+            return MapResource.HasMapSwf(mi)
+                ? MapResource.GetMapCellPoints(mi) //マップSWFがあったらそれを元に作る
+                    //外部結合
+                    .GroupJoin(
+                        CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes),
+                        outer => outer.Key,
+                        inner => inner.Key,
+                        (o, ie) => new { point = o, cells = ie })
+                    .SelectMany(
+                        x => x.cells.DefaultIfEmpty(),
+                        (x, y) => new { x.point, cells = y })
+                    //座標マージ
+                    .GroupBy(x => x.point.Value)
+                    .Select(x => new EnemyCellViewModel
+                    {
+                        Key = x.Min(y => y.point.Key), //若い番号を採用
+                        EnemyFleets = x.Where(y => y.cells != null) //敵データをEnemyIdでマージ
+                            .SelectMany(y => y.cells.EnemyFleets)
+                            .GroupBy(y => y.Key, EnemyData.Curret.GetComparer())
+                            .OrderBy(y => y.Key)
+                            .Select(y => y.First())
+                            .ToArray(),
+                        ColorNo = x.Where(y => y.cells != null).Select(y => y.cells.ColorNo).FirstOrDefault(),
+                        CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
+                    })
+                    //敵データのないセルは除外
+                    .Where(x => x.EnemyFleets.Any())
+                    .ToArray()
+                : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes) //なかったら敵データだけ(重複るが仕方ない)
+                    .OrderBy(cell => cell.Key)
+                    .ToArray();
+        }
+
+        private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
+            MapInfo mi,
+            IReadOnlyDictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> mapEnemies,
+            IReadOnlyDictionary<MapCell, CellType> cellTypes)
+        {
+            return mapEnemies.Where(info => info.Key.Id == mi.Id)
                 .Select(info => info.Value)
                 .SelectMany(cells => cells)
                 .Select(cell => new EnemyCellViewModel
@@ -138,42 +148,26 @@ namespace BattleInfoPlugin.ViewModels
                             Fleet = enemy.Value,
                             EnemyShips = enemy.Value.Ships.Select(s => new EnemyShipViewModel { Ship = s }).ToArray(),
                         })
+                        .GroupBy(x => x.Key, EnemyData.Curret.GetComparer())
+                        .Select(x => x.First())
                         .OrderBy(enemy => enemy.Key)
-                        .Distinct(new FleetComparer())  //同一編成の敵を除去
                         .ToArray(),
                     ColorNo = cell.Key.ColorNo,
                     CellType = cell.Key.GetCellType(cellTypes),
                 });
         }
 
-        public void Initialize()
+        private void MapData_MergeResult(bool result, string message)
         {
-        }
-    }
-
-    class FleetComparer : IEqualityComparer<EnemyFleetViewModel>
-    {
-        public bool Equals(EnemyFleetViewModel x, EnemyFleetViewModel y)
-        {
-            return this.GetHashCode(x) == this.GetHashCode(y);
-        }
-
-        public int GetHashCode(EnemyFleetViewModel obj)
-        {
-            var name = obj.Fleet.Name;
-            var formation = obj.Fleet.Formation;
-            var ships = obj.Fleet.Ships.OfType<MastersShipData>().Where(x => x.Source != null).ToArray();
-            var slots = obj.Fleet.Ships.SelectMany(x => x.Slots).Where(x => x.Source != null).Select(x => x.Source.Id).ToArray();
-            return name.GetHashCode()
-                   ^ formation.GetHashCode()
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Source.Id.GetHashCode())
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.MaxHP.GetHashCode())
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Level.GetHashCode())
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Firepower.GetHashCode())
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Torpedo.GetHashCode())
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.AA.GetHashCode())
-                   ^ ships.Aggregate(0, (a, b) => a.GetHashCode() ^ b.Armer.GetHashCode())
-                   ^ slots.Aggregate(0, (a, b) => a.GetHashCode() ^ b.GetHashCode());
+            if (result)
+            {
+                this.Messenger.Raise(new InformationMessage(message, "マージ成功", MessageBoxImage.Information, "MergeResult"));
+                this.EnemyMaps = this.CreateEnemyMaps();
+            }
+            else
+            {
+                this.Messenger.Raise(new InformationMessage(message, "マージ失敗", MessageBoxImage.Warning, "MergeResult"));
+            }
         }
     }
 }

@@ -1,96 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+using System.Security.Cryptography.X509Certificates;
 using BattleInfoPlugin.Models.Raw;
-using BattleInfoPlugin.Properties;
 using Grabacr07.KanColleWrapper;
 using System.Threading.Tasks;
 
 namespace BattleInfoPlugin.Models.Repositories
 {
-    [DataContract]
     public class EnemyDataProvider
     {
-        private static readonly DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(EnemyDataProvider));
-
-        // EnemyId, EnemyMasterIDs
-        [DataMember]
-        private Dictionary<string, int[]> EnemyDictionary { get; set; }
-
-        // EnemyId, Formation
-        [DataMember]
-        private Dictionary<string, Formation> EnemyFormation { get; set; }
-
-        // EnemyId, api_eSlot
-        [DataMember]
-        private Dictionary<string, int[][]> EnemySlotItems { get; set; }
-
-        // EnemyId, api_eKyouka
-        [DataMember]
-        private Dictionary<string, int[][]> EnemyUpgraded { get; set; }
-
-        // EnemyId, api_eParam
-        [DataMember]
-        private Dictionary<string, int[][]> EnemyParams { get; set; }
-
-        // EnemyId, api_ship_lv
-        [DataMember]
-        private Dictionary<string, int[]> EnemyLevels { get; set; }
-
-        // EnemyId, MaxHP
-        [DataMember]
-        private Dictionary<string, int[]> EnemyHPs { get; set; }
-
-        // MapInfoID, CellNo, EnemyId
-        [DataMember]
-        private Dictionary<int, Dictionary<int, HashSet<string>>> MapEnemyData { get; set; }
-
-        // MapInfoID, CellNo, BattleApiClassName
-        [DataMember]
-        private Dictionary<int, Dictionary<int, string>> MapCellBattleTypes { get; set; }
-
-        // MapInfoID, FromCellNo, ToCellNo
-        [DataMember]
-        private Dictionary<int, HashSet<KeyValuePair<int, int>>> MapRoute { get; set; }
-
-        // MapInfoID, MapCellData
-        [DataMember]
-        private Dictionary<int, List<MapCellData>> MapCellDatas { get; set; }
-
-        // EnemyId, Name
-        [DataMember]
-        private Dictionary<string, string> EnemyNames { get; set; }
-
-        [NonSerialized]
+        private EnemyData EnemyData { get; } = EnemyData.Curret;
+        
         private string currentEnemyID;
-
-        [NonSerialized]
+        
         private int previousCellNo;
-
-        [NonSerialized]
+        
         private map_start_next currentStartNext;
 
         public EnemyDataProvider()
         {
-            this.Reload();
-            if (this.EnemyDictionary == null) this.EnemyDictionary = new Dictionary<string, int[]>();
-            if (this.EnemyFormation == null) this.EnemyFormation = new Dictionary<string, Formation>();
-            if (this.EnemySlotItems == null) this.EnemySlotItems = new Dictionary<string, int[][]>();
-            if (this.EnemyUpgraded == null) this.EnemyUpgraded = new Dictionary<string, int[][]>();
-            if (this.EnemyParams == null) this.EnemyParams = new Dictionary<string, int[][]>();
-            if (this.EnemyLevels == null) this.EnemyLevels = new Dictionary<string, int[]>();
-            if (this.EnemyHPs == null) this.EnemyHPs = new Dictionary<string, int[]>();
-            if (this.EnemyNames == null) this.EnemyNames = new Dictionary<string, string>();
-            if (this.MapEnemyData == null) this.MapEnemyData = new Dictionary<int, Dictionary<int, HashSet<string>>>();
-            if (this.MapCellBattleTypes == null) this.MapCellBattleTypes = new Dictionary<int, Dictionary<int, string>>();
-            if (this.MapRoute == null) this.MapRoute = new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-            if (this.MapCellDatas == null) this.MapCellDatas = new Dictionary<int, List<MapCellData>>();
             this.previousCellNo = 0;
             this.currentStartNext = null;
+        }
+
+        public Task<bool> Merge(string path)
+        {
+            return this.EnemyData.Merge(path);
+        }
+
+        public void RemoveEnemy(string enemyId)
+        {
+            this.EnemyData.RemoveEnemy(enemyId);
+            this.EnemyData.Save();
         }
 
         public void UpdateMapData(map_start_next startNext)
@@ -100,7 +42,7 @@ namespace BattleInfoPlugin.Models.Repositories
             this.UpdateMapRoute(startNext);
             this.UpdateMapCellData(startNext);
 
-            this.Save();
+            this.EnemyData.Save();
         }
 
         public void UpdateBattleTypes<T>(T battleApi)
@@ -108,31 +50,31 @@ namespace BattleInfoPlugin.Models.Repositories
             var battleTypeName = typeof(T).Name;
             var mapInfo = GetMapInfo(this.currentStartNext);
 
-            if (!this.MapCellBattleTypes.ContainsKey(mapInfo))
-                this.MapCellBattleTypes.Add(mapInfo, new Dictionary<int, string>());
-            if (!this.MapCellBattleTypes[mapInfo].ContainsKey(this.currentStartNext.api_no))
-                this.MapCellBattleTypes[mapInfo].Add(this.currentStartNext.api_no, battleTypeName);
+            if (!this.EnemyData.MapCellBattleTypes.ContainsKey(mapInfo))
+                this.EnemyData.MapCellBattleTypes.Add(mapInfo, new Dictionary<int, string>());
+            if (!this.EnemyData.MapCellBattleTypes[mapInfo].ContainsKey(this.currentStartNext.api_no))
+                this.EnemyData.MapCellBattleTypes[mapInfo].Add(this.currentStartNext.api_no, battleTypeName);
             else
-                this.MapCellBattleTypes[mapInfo][this.currentStartNext.api_no] = battleTypeName;
+                this.EnemyData.MapCellBattleTypes[mapInfo][this.currentStartNext.api_no] = battleTypeName;
             
-            this.Save();
+            this.EnemyData.Save();
         }
 
         public void UpdateEnemyName(battle_result result)
         {
             if (result?.api_enemy_info == null) return;
 
-            if (this.EnemyNames.ContainsKey(this.currentEnemyID))
-                this.EnemyNames[this.currentEnemyID] = result.api_enemy_info.api_deck_name;
+            if (this.EnemyData.EnemyNames.ContainsKey(this.currentEnemyID))
+                this.EnemyData.EnemyNames[this.currentEnemyID] = result.api_enemy_info.api_deck_name;
             else
-                this.EnemyNames.Add(this.currentEnemyID, result.api_enemy_info.api_deck_name);
-            this.Save();
+                this.EnemyData.EnemyNames.Add(this.currentEnemyID, result.api_enemy_info.api_deck_name);
+            this.EnemyData.Save();
         }
 
         public Dictionary<MapInfo, Dictionary<MapCell, Dictionary<string, FleetData>>> GetMapEnemies()
         {
-            this.Reload();
-            return this.MapEnemyData
+            this.EnemyData.Reload();
+            return this.EnemyData.MapEnemyData
                 .Where(x => Master.Current.MapInfos.ContainsKey(x.Key))
                 .ToDictionary(
                 info => Master.Current.MapInfos[info.Key],
@@ -152,27 +94,27 @@ namespace BattleInfoPlugin.Models.Repositories
 
         public Dictionary<int, Dictionary<int, string>> GetMapCellBattleTypes()
         {
-            this.Reload();
-            return this.MapCellBattleTypes;
+            this.EnemyData.Reload();
+            return this.EnemyData.MapCellBattleTypes;
         }
 
         public Dictionary<int, List<MapCellData>> GetMapCellDatas()
         {
-            this.Reload();
-            return this.MapCellDatas;
+            this.EnemyData.Reload();
+            return this.EnemyData.MapCellDatas;
         }
 
         private string GetEnemyNameFromId(string enemyId)
         {
-            return this.EnemyNames.ContainsKey(enemyId)
-                ? this.EnemyNames[enemyId]
+            return this.EnemyData.EnemyNames.ContainsKey(enemyId)
+                ? this.EnemyData.EnemyNames[enemyId]
                 : "";
         }
 
         private Formation GetEnemyFormationFromId(string enemyId)
         {
-            return this.EnemyFormation.ContainsKey(enemyId)
-                ? this.EnemyFormation[enemyId]
+            return this.EnemyData.EnemyFormation.ContainsKey(enemyId)
+                ? this.EnemyData.EnemyFormation[enemyId]
                 : Formation.不明;
         }
 
@@ -180,15 +122,15 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             var shipInfos = KanColleClient.Current.Master.Ships;
             var slotInfos = KanColleClient.Current.Master.SlotItems;
-            if (!this.EnemyDictionary.ContainsKey(enemyId)) return Enumerable.Repeat(new MastersShipData(), 6).ToArray();
-            return this.EnemyDictionary[enemyId]
+            if (!this.EnemyData.EnemyDictionary.ContainsKey(enemyId)) return Enumerable.Repeat(new MastersShipData(), 6).ToArray();
+            return this.EnemyData.EnemyDictionary[enemyId]
                 .Select((x, i) =>
                 {
-                    var param = this.EnemyParams.ContainsKey(enemyId) ? this.EnemyParams[enemyId][i] : new[] { -1, -1, -1, -1 };
-                    var upgrades = this.EnemyUpgraded.ContainsKey(enemyId) ? this.EnemyUpgraded[enemyId][i] : new[] { 0, 0, 0, 0 };
+                    var param = this.EnemyData.EnemyParams.ContainsKey(enemyId) ? this.EnemyData.EnemyParams[enemyId][i] : new[] { -1, -1, -1, -1 };
+                    var upgrades = this.EnemyData.EnemyUpgraded.ContainsKey(enemyId) ? this.EnemyData.EnemyUpgraded[enemyId][i] : new[] { 0, 0, 0, 0 };
                     param = param.Zip(upgrades, (p, u) => p + u).ToArray();
-                    var lv = this.EnemyLevels.ContainsKey(enemyId) ? this.EnemyLevels[enemyId][i + 1] : -1;
-                    var hp = this.EnemyHPs.ContainsKey(enemyId) ? this.EnemyHPs[enemyId][i] : -1;
+                    var lv = this.EnemyData.EnemyLevels.ContainsKey(enemyId) ? this.EnemyData.EnemyLevels[enemyId][i + 1] : -1;
+                    var hp = this.EnemyData.EnemyHPs.ContainsKey(enemyId) ? this.EnemyData.EnemyHPs[enemyId][i] : -1;
                     return new MastersShipData(shipInfos[x])
                     {
                         Level = lv,
@@ -198,8 +140,8 @@ namespace BattleInfoPlugin.Models.Repositories
                         Torpedo = param[1],
                         AA = param[2],
                         Armer = param[3],
-                        Slots = this.EnemySlotItems.ContainsKey(enemyId)
-                            ? this.EnemySlotItems[enemyId][i]
+                        Slots = this.EnemyData.EnemySlotItems.ContainsKey(enemyId)
+                            ? this.EnemyData.EnemySlotItems[enemyId][i]
                                 .Where(s => s != -1)
                                 .Select(s => slotInfos[s])
                                 .Select((s, si) => new ShipSlotData(s))
@@ -214,21 +156,21 @@ namespace BattleInfoPlugin.Models.Repositories
             var startNext = this.currentStartNext;
             var mapInfo = GetMapInfo(startNext);
 
-            if (!this.MapEnemyData.ContainsKey(mapInfo))
-                this.MapEnemyData.Add(mapInfo, new Dictionary<int, HashSet<string>>());
-            if (!this.MapEnemyData[mapInfo].ContainsKey(startNext.api_no))
-                this.MapEnemyData[mapInfo].Add(startNext.api_no, new HashSet<string>());
+            if (!this.EnemyData.MapEnemyData.ContainsKey(mapInfo))
+                this.EnemyData.MapEnemyData.Add(mapInfo, new Dictionary<int, HashSet<string>>());
+            if (!this.EnemyData.MapEnemyData[mapInfo].ContainsKey(startNext.api_no))
+                this.EnemyData.MapEnemyData[mapInfo].Add(startNext.api_no, new HashSet<string>());
 
-            this.MapEnemyData[mapInfo][startNext.api_no].Add(enemyId);
+            this.EnemyData.MapEnemyData[mapInfo][startNext.api_no].Add(enemyId);
         }
 
         private void UpdateMapRoute(map_start_next startNext)
         {
             var mapInfo = GetMapInfo(startNext);
-            if (!this.MapRoute.ContainsKey(mapInfo))
-                this.MapRoute.Add(mapInfo, new HashSet<KeyValuePair<int, int>>());
+            if (!this.EnemyData.MapRoute.ContainsKey(mapInfo))
+                this.EnemyData.MapRoute.Add(mapInfo, new HashSet<KeyValuePair<int, int>>());
 
-            this.MapRoute[mapInfo].Add(new KeyValuePair<int, int>(this.previousCellNo, startNext.api_no));
+            this.EnemyData.MapRoute[mapInfo].Add(new KeyValuePair<int, int>(this.previousCellNo, startNext.api_no));
 
             this.previousCellNo = 0 < startNext.api_next ? startNext.api_no : 0;
         }
@@ -236,8 +178,8 @@ namespace BattleInfoPlugin.Models.Repositories
         private void UpdateMapCellData(map_start_next startNext)
         {
             var mapInfo = GetMapInfo(startNext);
-            if (!this.MapCellDatas.ContainsKey(mapInfo))
-                this.MapCellDatas.Add(mapInfo, new List<MapCellData>());
+            if (!this.EnemyData.MapCellDatas.ContainsKey(mapInfo))
+                this.EnemyData.MapCellDatas.Add(mapInfo, new List<MapCellData>());
 
             var mapCellData = new MapCellData
             {
@@ -252,9 +194,9 @@ namespace BattleInfoPlugin.Models.Repositories
                 SelectCells = startNext.api_select_route != null ? startNext.api_select_route.api_select_cells : new int[0],
             };
 
-            var exists = this.MapCellDatas[mapInfo].SingleOrDefault(x => x.No == mapCellData.No);
-            if (exists != null) this.MapCellDatas[mapInfo].Remove(exists);
-            this.MapCellDatas[mapInfo].Add(mapCellData);
+            var exists = this.EnemyData.MapCellDatas[mapInfo].SingleOrDefault(x => x.No == mapCellData.No);
+            if (exists != null) this.EnemyData.MapCellDatas[mapInfo].Remove(exists);
+            this.EnemyData.MapCellDatas[mapInfo].Add(mapCellData);
         }
 
         private static int GetMapInfo(map_start_next startNext)
@@ -282,45 +224,45 @@ namespace BattleInfoPlugin.Models.Repositories
 
             this.UpdateMapEnemyData(enemyId);
 
-            if (this.EnemyDictionary.ContainsKey(enemyId))
-                this.EnemyDictionary[enemyId] = enemies;
+            if (this.EnemyData.EnemyDictionary.ContainsKey(enemyId))
+                this.EnemyData.EnemyDictionary[enemyId] = enemies;
             else
-                this.EnemyDictionary.Add(enemyId, enemies);
+                this.EnemyData.EnemyDictionary.Add(enemyId, enemies);
 
-            if (this.EnemyFormation.ContainsKey(enemyId))
-                this.EnemyFormation[enemyId] = formation;
+            if (this.EnemyData.EnemyFormation.ContainsKey(enemyId))
+                this.EnemyData.EnemyFormation[enemyId] = formation;
             else
-                this.EnemyFormation.Add(enemyId, formation);
+                this.EnemyData.EnemyFormation.Add(enemyId, formation);
 
-            if (this.EnemySlotItems.ContainsKey(enemyId))
-                this.EnemySlotItems[enemyId] = api_eSlot;
+            if (this.EnemyData.EnemySlotItems.ContainsKey(enemyId))
+                this.EnemyData.EnemySlotItems[enemyId] = api_eSlot;
             else
-                this.EnemySlotItems.Add(enemyId, api_eSlot);
+                this.EnemyData.EnemySlotItems.Add(enemyId, api_eSlot);
 
-            if (this.EnemyUpgraded.ContainsKey(enemyId))
-                this.EnemyUpgraded[enemyId] = api_eKyouka;
+            if (this.EnemyData.EnemyUpgraded.ContainsKey(enemyId))
+                this.EnemyData.EnemyUpgraded[enemyId] = api_eKyouka;
             else
-                this.EnemyUpgraded.Add(enemyId, api_eKyouka);
+                this.EnemyData.EnemyUpgraded.Add(enemyId, api_eKyouka);
 
-            if (this.EnemyParams.ContainsKey(enemyId))
-                this.EnemyParams[enemyId] = api_eParam;
+            if (this.EnemyData.EnemyParams.ContainsKey(enemyId))
+                this.EnemyData.EnemyParams[enemyId] = api_eParam;
             else
-                this.EnemyParams.Add(enemyId, api_eParam);
+                this.EnemyData.EnemyParams.Add(enemyId, api_eParam);
 
-            if (this.EnemyLevels.ContainsKey(enemyId))
-                this.EnemyLevels[enemyId] = api_ship_lv;
+            if (this.EnemyData.EnemyLevels.ContainsKey(enemyId))
+                this.EnemyData.EnemyLevels[enemyId] = api_ship_lv;
             else
-                this.EnemyLevels.Add(enemyId, api_ship_lv);
+                this.EnemyData.EnemyLevels.Add(enemyId, api_ship_lv);
 
             var hps = api_maxhps.GetEnemyData().ToArray();
-            if (this.EnemyHPs.ContainsKey(enemyId))
-                this.EnemyHPs[enemyId] = hps;
+            if (this.EnemyData.EnemyHPs.ContainsKey(enemyId))
+                this.EnemyData.EnemyHPs[enemyId] = hps;
             else
-                this.EnemyHPs.Add(enemyId, hps);
+                this.EnemyData.EnemyHPs.Add(enemyId, hps);
 
             this.currentEnemyID = enemyId;
 
-            this.Save();
+            this.EnemyData.Save();
         }
 
         private string GetEnemyId(
@@ -332,100 +274,27 @@ namespace BattleInfoPlugin.Models.Repositories
             int[] api_ship_lv,
             int[] api_maxhps)
         {
-            var keys = this.EnemyDictionary.Where(x => x.Value.EqualsValue(api_ship_ke)).Select(x => x.Key).ToArray();
-            keys = this.EnemyFormation.Where(x => keys.Contains(x.Key)).Where(x => x.Value.Equals(api_formation)).Select(x => x.Key).ToArray();
+            var keys = this.EnemyData.EnemyDictionary.Where(x => x.Value.EqualsValue(api_ship_ke)).Select(x => x.Key).ToArray();
+            keys = this.EnemyData.EnemyFormation.Where(x => keys.Contains(x.Key)).Where(x => x.Value.Equals(api_formation)).Select(x => x.Key).ToArray();
 
             //以下は情報欠落がありそうなので、データがない場合はスルー。ある場合だけ絞り込む。
-            var existItems = this.EnemySlotItems.Where(x => keys.Contains(x.Key)).ToArray();
+            var existItems = this.EnemyData.EnemySlotItems.Where(x => keys.Contains(x.Key)).ToArray();
             keys = existItems.Any() ? existItems.Where(x => x.Value.EqualsValue(api_eSlot)).Select(x => x.Key).ToArray() : keys;
 
-            var existsUpgrads = this.EnemyUpgraded.Where(x => keys.Contains(x.Key)).ToArray();
+            var existsUpgrads = this.EnemyData.EnemyUpgraded.Where(x => keys.Contains(x.Key)).ToArray();
             keys = existsUpgrads.Any() ? existsUpgrads.Where(x => x.Value.EqualsValue(api_eKyouka)).Select(x => x.Key).ToArray() : keys;
 
-            var existsParams = this.EnemyParams.Where(x => keys.Contains(x.Key)).ToArray();
+            var existsParams = this.EnemyData.EnemyParams.Where(x => keys.Contains(x.Key)).ToArray();
             keys = existsParams.Any() ? existsParams.Where(x => x.Value.EqualsValue(api_eParam)).Select(x => x.Key).ToArray() : keys;
 
-            var existsLevels = this.EnemyLevels.Where(x => keys.Contains(x.Key)).ToArray();
+            var existsLevels = this.EnemyData.EnemyLevels.Where(x => keys.Contains(x.Key)).ToArray();
             keys = existsLevels.Any() ? existsLevels.Where(x => x.Value.EqualsValue(api_ship_lv)).Select(x => x.Key).ToArray() : keys;
 
-            var existsHPs = this.EnemyHPs.Where(x => keys.Contains(x.Key)).ToArray();
+            var existsHPs = this.EnemyData.EnemyHPs.Where(x => keys.Contains(x.Key)).ToArray();
             keys = existsHPs.Any() ? existsHPs.Where(x => x.Value.EqualsValue(api_maxhps)).Select(x => x.Key).ToArray() : keys;
 
             keys = keys.OrderBy(x => x).ToArray();
             return keys.Any() ? keys.First() : Guid.NewGuid().ToString();
-        }
-
-        public Task<bool> Merge(string path)
-        {
-            return Task.Run(() =>
-            {
-                if (!File.Exists(path)) return false;
-
-                lock (serializer)
-                {
-                    using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open)))
-                    {
-                        var obj = serializer.ReadObject(stream) as EnemyDataProvider;
-                        if (obj == null) return false;
-                        this.EnemyDictionary = this.EnemyDictionary.Merge(obj.EnemyDictionary);
-                        this.EnemyFormation = this.EnemyFormation.Merge(obj.EnemyFormation);
-                        this.EnemySlotItems = this.EnemySlotItems.Merge(obj.EnemySlotItems);
-                        this.EnemyUpgraded = this.EnemyUpgraded.Merge(obj.EnemyUpgraded);
-                        this.EnemyParams = this.EnemyParams.Merge(obj.EnemyParams);
-                        this.EnemyLevels = this.EnemyLevels.Merge(obj.EnemyLevels);
-                        this.EnemyHPs = this.EnemyHPs.Merge(obj.EnemyHPs);
-                        this.EnemyNames = this.EnemyNames.Merge(obj.EnemyNames);
-                        this.MapEnemyData = this.MapEnemyData.Merge(obj.MapEnemyData, (v1, v2) => v1.Merge(v2, (h1, h2) => h1.Merge(h2)));
-                        this.MapCellBattleTypes = this.MapCellBattleTypes.Merge(obj.MapCellBattleTypes, (v1, v2) => v1.Merge(v2));
-                        this.MapRoute = this.MapRoute.Merge(obj.MapRoute, (v1, v2) => v1.Merge(v2));
-                        this.MapCellDatas = this.MapCellDatas.Merge(obj.MapCellDatas, (v1, v2) => v1.Merge(v2).ToList());
-                    }
-                }
-
-                this.Save();
-                return true;
-            });
-        }
-
-        private void Reload()
-        {
-            Debug.WriteLine("Start Reload");
-            //deserialize
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
-            if (!File.Exists(path)) return;
-
-            lock (serializer)
-                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
-                {
-                    var obj = serializer.ReadObject(stream) as EnemyDataProvider;
-                    if (obj == null) return;
-                    this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<string, int[]>();
-                    this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<string, Formation>();
-                    this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<string, int[][]>();
-                    this.EnemyUpgraded = obj.EnemyUpgraded ?? new Dictionary<string, int[][]>();
-                    this.EnemyParams = obj.EnemyParams ?? new Dictionary<string, int[][]>();
-                    this.EnemyLevels = obj.EnemyLevels ?? new Dictionary<string, int[]>();
-                    this.EnemyHPs = obj.EnemyHPs ?? new Dictionary<string, int[]>();
-                    this.EnemyNames = obj.EnemyNames ?? new Dictionary<string, string>();
-                    this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<string>>>();
-                    this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
-                    this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-                    this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
-                }
-            Debug.WriteLine("End  Reload");
-        }
-
-        private void Save()
-        {
-            Debug.WriteLine("Start Save");
-            //serialize
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
-            lock (serializer)
-            using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
-            {
-                serializer.WriteObject(stream, this);
-            }
-            Debug.WriteLine("End  Save");
         }
     }
 }

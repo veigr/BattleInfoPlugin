@@ -124,7 +124,8 @@ namespace BattleInfoPlugin.Models.Repositories
         public static Point ToPoint(this PlaceObject2Tag tag)
         {
             return tag != null
-                ? new Point(tag.Matrix.TranslateX / 20, tag.Matrix.TranslateY / 20)
+                // 31-4 の No.5 と No.14 のように座標が微妙にずれて設定されてることがあるのでとりあえず切り捨て
+                ? new Point(Math.Floor(tag.Matrix.TranslateX / 20), Math.Floor(tag.Matrix.TranslateY / 20))
                 : default(Point);
         }
 
