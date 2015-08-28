@@ -18,6 +18,7 @@ namespace BattleInfoPlugin.Models
         気のせい = 1 << 6,  //Frameでは気のせい変更前(赤)
         航空戦 = 1 << 7,
         母港 = 1 << 8,
+        航空偵察 = 1 << 9,
 
         夜戦 = 1 << 31,
     }

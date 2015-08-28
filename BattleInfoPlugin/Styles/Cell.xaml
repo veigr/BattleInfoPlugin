@@ -182,7 +182,7 @@
                 </Setter>
             </Trigger>
 
-            <!-- 気のせい(変化前) -->
+            <!-- 気のせい(変化前。踏むと1に置換される。) -->
             <Trigger Property="CellIconNumber" Value="6">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -190,8 +190,8 @@
                             <StackPanel Margin="-11"
                                         Orientation="Horizontal"
                                         Background="Transparent">
-                                <Ellipse Fill="{StaticResource No1FillBrushKey}"
-                                         Stroke="{StaticResource No1StrokeBrushKey}"
+                                <Ellipse Fill="{StaticResource No4FillBrushKey}"
+                                         Stroke="{StaticResource No4StrokeBrushKey}"
                                          StrokeThickness="3"
                                          Width="22"
                                          Height="22"
