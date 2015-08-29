@@ -149,10 +149,10 @@
                                                 <ControlTemplate TargetType="{x:Type GroupItem}">
                                                     <StackPanel >
                                                         <Border Padding="10,7"
-                                                                    Background="{DynamicResource ThemeBrushKey}">
+                                                                Background="{DynamicResource ThemeBrushKey}">
                                                             <TextBlock Text="{Binding Name.Name}"
-                                                                           Foreground="{DynamicResource AccentBrushKey}"
-                                                                           FontSize="16"/>
+                                                                       Foreground="{DynamicResource AccentBrushKey}"
+                                                                       FontSize="16"/>
                                                         </Border>
                                                         <ItemsPresenter Margin="0,0,0,16"/>
                                                     </StackPanel>
@@ -567,7 +567,7 @@
                                            Margin="10,-1,10,0" />
 
                                 <Grid HorizontalAlignment="Left"
-                                      Margin="0,5">
+                                      Margin="0,3">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" SharedSizeGroup="ShipStatusLabel"/>
                                         <RowDefinition Height="Auto" SharedSizeGroup="ShipStatusValue"/>

@@ -377,8 +377,8 @@ namespace BattleInfoPlugin.Models
             this.Situation = this.Source.Situation;
             this.NowHP = this.Source.HP.Current;
             this.MaxHP = this.Source.HP.Maximum;
-            this.Slots = this.Source.Slots
-                .Where(s => s!= null)
+            this.Slots = this.Source.Slots.Concat(new[] {this.Source.ExSlot})   //とりあえずくっつける
+                .Where(s => s != null)
                 .Where(s => s.Equipped)
                 .Select(s => new ShipSlotData(s)).ToArray();
 
