@@ -24,6 +24,7 @@ namespace BattleInfoPlugin.Models.Raw
                 .Where(x => x != -1)
                 .Select((x, i) => new MastersShipData(master.Ships[x])
                 {
+                    Level = data.api_ship_lv[i + 1],
                     Firepower = data.api_eParam[i][0] + data.api_eKyouka[i][0],
                     Torpedo = data.api_eParam[i][1] + data.api_eKyouka[i][1],
                     AA = data.api_eParam[i][2] + data.api_eKyouka[i][2],

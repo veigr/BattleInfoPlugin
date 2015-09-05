@@ -277,17 +277,22 @@
 
                             <TextBlock>
                                 <Run Text="{Binding Name, Mode=OneWay}"
-                                    Style="{DynamicResource EmphaticTextElementStyleKey}" />
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}" />
                                 <Run Text="{Binding AdditionalName, Mode=OneWay}"
-                                    Foreground="{Binding AdditionalName, Converter={StaticResource AdditionalNameColorConverter}}"/>
+                                     Foreground="{Binding AdditionalName, Converter={StaticResource AdditionalNameColorConverter}}"/>
                                 <LineBreak />
+                                <Run Text="Lv"
+                                     FontSize="11" />
+                                <Run Text="{Binding Level, Mode=OneWay}"
+                                     Style="{DynamicResource EmphaticTextElementStyleKey}"
+                                     FontSize="11" />
                                 <Run Text="{Binding TypeName, Mode=OneWay}"
-                                    FontSize="11" />
+                                     FontSize="11" />
                             </TextBlock>
 
                             <Grid x:Name="HPIndicator"
-                                      Grid.Column="1"
-                                      Margin="5,1,5,0">
+                                  Grid.Column="1"
+                                  Margin="5,1,5,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
