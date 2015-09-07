@@ -569,9 +569,9 @@
                                 <Grid HorizontalAlignment="Left"
                                       Margin="0,3">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" SharedSizeGroup="ShipStatusLabel"/>
-                                        <RowDefinition Height="Auto" SharedSizeGroup="ShipStatusValue"/>
-                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition MinHeight="0"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" MinWidth="130" SharedSizeGroup="Name" />
@@ -590,7 +590,7 @@
 
                                     <StackPanel Grid.Column="0"
                                                 Grid.Row="0"
-                                                Grid.RowSpan="2">
+                                                Grid.RowSpan="3">
                                         <TextBlock Text="{Binding Id, StringFormat=ID:{0}, Mode=OneTime}"
                                                    FontSize="11"/>
                                         <TextBlock>
