@@ -13,6 +13,8 @@ namespace BattleInfoPlugin.Models.Repositories
     [DataContract]
     internal class EnemyData {
         private static readonly DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(EnemyData));
+        private static readonly object margeLock = new object();
+        private static readonly object saveLoadLock = new object();
         public static EnemyData Curret { get; } = new EnemyData();
 
         private EnemyData()
@@ -85,28 +87,31 @@ namespace BattleInfoPlugin.Models.Repositories
             return Task.Run(() =>
             {
                 if (!File.Exists(path)) return false;
-                
-                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
+
+                lock (margeLock)
                 {
-                    var obj = serializer.ReadObject(stream) as EnemyData;
-                    if (obj == null) return false;
+                    using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
+                    {
+                        var obj = serializer.ReadObject(stream) as EnemyData;
+                        if (obj == null) return false;
 
-                    this.EnemyDictionary = this.EnemyDictionary.Merge(obj.EnemyDictionary);
-                    this.EnemyFormation = this.EnemyFormation.Merge(obj.EnemyFormation);
-                    this.EnemySlotItems = this.EnemySlotItems.Merge(obj.EnemySlotItems);
-                    this.EnemyUpgraded = this.EnemyUpgraded.Merge(obj.EnemyUpgraded);
-                    this.EnemyParams = this.EnemyParams.Merge(obj.EnemyParams);
-                    this.EnemyLevels = this.EnemyLevels.Merge(obj.EnemyLevels);
-                    this.EnemyHPs = this.EnemyHPs.Merge(obj.EnemyHPs);
-                    this.EnemyNames = this.EnemyNames.Merge(obj.EnemyNames);
-                    this.MapEnemyData = this.MapEnemyData.Merge(obj.MapEnemyData, (v1, v2) => v1.Merge(v2, (h1, h2) => h1.Merge(h2)));
-                    this.MapCellBattleTypes = this.MapCellBattleTypes.Merge(obj.MapCellBattleTypes, (v1, v2) => v1.Merge(v2));
-                    this.MapRoute = this.MapRoute.Merge(obj.MapRoute, (v1, v2) => v1.Merge(v2));
-                    this.MapCellDatas = this.MapCellDatas.Merge(obj.MapCellDatas, (v1, v2) => v1.Merge(v2, x => x.No));
+                        this.EnemyDictionary = this.EnemyDictionary.Merge(obj.EnemyDictionary);
+                        this.EnemyFormation = this.EnemyFormation.Merge(obj.EnemyFormation);
+                        this.EnemySlotItems = this.EnemySlotItems.Merge(obj.EnemySlotItems);
+                        this.EnemyUpgraded = this.EnemyUpgraded.Merge(obj.EnemyUpgraded);
+                        this.EnemyParams = this.EnemyParams.Merge(obj.EnemyParams);
+                        this.EnemyLevels = this.EnemyLevels.Merge(obj.EnemyLevels);
+                        this.EnemyHPs = this.EnemyHPs.Merge(obj.EnemyHPs);
+                        this.EnemyNames = this.EnemyNames.Merge(obj.EnemyNames);
+                        this.MapEnemyData = this.MapEnemyData.Merge(obj.MapEnemyData, (v1, v2) => v1.Merge(v2, (h1, h2) => h1.Merge(h2)));
+                        this.MapCellBattleTypes = this.MapCellBattleTypes.Merge(obj.MapCellBattleTypes, (v1, v2) => v1.Merge(v2));
+                        this.MapRoute = this.MapRoute.Merge(obj.MapRoute, (v1, v2) => v1.Merge(v2));
+                        this.MapCellDatas = this.MapCellDatas.Merge(obj.MapCellDatas, (v1, v2) => v1.Merge(v2, x => x.No));
+                    }
+
+                    this.RemoveDuplicate();
+                    this.Save();
                 }
-
-                this.RemoveDuplicate();
-                this.Save();
                 return true;
             });
         }
@@ -116,27 +121,30 @@ namespace BattleInfoPlugin.Models.Repositories
             Debug.WriteLine("Start Reload");
             //deserialize
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
-            if (!File.Exists(path)) return;
-
-            using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
+            lock (saveLoadLock)
             {
-                var obj = serializer.ReadObject(stream) as EnemyData;
-                if (obj == null) return;
-                this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<string, int[]>();
-                this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<string, Formation>();
-                this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<string, int[][]>();
-                this.EnemyUpgraded = obj.EnemyUpgraded ?? new Dictionary<string, int[][]>();
-                this.EnemyParams = obj.EnemyParams ?? new Dictionary<string, int[][]>();
-                this.EnemyLevels = obj.EnemyLevels ?? new Dictionary<string, int[]>();
-                this.EnemyHPs = obj.EnemyHPs ?? new Dictionary<string, int[]>();
-                this.EnemyNames = obj.EnemyNames ?? new Dictionary<string, string>();
-                this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<string>>>();
-                this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
-                this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-                this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
-            }
+                if (!File.Exists(path)) return;
 
-            this.RemoveDuplicate();
+                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
+                {
+                    var obj = serializer.ReadObject(stream) as EnemyData;
+                    if (obj == null) return;
+                    this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<string, int[]>();
+                    this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<string, Formation>();
+                    this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<string, int[][]>();
+                    this.EnemyUpgraded = obj.EnemyUpgraded ?? new Dictionary<string, int[][]>();
+                    this.EnemyParams = obj.EnemyParams ?? new Dictionary<string, int[][]>();
+                    this.EnemyLevels = obj.EnemyLevels ?? new Dictionary<string, int[]>();
+                    this.EnemyHPs = obj.EnemyHPs ?? new Dictionary<string, int[]>();
+                    this.EnemyNames = obj.EnemyNames ?? new Dictionary<string, string>();
+                    this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<string>>>();
+                    this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
+                    this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
+                    this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
+                }
+
+                this.RemoveDuplicate();
+            }
             Debug.WriteLine("End  Reload");
         }
 
@@ -144,10 +152,23 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             Debug.WriteLine("Start Save");
             //serialize
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
-            using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Create, FileAccess.Write)))
+            lock (saveLoadLock)
             {
-                serializer.WriteObject(stream, this);
+                var i = 0;
+                string tempPath;
+                do
+                {
+                    tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"_{i++}_{Settings.Default.EnemyDataFilePath}");
+                } while (File.Exists(tempPath));
+                using (var stream = Stream.Synchronized(new FileStream(tempPath, FileMode.Create, FileAccess.Write)))
+                {
+                    serializer.WriteObject(stream, this);
+                }
+
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
+                if (File.Exists(path))
+                    File.Delete(path);
+                File.Move(tempPath, path);
             }
             Debug.WriteLine("End  Save");
         }

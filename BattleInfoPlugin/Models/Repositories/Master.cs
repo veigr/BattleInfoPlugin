@@ -16,6 +16,8 @@ namespace BattleInfoPlugin.Models.Repositories
     public class Master
     {
         private static readonly DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Master));
+        private static readonly object margeLock = new object();
+        private static readonly object saveLoadLock = new object();
 
         private static Master _Current;
 
@@ -70,16 +72,16 @@ namespace BattleInfoPlugin.Models.Repositories
         //            target.Add(sourceKey, source[sourceKey]);
         //    }
         //}
-
+        
         public Task<bool> Merge(string path)
         {
             return Task.Run(() =>
             {
                 if (!File.Exists(path)) return false;
 
-                lock (serializer)
+                lock (margeLock)
                 {
-                    using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open)))
+                    using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
                     {
                         var obj = serializer.ReadObject(stream) as Master;
                         if (obj == null) return false;
@@ -87,9 +89,9 @@ namespace BattleInfoPlugin.Models.Repositories
                         this.MapInfos = new ConcurrentDictionary<int, MapInfo>(this.MapInfos.Merge(obj.MapInfos));
                         this.MapCells = new ConcurrentDictionary<int, MapCell>(this.MapCells.Merge(obj.MapCells));
                     }
+                    this.Save();
                 }
 
-                this.Save();
                 return true;
             });
         }
@@ -98,25 +100,40 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             //deserialize
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
-            if (!File.Exists(path)) return;
-
-            using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
+            lock (saveLoadLock)
             {
-                var obj = serializer.ReadObject(stream) as Master;
-                if (obj == null) return;
-                this.MapAreas = obj.MapAreas;
-                this.MapInfos = obj.MapInfos;
-                this.MapCells = obj.MapCells;
+                if (!File.Exists(path)) return;
+                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
+                {
+                    var obj = serializer.ReadObject(stream) as Master;
+                    if (obj == null) return;
+                    this.MapAreas = obj.MapAreas;
+                    this.MapInfos = obj.MapInfos;
+                    this.MapCells = obj.MapCells;
+                }
             }
         }
 
         private void Save()
         {
             //serialize
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
-            using (var stream = Stream.Synchronized(new FileStream(path, FileMode.OpenOrCreate)))
+            lock (saveLoadLock)
             {
-                serializer.WriteObject(stream, this);
+                var i = 0;
+                string tempPath;
+                do
+                {
+                    tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"_{i++}_{Settings.Default.MasterDataFilePath}");
+                } while (File.Exists(tempPath));
+                using (var stream = Stream.Synchronized(new FileStream(tempPath, FileMode.Create, FileAccess.Write)))
+                {
+                    serializer.WriteObject(stream, this);
+                }
+
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
+                if (File.Exists(path))
+                    File.Delete(path);
+                File.Move(tempPath, path);
             }
         }
     }
