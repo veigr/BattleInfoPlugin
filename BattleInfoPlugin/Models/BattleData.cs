@@ -401,7 +401,7 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
-            this.FirstFleet.CalcDamages(
+            this.FirstFleet.CalcPracticeDamages(
                 data.api_kouku.GetFirstFleetDamages(),
                 data.api_opening_atack.GetFriendDamages(),
                 data.api_hougeki1.GetFriendDamages(),
@@ -409,7 +409,7 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetFriendDamages()
                 );
 
-            this.Enemies.CalcDamages(
+            this.Enemies.CalcPracticeDamages(
                 data.api_kouku.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
@@ -430,9 +430,9 @@ namespace BattleInfoPlugin.Models
             this.UpdateMaxHP(data.api_maxhps);
             this.UpdateNowHP(data.api_nowhps);
 
-            this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
+            this.FirstFleet.CalcPracticeDamages(data.api_hougeki.GetFriendDamages());
 
-            this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+            this.Enemies.CalcPracticeDamages(data.api_hougeki.GetEnemyDamages());
         }
 
         private void Update(sortie_airbattle data)

@@ -110,6 +110,23 @@ namespace BattleInfoPlugin.ViewModels
         #endregion
 
 
+        #region IsNotifyOnlyWhenInactive変更通知プロパティ
+        // ここ以外で変更しないのでModel変更通知は受け取らない雑対応
+        public bool IsNotifyOnlyWhenInactive
+        {
+            get
+            { return this.notifier.IsNotifyOnlyWhenInactive; }
+            set
+            {
+                if (this.notifier.IsNotifyOnlyWhenInactive == value)
+                    return;
+                this.notifier.IsNotifyOnlyWhenInactive = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
         public ToolViewModel(Plugin plugin)
         {
             this.notifier = new BattleEndNotifier(plugin);

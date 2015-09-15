@@ -13,7 +13,7 @@
              Foreground="{DynamicResource ActiveForegroundBrushKey}"
              mc:Ignorable="d" 
              d:DesignHeight="530"
-             d:DesignWidth="640"
+             d:DesignWidth="720"
              d:DataContext="{d:DesignData /SampleData/ToolViewModelSampleData.xaml}">
 
     <UserControl.Resources>
@@ -127,11 +127,16 @@
                              DataContext="{Binding Enemies}"/>
             </StackPanel>
 
-            <CheckBox Grid.Row="2"
-                      HorizontalAlignment="Right"
-                      Content="戦闘終了通知"
-                      IsChecked="{Binding IsNotifierEnabled}"
-                      Margin="10, 0"/>
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <CheckBox Content="戦闘終了通知"
+                          IsChecked="{Binding IsNotifierEnabled}"
+                          Margin="0,0,10,0"/>
+                <CheckBox Content="非アクティブ時のみ通知"
+                          IsChecked="{Binding IsNotifyOnlyWhenInactive}"
+                          Margin="0,0,10,0"/>
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </UserControl>

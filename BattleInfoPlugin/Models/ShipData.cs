@@ -257,6 +257,23 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
+        #region ExSlot変更通知プロパティ
+        private ShipSlotData _ExSlot;
+
+        public ShipSlotData ExSlot
+        {
+            get
+            { return this._ExSlot; }
+            set
+            {
+                if (this._ExSlot == value)
+                    return;
+                this._ExSlot = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
         #region IsUsedDamecon 変更通知プロパティ
 
         private bool _IsUsedDamecon;
@@ -377,10 +394,11 @@ namespace BattleInfoPlugin.Models
             this.Situation = this.Source.Situation;
             this.NowHP = this.Source.HP.Current;
             this.MaxHP = this.Source.HP.Maximum;
-            this.Slots = this.Source.Slots.Concat(new[] {this.Source.ExSlot})   //とりあえずくっつける
+            this.Slots = this.Source.Slots
                 .Where(s => s != null)
                 .Where(s => s.Equipped)
                 .Select(s => new ShipSlotData(s)).ToArray();
+            this.ExSlot = new ShipSlotData(this.Source.ExSlot);
 
             this.Firepower = this.Source.Firepower.Current;
             this.Torpedo = this.Source.Torpedo.Current;
