@@ -13,6 +13,8 @@ namespace BattleInfoPlugin.Models.Notifiers
     {
         private static readonly Settings settings = Settings.Default;
 
+        private static readonly BrowserImageMonitor monitor = new BrowserImageMonitor();
+
         private readonly Plugin plugin;
 
         #region IsEnabled変更通知プロパティ
@@ -56,19 +58,29 @@ namespace BattleInfoPlugin.Models.Notifiers
             settings.Reload();
 
             var proxy = KanColleClient.Current.Proxy;
+
             proxy.api_req_combined_battle_battleresult
-                .Subscribe(_ => this.Notify());
+                .Subscribe(_ => this.NotifyEndOfBattle());
+
             proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle_result")
-                .Subscribe(_ => this.Notify());
+                .Subscribe(_ => this.NotifyEndOfBattle());
+
             proxy.api_req_sortie_battleresult
-                .Subscribe(_ => this.Notify());
+                .Subscribe(_ => this.NotifyEndOfBattle());
+
+            monitor.ConfirmPursuit += () => this.Notify(NotificationType.ConfirmPursuit, "追撃確認", "夜戦を行うかどうか選択してください。");
         }
 
-        private void Notify()
+        private void NotifyEndOfBattle()
+        {
+            this.Notify(NotificationType.BattleEnd, "戦闘終了", "戦闘が終了しました。");
+        }
+
+        private void Notify(string type, string title, string message)
         {
             var isActive = DispatcherHelper.UIDispatcher.Invoke(() => Application.Current.MainWindow.IsActive);
             if (this.IsEnabled && (!isActive || !this.IsNotifyOnlyWhenInactive))
-                this.plugin.InvokeNotifyRequested(new NotifyEventArgs(NotificationType.BattleEnd, "戦闘終了", "戦闘が終了しました。")
+                this.plugin.InvokeNotifyRequested(new NotifyEventArgs(type, title, message)
                 {
                     Activated = () =>
                     {
