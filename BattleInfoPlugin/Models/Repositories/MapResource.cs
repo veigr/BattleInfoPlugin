@@ -23,6 +23,11 @@ namespace BattleInfoPlugin.Models.Repositories
             return ExistsAssembly ? MapResourcePrivate.GetMapCellPoints(map) : new Dictionary<int, Point>();
         }
 
+        public static IEnumerable<Point> GetMapFlags(MapInfo map)
+        {
+            return ExistsAssembly ? MapResourcePrivate.GetMapFlags(map) : new Point[0];
+        }
+
         public static bool HasMapSwf(MapInfo map)
         {
             return ExistsAssembly && MapResourcePrivate.HasMapSwf(map);
@@ -86,6 +91,21 @@ namespace BattleInfoPlugin.Models.Repositories
                     .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             }
 
+            public static IEnumerable<Point> GetMapFlags(MapInfo map)
+            {
+                var swf = map.ToSwf();
+                if (swf == null) return new Point[0];
+
+                return swf.Tags
+                    .OfType<DefineSpriteTag>()
+                    .SelectMany(sprite => sprite.ControlTags)
+                    .OfType<PlaceObject2Tag>()
+                    .Where(place => place.Name != null)
+                    .Where(place => place.Name.StartsWith("flag"))
+                    .Select(place => place.ToPoint())
+                    .ToArray();
+            }
+
             public static bool HasMapSwf(MapInfo map)
             {
                 return map.HasMapSwf();
@@ -124,8 +144,10 @@ namespace BattleInfoPlugin.Models.Repositories
         public static Point ToPoint(this PlaceObject2Tag tag)
         {
             return tag != null
-                // 31-4 の No.5 と No.14 のように座標が微妙にずれて設定されてることがあるのでとりあえず切り捨て
-                ? new Point(Math.Floor(tag.Matrix.TranslateX / 20), Math.Floor(tag.Matrix.TranslateY / 20))
+                // 31-4 の No.5 と No.14 のように座標が微妙にずれて設定されてることがあるのでとりあえず丸め
+                ? new Point(
+                    (int)Math.Floor(tag.Matrix.TranslateX / 20) / 2 * 2,
+                    (int)Math.Floor(tag.Matrix.TranslateY / 20) / 2 * 2)
                 : default(Point);
         }
 

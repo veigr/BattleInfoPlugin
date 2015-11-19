@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:BattleInfoPlugin.Views.Controls">
+
+    <Style TargetType="{x:Type controls:Flag}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:Flag}">
+                    <StackPanel Margin="0,-26,0,0"
+                                Orientation="Horizontal"
+                                Background="Transparent"
+                                Width="18"
+                                Height="26">
+                        <Path Data="M11.594514,11.174758 L23.973805,17.835 12.125,21.75 12.103465,34.034996 10.209791,34.004998 10.209791,11.175238 z" Fill="#FFA2C966" HorizontalAlignment="Left" Height="24.812" Stretch="Fill" Stroke="#FF485E4E" VerticalAlignment="Top" Width="16.218" Margin="0.094,0.313,0,0"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

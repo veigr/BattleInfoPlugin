@@ -71,6 +71,8 @@ namespace BattleInfoPlugin.ViewModels.Enemies
             }
         }
 
+        public IEnumerable<Point> Flags => MapResource.GetMapFlags(this.Info);
+
         private int GetCellColorNo(int idInEachMapInfo)
         {
             var data = this.CellDatas.SingleOrDefault(x => x.No == idInEachMapInfo);

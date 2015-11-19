@@ -25,7 +25,7 @@ namespace BattleInfoPlugin.Views.Controls
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(Cell), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(Cell), new PropertyMetadata(""));
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace BattleInfoPlugin.Views.Controls
 
         // Using a DependencyProperty as the backing store for X.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty XProperty =
-            DependencyProperty.Register("X", typeof(int), typeof(Cell), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(X), typeof(int), typeof(Cell), new PropertyMetadata(0));
 
 
         #endregion
@@ -56,7 +56,7 @@ namespace BattleInfoPlugin.Views.Controls
 
         // Using a DependencyProperty as the backing store for Y.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty YProperty =
-            DependencyProperty.Register("Y", typeof(int), typeof(Cell), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(Y), typeof(int), typeof(Cell), new PropertyMetadata(0));
 
 
         #endregion
@@ -72,7 +72,7 @@ namespace BattleInfoPlugin.Views.Controls
 
         // Using a DependencyProperty as the backing store for CellIconNumber.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CellIconNumberProperty =
-            DependencyProperty.Register("CellIconNumber", typeof(int), typeof(Cell), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(CellIconNumber), typeof(int), typeof(Cell), new PropertyMetadata(0));
 
         
         #endregion

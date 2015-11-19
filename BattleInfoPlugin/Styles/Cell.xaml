@@ -37,7 +37,7 @@
             <Setter.Value>
                 <!-- アイコンなし。デフォルト。 -->
                 <ControlTemplate TargetType="{x:Type controls:Cell}">
-                    <StackPanel Margin="-11"
+                    <StackPanel Margin="-10.5"
                                 Orientation="Horizontal"
                                 Background="Transparent">
                         <Control Width="22"
@@ -57,7 +57,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-11"
+                            <StackPanel Margin="-10.5"
                                         Orientation="Horizontal"
                                         Background="Transparent">
                                 <Ellipse Fill="{StaticResource No1FillBrushKey}"
@@ -105,7 +105,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-11"
+                            <StackPanel Margin="-10.5"
                                         Orientation="Horizontal"
                                         Background="Transparent">
                                 <Ellipse Fill="{StaticResource No3FillBrushKey}"
@@ -129,7 +129,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-11"
+                            <StackPanel Margin="-10.5"
                                         Orientation="Horizontal"
                                         Background="Transparent">
                                 <Ellipse Fill="{StaticResource No4FillBrushKey}"
@@ -153,7 +153,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-18.5, -24"
+                            <StackPanel Margin="-18, -23.5"
                                         Orientation="Horizontal"
                                         Background="Transparent">
 
@@ -182,16 +182,16 @@
                 </Setter>
             </Trigger>
 
-            <!-- 気のせい(変化前。踏むと1に置換される。) -->
+            <!-- 旗 -->
             <Trigger Property="CellIconNumber" Value="6">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-11"
+                            <StackPanel Margin="-10.5"
                                         Orientation="Horizontal"
                                         Background="Transparent">
-                                <Ellipse Fill="{StaticResource No4FillBrushKey}"
-                                         Stroke="{StaticResource No4StrokeBrushKey}"
+                                <Ellipse Fill="{StaticResource No2FillBrushKey}"
+                                         Stroke="{StaticResource No2StrokeBrushKey}"
                                          StrokeThickness="3"
                                          Width="22"
                                          Height="22"
@@ -211,7 +211,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-35.5, -22.5"
+                            <StackPanel Margin="-35, -22"
                                         Orientation="Horizontal"
                                         Background="Transparent">
 
@@ -283,7 +283,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-24.5, -24.5"
+                            <StackPanel Margin="-24"
                                         Orientation="Horizontal"
                                         Background="Transparent">
 
@@ -321,7 +321,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type controls:Cell}">
-                            <StackPanel Margin="-11"
+                            <StackPanel Margin="-10.5"
                                         Orientation="Horizontal"
                                         Background="Transparent">
                                 <Ellipse Fill="{StaticResource No9FillBrushKey}"

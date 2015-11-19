@@ -202,6 +202,7 @@
     <Compile Include="ViewModels\ToolViewModel.cs" />
     <Compile Include="Views\Behaviors\ScrollToCellBehavior.cs" />
     <Compile Include="Views\Controls\Cell.cs" />
+    <Compile Include="Views\Controls\Flag.cs" />
     <Compile Include="Views\Converters\AddDoubleValueConverter.cs" />
     <Compile Include="Views\Converters\AdditionalNameColorConverter.cs" />
     <Compile Include="Views\Converters\AttackTypeToDisplayTextConverter.cs" />
@@ -222,6 +223,10 @@
     <Compile Include="Win32\IViewObject.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Page Include="Styles\Cell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Flag.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
