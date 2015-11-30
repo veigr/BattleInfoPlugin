@@ -25,7 +25,8 @@
                    TextOptions.TextFormattingMode="Display"
                    AllowDrop="True"
                    Drop="Window_Drop"
-                   d:DataContext="{d:DesignInstance vm:EnemyWindowViewModel, IsDesignTimeCreatable=True}">
+                   d:DataContext="{d:DesignInstance vm:EnemyWindowViewModel, IsDesignTimeCreatable=True}"
+                   metro:ThemeHelper.HasThemeResources="True">
 
     <metro:MetroWindow.Resources>
         <ResourceDictionary>

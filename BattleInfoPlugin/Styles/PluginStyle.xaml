@@ -19,7 +19,7 @@
         <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Icons.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Dark.xaml" />
-        <!--<ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Accents/Purple.xaml" />-->
+        <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Accents/Purple.xaml" />
 
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.xaml" />
