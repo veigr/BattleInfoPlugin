@@ -9,13 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BattleInfoPlugin</RootNamespace>
     <AssemblyName>BattleInfoPlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,24 +65,24 @@
       <HintPath>..\packages\log4net.2.0.4\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\MetroRadiance.dll</HintPath>
+    <Reference Include="MetroRadiance, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.2.0.3-alpha\lib\net46\MetroRadiance.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance.Chrome, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Chrome.1.1.0.2\lib\net45\MetroRadiance.Chrome.dll</HintPath>
+    <Reference Include="MetroRadiance.Chrome, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.Chrome.2.0.2-alpha\lib\net46\MetroRadiance.Chrome.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance.Core, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Core.1.1.0.2\lib\net45\MetroRadiance.Core.dll</HintPath>
+    <Reference Include="MetroRadiance.Core, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.Core.2.0.2-alpha\lib\net46\MetroRadiance.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroTrilithon, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroTrilithon.0.1.1.0\lib\portable-net45+dnxcore50+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
+    <Reference Include="MetroTrilithon, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroTrilithon.0.1.2\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroTrilithon.Desktop, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroTrilithon.Desktop.0.1.4.0\lib\net45\MetroTrilithon.Desktop.dll</HintPath>
+    <Reference Include="MetroTrilithon.Desktop, Version=0.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroTrilithon.Desktop.0.1.5-alpha\lib\net46\MetroTrilithon.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -89,8 +90,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\KanColleViewer.Controls.1.2.0.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="Nekoxy, Version=1.5.1.19, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nekoxy.1.5.1.19\lib\net45\Nekoxy.dll</HintPath>
@@ -126,8 +127,8 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.1.2.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\KanColleViewer.Controls.1.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -189,6 +190,7 @@
     <Compile Include="Models\ShipData.cs" />
     <Compile Include="Models\ShipSlotData.cs" />
     <Compile Include="Models\Type2.cs" />
+    <Compile Include="NotifyAttribute.cs" />
     <Compile Include="SortieDataListener.cs" />
     <Compile Include="ViewModels\AirCombatResultViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
@@ -286,6 +288,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.0.1.0\analyzers\KanColleViewer.Composition.dll" />
     <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.0.1.0\analyzers\KanColleViewer.PluginAnalyzer.dll" />
+    <Analyzer Include="..\packages\NotifyPropertyChangedGenerator.1.1.0.1\analyzers\dotnet\cs\NotifyPropertyChangedGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="MSHTML">

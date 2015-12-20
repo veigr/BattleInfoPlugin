@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Livet;
-using MetroRadiance.Controls;
+using MetroRadiance.UI.Controls;
 using Livet.EventListeners;
 
 namespace BattleInfoPlugin.ViewModels

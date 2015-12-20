@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using MetroRadiance.Controls;
+using MetroRadiance.UI.Controls;
 using BattleInfoPlugin.ViewModels;
 
 namespace BattleInfoPlugin.Views

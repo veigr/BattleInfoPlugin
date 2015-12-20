@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using MetroRadiance.Core.Win32;
 
 namespace BattleInfoPlugin.Win32
 {
