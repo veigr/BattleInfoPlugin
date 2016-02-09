@@ -41,20 +41,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DependentAssemblies\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="KanColleViewer.Composition, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleViewer.Composition.1.2.0.0\lib\net45\KanColleViewer.Composition.dll</HintPath>
+    <Reference Include="KanColleViewer.Composition, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KanColleViewer.Composition.1.4.0\lib\net45\KanColleViewer.Composition.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="KanColleViewer.Controls, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleViewer.Controls.1.2.0.0\lib\net45\KanColleViewer.Controls.dll</HintPath>
+    <Reference Include="KanColleViewer.Controls, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KanColleViewer.Controls.1.3.1\lib\net46\KanColleViewer.Controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="KanColleViewer.PluginAnalyzer, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleViewer.PluginAnalyzer.1.0.1.0\lib\net45\KanColleViewer.PluginAnalyzer.dll</HintPath>
+    <Reference Include="KanColleViewer.PluginAnalyzer, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KanColleViewer.PluginAnalyzer.1.1.1.0\lib\net46\KanColleViewer.PluginAnalyzer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="KanColleWrapper, Version=1.2.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleWrapper.1.2.7.0\lib\net45\KanColleWrapper.dll</HintPath>
+    <Reference Include="KanColleWrapper, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KanColleWrapper.1.4.0\lib\net46\KanColleWrapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
@@ -65,36 +65,29 @@
       <HintPath>..\packages\log4net.2.0.4\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.2.0.3-alpha\lib\net46\MetroRadiance.dll</HintPath>
+    <Reference Include="MetroRadiance, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.2.2.0\lib\net46\MetroRadiance.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance.Chrome, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Chrome.2.0.2-alpha\lib\net46\MetroRadiance.Chrome.dll</HintPath>
+    <Reference Include="MetroRadiance.Chrome, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.Chrome.2.1.0\lib\net46\MetroRadiance.Chrome.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroRadiance.Core, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Core.2.0.2-alpha\lib\net46\MetroRadiance.Core.dll</HintPath>
+    <Reference Include="MetroRadiance.Core, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroRadiance.Core.2.1.0\lib\net46\MetroRadiance.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroTrilithon, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroTrilithon.0.1.2\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
+    <Reference Include="MetroTrilithon, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroTrilithon.0.2.0\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\MetroTrilithon.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MetroTrilithon.Desktop, Version=0.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroTrilithon.Desktop.0.1.5-alpha\lib\net46\MetroTrilithon.Desktop.dll</HintPath>
+    <Reference Include="MetroTrilithon.Desktop, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroTrilithon.Desktop.0.2.3\lib\net46\MetroTrilithon.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleViewer.Controls.1.2.0.0\lib\net45\Microsoft.Expression.Drawing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\KanColleViewer.Controls.1.2.0.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
-    </Reference>
-    <Reference Include="Nekoxy, Version=1.5.1.19, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nekoxy.1.5.1.19\lib\net45\Nekoxy.dll</HintPath>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Nekoxy, Version=1.5.2.20, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nekoxy.1.5.2.20\lib\net45\Nekoxy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StatefulModel, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -126,10 +119,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\KanColleViewer.Controls.1.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -139,7 +129,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="TrotiNet, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nekoxy.1.5.1.19\lib\net45\TrotiNet.dll</HintPath>
+      <HintPath>..\packages\Nekoxy.1.5.2.20\lib\net45\TrotiNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -147,6 +137,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotations\DarkAttribute.cs" />
+    <Compile Include="Annotations\ElementalAttribute.cs" />
+    <Compile Include="Annotations\LightAttribute.cs" />
     <Compile Include="KcsResourceWriter.cs" />
     <Compile Include="Models\AirCombatResult.cs" />
     <Compile Include="Models\AirSupremacy.cs" />
@@ -287,8 +280,8 @@
     <DesignData Include="SampleData\ToolViewModelSampleData.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.0.1.0\analyzers\KanColleViewer.Composition.dll" />
-    <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.0.1.0\analyzers\KanColleViewer.PluginAnalyzer.dll" />
+    <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.1.1.0\analyzers\KanColleViewer.Composition.dll" />
+    <Analyzer Include="..\packages\KanColleViewer.PluginAnalyzer.1.1.1.0\analyzers\KanColleViewer.PluginAnalyzer.dll" />
     <Analyzer Include="..\packages\NotifyPropertyChangedGenerator.1.1.0.1\analyzers\dotnet\cs\NotifyPropertyChangedGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
