@@ -166,6 +166,7 @@
     <Compile Include="Models\Notifiers\BattleEndNotifier.cs" />
     <Compile Include="Models\Notifiers\BrowserImageMonitor.cs" />
     <Compile Include="Models\Raw\ICommonBattleMembers.cs" />
+    <Compile Include="Models\Raw\member_mapinfo.cs" />
     <Compile Include="Models\Repositories\EnemyData.cs" />
     <Compile Include="NotificationType.cs" />
     <Compile Include="Models\Raw\battle_midnight_battle.cs" />

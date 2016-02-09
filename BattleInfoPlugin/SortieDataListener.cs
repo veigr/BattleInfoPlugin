@@ -48,6 +48,9 @@ namespace BattleInfoPlugin
 
             proxy.api_req_combined_battle_battleresult
                 .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
+
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_get_member/mapinfo")
+                .TryParse<member_mapinfo[]>().Subscribe(x => this.Update(x.Data));
         }
 
         #region Battle
@@ -152,6 +155,9 @@ namespace BattleInfoPlugin
 
         private void Update(battle_result result)
             => this.provider.UpdateEnemyName(result);
+
+        private void Update(member_mapinfo[] mapinfos)
+            => this.provider.UpdateMapInfo(mapinfos);
 
         #endregion
     }

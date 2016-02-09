@@ -18,6 +18,8 @@ namespace BattleInfoPlugin.Models.Repositories
         
         private map_start_next currentStartNext;
 
+        private member_mapinfo[] currentMapInfos;
+
         public EnemyDataProvider()
         {
             this.previousCellNo = 0;
@@ -33,6 +35,11 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             this.EnemyData.RemoveEnemy(enemyId);
             this.EnemyData.Save();
+        }
+
+        public void UpdateMapInfo(member_mapinfo[] mapinfos)
+        {
+            this.currentMapInfos = mapinfos;
         }
 
         public void UpdateMapData(map_start_next startNext)
@@ -162,6 +169,15 @@ namespace BattleInfoPlugin.Models.Repositories
                 this.EnemyData.MapEnemyData[mapInfo].Add(startNext.api_no, new HashSet<string>());
 
             this.EnemyData.MapEnemyData[mapInfo][startNext.api_no].Add(enemyId);
+
+
+            var rank = this.currentMapInfos
+                .FirstOrDefault(x => $"{x.api_id}" == $"{startNext.api_maparea_id}{startNext.api_mapinfo_no}")
+                ?.api_eventmap?.api_selected_rank
+                ?? 0;
+            if (!this.EnemyData.EnemyEncounterRank.ContainsKey(enemyId))
+                this.EnemyData.EnemyEncounterRank.Add(enemyId, new HashSet<int>());
+            this.EnemyData.EnemyEncounterRank[enemyId].Add(rank);
         }
 
         private void UpdateMapRoute(map_start_next startNext)
