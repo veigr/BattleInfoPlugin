@@ -95,7 +95,8 @@ namespace BattleInfoPlugin.Models.Repositories
                             this.GetEnemiesFromId(enemy),
                             this.GetEnemyFormationFromId(enemy),
                             this.GetEnemyNameFromId(enemy),
-                            FleetType.Enemy
+                            FleetType.Enemy,
+                            this.GetEnemyEncounterRankFromId(enemy)
                             ))));
         }
 
@@ -123,6 +124,13 @@ namespace BattleInfoPlugin.Models.Repositories
             return this.EnemyData.EnemyFormation.ContainsKey(enemyId)
                 ? this.EnemyData.EnemyFormation[enemyId]
                 : Formation.不明;
+        }
+
+        private int[] GetEnemyEncounterRankFromId(string enemyId)
+        {
+            return this.EnemyData.EnemyEncounterRank.ContainsKey(enemyId)
+                ? this.EnemyData.EnemyEncounterRank[enemyId].OrderBy(x => x).ToArray()
+                : new [] { 0 };
         }
 
         private IEnumerable<ShipData> GetEnemiesFromId(string enemyId)

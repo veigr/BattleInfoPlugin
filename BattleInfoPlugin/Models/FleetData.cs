@@ -79,6 +79,23 @@ namespace BattleInfoPlugin.Models
         }
         #endregion
 
+        #region Rank変更通知プロパティ
+        private int[] _Rank;
+
+        public int[] Rank
+        {
+            get
+            { return this._Rank; }
+            set
+            {
+                if (this._Rank == value)
+                    return;
+                this._Rank = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+        
         //#region AirSuperiorityPotential変更通知プロパティ
         //private int _AirSuperiorityPotential;
 
@@ -104,12 +121,13 @@ namespace BattleInfoPlugin.Models
         {
         }
 
-        public FleetData(IEnumerable<ShipData> ships, Formation formation, string name, FleetType type)
+        public FleetData(IEnumerable<ShipData> ships, Formation formation, string name, FleetType type, int[] rank = null)
         {
             this._Ships = ships;
             this._Formation = formation;
             this._Name = name;
             this._FleetType = type;
+            this._Rank = rank ?? new[] { 0 };
             //this._AirSuperiorityPotential = this._Ships
             //    .SelectMany(s => s.Slots)
             //    .Where(s => s.Source.IsAirSuperiorityFighter)

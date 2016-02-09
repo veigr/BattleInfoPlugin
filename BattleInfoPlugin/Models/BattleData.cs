@@ -519,7 +519,8 @@ namespace BattleInfoPlugin.Models
                 data.ToMastersShipDataArray(),
                 this.Enemies?.Formation ?? Formation.なし,
                 this.Enemies?.Name ?? "",
-                FleetType.Enemy);
+                FleetType.Enemy,
+                this.Enemies?.Rank);
 
             if (api_formation != null)
             {

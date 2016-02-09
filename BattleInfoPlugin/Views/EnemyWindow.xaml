@@ -549,6 +549,15 @@
                                                                      Style="{DynamicResource EmphaticTextElementStyleKey}"
                                                                      FontSize="12"/>
                                                             </TextBlock>
+
+                                                            <TextBlock Margin="5,10,5,0"
+                                                                       Visibility="{Binding RankVisibility}">
+                                                                <Run Text="難易度:"
+                                                                     FontSize="12"/>
+                                                                <Run Text="{Binding Rank, Mode=OneTime}"
+                                                                     Style="{DynamicResource EmphaticTextElementStyleKey}"
+                                                                     FontSize="12"/>
+                                                            </TextBlock>
                                                         </StackPanel>
 
                                                         <!--Ships-->

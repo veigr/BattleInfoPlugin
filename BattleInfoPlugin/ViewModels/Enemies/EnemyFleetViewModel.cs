@@ -25,6 +25,25 @@ namespace BattleInfoPlugin.ViewModels.Enemies
                 ? this.Fleet.Name
                 : "？？？";
 
+        public string Rank
+            => string.Join(", ", this.Fleet.Rank.Where(x => 0 < x).Select(x =>
+            {
+                switch (x)
+                {
+                    case 1:
+                        return "丙";
+                    case 2:
+                        return "乙";
+                    case 3:
+                        return "甲";
+                    default:
+                        return "？";
+                }
+            }));
+
+        public Visibility RankVisibility
+            => !string.IsNullOrEmpty(this.Rank) ? Visibility.Visible : Visibility.Collapsed;
+
         public FleetData Fleet { get; set; }
 
         #region EnemyShips
