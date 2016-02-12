@@ -128,61 +128,27 @@ namespace BattleInfoPlugin.Models.Repositories
 
         internal void Reload()
         {
-            Debug.WriteLine("Start Reload");
-            //deserialize
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
-            lock (saveLoadLock)
-            {
-                if (!File.Exists(path)) return;
+            var obj = Settings.Default.EnemyDataFileName.Deserialize<EnemyData>();
+            if (obj == null) return;
 
-                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
-                {
-                    var obj = serializer.ReadObject(stream) as EnemyData;
-                    if (obj == null) return;
-                    this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<string, int[]>();
-                    this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<string, Formation>();
-                    this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<string, int[][]>();
-                    this.EnemyUpgraded = obj.EnemyUpgraded ?? new Dictionary<string, int[][]>();
-                    this.EnemyParams = obj.EnemyParams ?? new Dictionary<string, int[][]>();
-                    this.EnemyLevels = obj.EnemyLevels ?? new Dictionary<string, int[]>();
-                    this.EnemyHPs = obj.EnemyHPs ?? new Dictionary<string, int[]>();
-                    this.EnemyNames = obj.EnemyNames ?? new Dictionary<string, string>();
-                    this.EnemyEncounterRank = obj.EnemyEncounterRank ?? new Dictionary<string, HashSet<int>>();
-                    this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<string>>>();
-                    this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
-                    this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
-                    this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
-                }
-
-                this.RemoveDuplicate();
-            }
-            Debug.WriteLine("End  Reload");
+            this.EnemyDictionary = obj.EnemyDictionary ?? new Dictionary<string, int[]>();
+            this.EnemyFormation = obj.EnemyFormation ?? new Dictionary<string, Formation>();
+            this.EnemySlotItems = obj.EnemySlotItems ?? new Dictionary<string, int[][]>();
+            this.EnemyUpgraded = obj.EnemyUpgraded ?? new Dictionary<string, int[][]>();
+            this.EnemyParams = obj.EnemyParams ?? new Dictionary<string, int[][]>();
+            this.EnemyLevels = obj.EnemyLevels ?? new Dictionary<string, int[]>();
+            this.EnemyHPs = obj.EnemyHPs ?? new Dictionary<string, int[]>();
+            this.EnemyNames = obj.EnemyNames ?? new Dictionary<string, string>();
+            this.EnemyEncounterRank = obj.EnemyEncounterRank ?? new Dictionary<string, HashSet<int>>();
+            this.MapEnemyData = obj.MapEnemyData ?? new Dictionary<int, Dictionary<int, HashSet<string>>>();
+            this.MapCellBattleTypes = obj.MapCellBattleTypes ?? new Dictionary<int, Dictionary<int, string>>();
+            this.MapRoute = obj.MapRoute ?? new Dictionary<int, HashSet<KeyValuePair<int, int>>>();
+            this.MapCellDatas = obj.MapCellDatas ?? new Dictionary<int, List<MapCellData>>();
+            this.RemoveDuplicate();
         }
 
         internal void Save()
-        {
-            Debug.WriteLine("Start Save");
-            //serialize
-            lock (saveLoadLock)
-            {
-                var i = 0;
-                string tempPath;
-                do
-                {
-                    tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"_{i++}_{Settings.Default.EnemyDataFilePath}");
-                } while (File.Exists(tempPath));
-                using (var stream = Stream.Synchronized(new FileStream(tempPath, FileMode.Create, FileAccess.Write)))
-                {
-                    serializer.WriteObject(stream, this);
-                }
-
-                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.EnemyDataFilePath);
-                if (File.Exists(path))
-                    File.Delete(path);
-                File.Move(tempPath, path);
-            }
-            Debug.WriteLine("End  Save");
-        }
+            => this.Serialize(Settings.Default.EnemyDataFileName);
 
         internal void RemoveDuplicate()
         {

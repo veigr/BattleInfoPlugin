@@ -129,7 +129,7 @@ namespace BattleInfoPlugin.Models.Repositories
         private int[] GetEnemyEncounterRankFromId(string enemyId)
         {
             return this.EnemyData.EnemyEncounterRank.ContainsKey(enemyId)
-                ? this.EnemyData.EnemyEncounterRank[enemyId].OrderBy(x => x).ToArray()
+                ? this.EnemyData.EnemyEncounterRank[enemyId].OrderByDescending(x => x).ToArray()
                 : new [] { 0 };
         }
 

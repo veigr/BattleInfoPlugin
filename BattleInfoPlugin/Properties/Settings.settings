@@ -5,10 +5,10 @@
     <Setting Name="IsEnabledBattleEndNotify" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="EnemyDataFilePath" Type="System.String" Scope="Application">
+    <Setting Name="EnemyDataFileName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">BattleInfoPlugin_EnemyData.txt</Value>
     </Setting>
-    <Setting Name="MasterDataFilePath" Type="System.String" Scope="Application">
+    <Setting Name="MasterDataFileName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">BattleInfoPlugin_MasterData.txt</Value>
     </Setting>
     <Setting Name="CacheDirPath" Type="System.String" Scope="Application">
@@ -16,6 +16,9 @@
     </Setting>
     <Setting Name="IsBattleEndNotifyOnlyWhenInactive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ResourceUrlMappingFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BattleInfoPlugin_ResourceUrlMapping.txt</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -79,6 +82,47 @@ namespace BattleInfoPlugin.Models.Repositories
                 .ToArray();
             c1.AddRange(e);
             return c1;
+        }
+        
+        private static readonly object serializeLoadLock = new object();
+        public static void Serialize<T>(this T target, string fileName)
+        {
+            Debug.WriteLine("Start Serialize");
+            var serializer = new DataContractJsonSerializer(typeof(T));
+            lock (serializeLoadLock)
+            {
+                var i = 0;
+                string tempPath;
+                do
+                {
+                    tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"_{i++}_{fileName}");
+                } while (File.Exists(tempPath));
+                using (var stream = Stream.Synchronized(new FileStream(tempPath, FileMode.Create, FileAccess.Write)))
+                {
+                    serializer.WriteObject(stream, target);
+                }
+
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+                if (File.Exists(path))
+                    File.Delete(path);
+                File.Move(tempPath, path);
+            }
+            Debug.WriteLine("End  Serialize");
+        }
+        public static T Deserialize<T>(this string fileName)
+        {
+            Debug.WriteLine("Start Deserialize");
+            var serializer = new DataContractJsonSerializer(typeof(T));
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+            lock (serializeLoadLock)
+            {
+                if (!File.Exists(path)) return default(T);
+                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
+                {
+                    Debug.WriteLine("End  Deserialize");
+                    return (T)serializer.ReadObject(stream);
+                }
+            }
         }
     }
 }

@@ -46,7 +46,11 @@ namespace BattleInfoPlugin.Models.Repositories
             this.MapAreas = new ConcurrentDictionary<int, MapArea>();
             this.MapInfos = new ConcurrentDictionary<int, MapInfo>();
             this.MapCells = new ConcurrentDictionary<int, MapCell>();
-            this.Reload();
+            var obj = Settings.Default.MasterDataFileName.Deserialize<Master>();
+            if (obj == null) return;
+            this.MapAreas = obj.MapAreas;
+            this.MapInfos = obj.MapInfos;
+            this.MapCells = obj.MapCells;
         }
 
         public void Update(kcsapi_start2 start2)
@@ -59,7 +63,7 @@ namespace BattleInfoPlugin.Models.Repositories
             foreach (var key in infos.Keys) this.MapInfos.AddOrUpdate(key, infos[key], (k, v) => infos[k]);
             foreach (var key in cells.Keys) this.MapCells.AddOrUpdate(key, cells[key], (k, v) => cells[k]);
 
-            this.Save();
+            this.Serialize(Settings.Default.MasterDataFileName);
         }
 
         //private static void UpdateMasterTable<T>(IDictionary<int, T> target, Dictionary<int, T> source)
@@ -89,52 +93,12 @@ namespace BattleInfoPlugin.Models.Repositories
                         this.MapInfos = new ConcurrentDictionary<int, MapInfo>(this.MapInfos.Merge(obj.MapInfos));
                         this.MapCells = new ConcurrentDictionary<int, MapCell>(this.MapCells.Merge(obj.MapCells));
                     }
-                    this.Save();
+                    this.Serialize(Settings.Default.MasterDataFileName);
                 }
 
                 return true;
             });
         }
-
-        private void Reload()
-        {
-            //deserialize
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
-            lock (saveLoadLock)
-            {
-                if (!File.Exists(path)) return;
-                using (var stream = Stream.Synchronized(new FileStream(path, FileMode.Open, FileAccess.Read)))
-                {
-                    var obj = serializer.ReadObject(stream) as Master;
-                    if (obj == null) return;
-                    this.MapAreas = obj.MapAreas;
-                    this.MapInfos = obj.MapInfos;
-                    this.MapCells = obj.MapCells;
-                }
-            }
-        }
-
-        private void Save()
-        {
-            //serialize
-            lock (saveLoadLock)
-            {
-                var i = 0;
-                string tempPath;
-                do
-                {
-                    tempPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"_{i++}_{Settings.Default.MasterDataFilePath}");
-                } while (File.Exists(tempPath));
-                using (var stream = Stream.Synchronized(new FileStream(tempPath, FileMode.Create, FileAccess.Write)))
-                {
-                    serializer.WriteObject(stream, this);
-                }
-
-                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Settings.Default.MasterDataFilePath);
-                if (File.Exists(path))
-                    File.Delete(path);
-                File.Move(tempPath, path);
-            }
-        }
+        
     }
 }

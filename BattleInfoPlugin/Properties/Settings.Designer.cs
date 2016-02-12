@@ -38,18 +38,18 @@ namespace BattleInfoPlugin.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("BattleInfoPlugin_EnemyData.txt")]
-        public string EnemyDataFilePath {
+        public string EnemyDataFileName {
             get {
-                return ((string)(this["EnemyDataFilePath"]));
+                return ((string)(this["EnemyDataFileName"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("BattleInfoPlugin_MasterData.txt")]
-        public string MasterDataFilePath {
+        public string MasterDataFileName {
             get {
-                return ((string)(this["MasterDataFilePath"]));
+                return ((string)(this["MasterDataFileName"]));
             }
         }
         
@@ -71,6 +71,15 @@ namespace BattleInfoPlugin.Properties {
             }
             set {
                 this["IsBattleEndNotifyOnlyWhenInactive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BattleInfoPlugin_ResourceUrlMapping.txt")]
+        public string ResourceUrlMappingFileName {
+            get {
+                return ((string)(this["ResourceUrlMappingFileName"]));
             }
         }
     }

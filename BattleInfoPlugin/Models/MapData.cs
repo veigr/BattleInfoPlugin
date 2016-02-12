@@ -71,11 +71,11 @@ namespace BattleInfoPlugin.Models
                 };
 
                 var info = new FileInfo(filePath);
-                if (info.Name == Settings.Default.EnemyDataFilePath)
+                if (info.Name == Settings.Default.EnemyDataFileName)
                 {
                     this.EnemyData.Merge(filePath)
                         .ContinueWith(continuationAction, TaskScheduler.FromCurrentSynchronizationContext());
-                }else if (info.Name == Settings.Default.MasterDataFilePath)
+                }else if (info.Name == Settings.Default.MasterDataFileName)
                 {
                     Master.Current.Merge(filePath)
                         .ContinueWith(continuationAction, TaskScheduler.FromCurrentSynchronizationContext());
