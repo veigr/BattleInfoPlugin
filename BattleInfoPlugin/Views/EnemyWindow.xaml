@@ -283,13 +283,30 @@
                         <Canvas Width="768"
                                 Height="435">
                             <!-- マップイメージ -->
-                            <Image Source="{Binding /MapImage}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Width="768"
-                                   Height="435"
-                                   Margin="0"
-                                   />
+                            <ItemsControl ItemsSource="{Binding /MapImages}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Width="768"
+                                          Height="435"
+                                          Margin="0"
+                                          Padding="0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <Canvas Margin="0"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Width="768"
+                                               Height="435"
+                                               Margin="0"
+                                               />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <!-- セルアイコン -->
                             <ItemsControl ItemsSource="{Binding /CellPoints}"
                                           VerticalAlignment="Center"

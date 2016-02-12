@@ -15,9 +15,9 @@ namespace BattleInfoPlugin.Models.Repositories
 {
     public class MapResource
     {
-        public static BitmapSource GetMapImage(MapInfo map)
+        public static BitmapSource[] GetMapImages(MapInfo map)
         {
-            return ExistsAssembly ? MapResourcePrivate.GetMapImage(map) : null;
+            return ExistsAssembly ? MapResourcePrivate.GetMapImages(map) : null;
         }
 
         public static IDictionary<int, Point> GetMapCellPoints(MapInfo map)
@@ -59,15 +59,17 @@ namespace BattleInfoPlugin.Models.Repositories
 
         private static class MapResourcePrivate
         {
-            public static BitmapSource GetMapImage(MapInfo map)
+            public static BitmapSource[] GetMapImages(MapInfo map)
             {
                 var swf = map.ToSwf();
 
                 return swf?.Tags
                     .SkipWhile(x => x.TagType != TagType.ShowFrame) //1フレーム飛ばす
                     .OfType<DefineBitsTag>()
-                    .FirstOrDefault(x => x.TagType == TagType.DefineBitsJPEG3)
-                    .ToBitmapFrame();
+                    .Where(x => x.TagType == TagType.DefineBitsJPEG3)
+                    .Select(x => x.ToBitmapFrame())
+                    .Where(x => x.Width == 768)
+                    .ToArray();
             }
 
             public static IDictionary<int, Point> GetMapCellPoints(MapInfo map)

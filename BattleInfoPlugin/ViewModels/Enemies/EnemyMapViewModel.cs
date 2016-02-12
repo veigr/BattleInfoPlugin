@@ -50,9 +50,9 @@ namespace BattleInfoPlugin.ViewModels.Enemies
         public IEnumerable<EnemyShipViewModel> EnemyShips
             => this.EnemyCells.SelectMany(x => x.EnemyFleets).SelectMany(x => x.EnemyShips);
 
-        public BitmapSource MapImage => MapResource.GetMapImage(this.Info);
+        public BitmapSource[] MapImages => MapResource.GetMapImages(this.Info);
 
-        public bool HasImage => this.MapImage != null;
+        public bool HasImage => this.MapImages != null && this.MapImages.Any();
 
         public bool ExistsMapAssembly => MapResource.ExistsAssembly;
 
