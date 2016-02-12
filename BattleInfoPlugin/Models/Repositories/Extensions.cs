@@ -42,6 +42,7 @@ namespace BattleInfoPlugin.Models.Repositories
 
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
+            if (dictionary == null) return default(TValue);
             TValue p;
             return dictionary.TryGetValue(key, out p) ? p : default(TValue);
         }

@@ -117,7 +117,6 @@ namespace BattleInfoPlugin.Models.Repositories
 
     static class MapResourceExtensions
     {
-        private static readonly string mapDir = Settings.Default.CacheDirPath + "\\kcs\\resources\\swf\\map\\";
         private static readonly IDictionary<int, IDictionary<int, string>> knownUrlMapping = new Dictionary<int, IDictionary<int, string>>
         {
             {
@@ -137,9 +136,10 @@ namespace BattleInfoPlugin.Models.Repositories
             Debug.WriteLine($"FromFile:{urlMapping.GetValueOrDefault(map.MapAreaId)?.GetValueOrDefault(map.IdInEachMapArea)}");
             Debug.WriteLine($"FromCode:{knownUrlMapping.GetValueOrDefault(map.MapAreaId)?.GetValueOrDefault(map.IdInEachMapArea)}");
 
-            return urlMapping.GetValueOrDefault(map.MapAreaId)?.GetValueOrDefault(map.IdInEachMapArea)
+            var r = urlMapping?.GetValueOrDefault(map.MapAreaId)?.GetValueOrDefault(map.IdInEachMapArea)
                 ?? knownUrlMapping.GetValueOrDefault(map.MapAreaId)?.GetValueOrDefault(map.IdInEachMapArea)
-                ?? mapDir + map.MapAreaId.ToString("00") + "_" + map.IdInEachMapArea.ToString("00") + ".swf";
+                ?? "\\kcs\\resources\\swf\\map\\" + map.MapAreaId.ToString("00") + "_" + map.IdInEachMapArea.ToString("00") + ".swf";
+            return Settings.Default.CacheDirPath + r;
         }
 
         public static bool HasMapSwf(this MapInfo map)
