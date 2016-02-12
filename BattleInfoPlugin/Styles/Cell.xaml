@@ -44,7 +44,8 @@
                                  Height="22"
                                  Visibility="Hidden"/>
                         <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                        Margin="15,0">
+                                        Margin="15,0"
+                                                VerticalAlignment="Center">
                             <TemplateBinding Property="Text"/>
                         </ContentControl>
                     </StackPanel>
@@ -67,7 +68,8 @@
                                          Height="22"
                                          VerticalAlignment="Top"/>
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="15,0">
+                                                Margin="15,0"
+                                                VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
                             </StackPanel>
@@ -91,7 +93,8 @@
                                          Height="22"
                                          VerticalAlignment="Top"/>
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="15,0">
+                                                Margin="15,0"
+                                                VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
                             </StackPanel>
@@ -115,7 +118,8 @@
                                          Height="22"
                                          VerticalAlignment="Top"/>
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="15,0">
+                                                Margin="15,0"
+                                                VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
                             </StackPanel>
@@ -139,7 +143,8 @@
                                          Height="22"
                                          VerticalAlignment="Top"/>
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="15,0">
+                                                Margin="15,0"
+                                                VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
                             </StackPanel>
@@ -197,7 +202,8 @@
                                          Height="22"
                                          VerticalAlignment="Top"/>
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="15,0">
+                                                Margin="15,0"
+                                                VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
                             </StackPanel>
@@ -331,7 +337,52 @@
                                          Height="22"
                                          VerticalAlignment="Top"/>
                                 <ContentControl Template="{StaticResource CellNoDisplayText}"
-                                                Margin="15,0">
+                                                Margin="15,0"
+                                                VerticalAlignment="Center">
+                                    <TemplateBinding Property="Text"/>
+                                </ContentControl>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <!-- 長距離空襲戦 -->
+            <Trigger Property="CellIconNumber" Value="10">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type controls:Cell}">
+                            <StackPanel Margin="-25, -18"
+                                        Orientation="Horizontal"
+                                        Background="Transparent">
+                                <Canvas Width="57"
+                                        Height="32"
+                                        VerticalAlignment="Top">
+                                    <Ellipse HorizontalAlignment="Left" Height="10.625" Stroke="#FFE01818" VerticalAlignment="Top" Width="32.625" StrokeThickness="2" Canvas.Left="6.375" Canvas.Top="15.375">
+                                        <Ellipse.Fill>
+                                            <RadialGradientBrush>
+                                                <GradientStop Color="#FFFF7C7C"/>
+                                                <GradientStop Color="Red" Offset="1"/>
+                                                <GradientStop Color="#4CFF4242"/>
+                                            </RadialGradientBrush>
+                                        </Ellipse.Fill>
+                                        <Ellipse.Effect>
+                                            <BlurEffect Radius="3"/>
+                                        </Ellipse.Effect>
+                                    </Ellipse>
+                                    <Path Data="M-539.74249,47.401538 L-545.21543,-8.7702608 -535.63776,0.97382679 C-535.63776,0.97382679 -529.22555,-40.324208 -504.50961,-47.748626 -464.40282,-59.796297 -447.72824,-3.611626 -447.72824,-3.611626 -447.72824,-3.611626 -472.58463,-57.680494 -504.51027,-32.460806 -522.82933,-17.989642 -523.89463,6.5548525 -523.89463,6.5548525 -523.89463,6.5548525 -513.40384,11.291096 -513.40384,11.291096 -529.82274,26.193818 -539.74249,47.401538 -539.74249,47.401538 z" HorizontalAlignment="Left" Height="22.12" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="36.625" Canvas.Left="18.625" Canvas.Top="0.13">
+                                        <Path.Fill>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#FFEC1818" Offset="0"/>
+                                                <GradientStop Color="#FFFBBEBE" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+                                </Canvas>
+                                
+                                <ContentControl Template="{StaticResource CellNoDisplayText}"
+                                                Margin="0"
+                                                VerticalAlignment="Center">
                                     <TemplateBinding Property="Text"/>
                                 </ContentControl>
                             </StackPanel>
