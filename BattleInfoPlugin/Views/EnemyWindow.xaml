@@ -559,6 +559,27 @@
                                                                            HorizontalAlignment="Center"/>
                                                             </Border>
 
+                                                            <Border Background="DarkGreen"
+                                                                    HorizontalAlignment="Left"
+                                                                    Margin="5,0"
+                                                                    MinWidth="50">
+                                                                <Border.Style>
+                                                                    <Style TargetType="{x:Type Border}">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding ParentCell.CellType, Converter={StaticResource HasFlagConverter}, ConverterParameter=空襲戦}"
+                                                                                         Value="True">
+                                                                                <Setter Property="Visibility"
+                                                                                        Value="Visible"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                                <TextBlock Text="空襲戦"
+                                                                           Margin="9,2"
+                                                                           HorizontalAlignment="Center"/>
+                                                            </Border>
+
                                                             <TextBlock Margin="5,10,5,0">
                                                                 <Run Text="陣形:"
                                                                      FontSize="12"/>

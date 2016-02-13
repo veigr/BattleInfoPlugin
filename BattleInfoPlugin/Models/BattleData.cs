@@ -215,7 +215,13 @@ namespace BattleInfoPlugin.Models
             proxy.api_req_sortie_battle
                 .TryParse<sortie_battle>().Subscribe(x => this.Update(x.Data));
 
-            
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_sortie/ld_airbattle")
+                .TryParse<sortie_ld_airbattle>().Subscribe(x => this.Update(x.Data));
+
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/ld_airbattle")
+                .TryParse<combined_battle_ld_airbattle>().Subscribe(x => this.Update(x.Data));
+
+
             proxy.api_req_sortie_battleresult
                 .TryParse<battle_result>().Subscribe(x => this.Update(x.Data));
 
@@ -483,6 +489,44 @@ namespace BattleInfoPlugin.Models
                 data.api_hougeki1.GetEnemyDamages(),
                 data.api_hougeki2.GetEnemyDamages(),
                 data.api_raigeki.GetEnemyDamages()
+                );
+
+            this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
+        }
+
+        private void Update(sortie_ld_airbattle data)
+        {
+            this.Name = "空襲戦 - 昼戦";
+
+            this.UpdateFleets(data.api_dock_id, data, data.api_formation);
+            this.UpdateMaxHP(data.api_maxhps);
+            this.UpdateNowHP(data.api_nowhps);
+
+            this.FirstFleet.CalcDamages(
+                data.api_kouku.GetFirstFleetDamages()
+                );
+
+            this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
+        }
+
+        private void Update(combined_battle_ld_airbattle data)
+        {
+            this.Name = "連合艦隊 - 空襲戦 - 昼戦";
+
+            this.UpdateFleets(data.api_deck_id, data, data.api_formation);
+            this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
+            this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+            this.FirstFleet.CalcDamages(
+                data.api_kouku.GetFirstFleetDamages()
+                );
+
+            this.SecondFleet.CalcDamages(
+                data.api_kouku.GetSecondFleetDamages()
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();

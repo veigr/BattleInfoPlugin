@@ -15,10 +15,11 @@ namespace BattleInfoPlugin.Models
         渦潮 = 1 << 3,
         戦闘 = 1 << 4,
         ボス = 1 << 5,
-        気のせい = 1 << 6,  //Frameでは気のせい変更前(赤)
+        揚陸地点 = 1 << 6,
         航空戦 = 1 << 7,
         母港 = 1 << 8,
         航空偵察 = 1 << 9,
+        空襲戦 = 1 << 10,
 
         夜戦 = 1 << 31,
     }
@@ -33,6 +34,7 @@ namespace BattleInfoPlugin.Models
         public static CellType ToCellType(this string battleType)
         {
             return battleType.Contains("sp_midnight") ? CellType.夜戦
+                : battleType.Contains("ld_airbattle") ? CellType.空襲戦    //ColorNoからも分かるが、航空戦と誤認しないため
                 : battleType.Contains("airbattle") ? CellType.航空戦
                 : CellType.None;
         }
