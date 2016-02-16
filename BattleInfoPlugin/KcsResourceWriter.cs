@@ -17,13 +17,12 @@ namespace BattleInfoPlugin
     {
         private int currentMapAreaId;
         private int currentMapInfoNo;
-        private ConcurrentDictionary<int, ConcurrentDictionary<int, string>> resourceUrlMapping;
+        private readonly ConcurrentDictionary<int, ConcurrentDictionary<int, string>> resourceUrlMapping;
 
         public KcsResourceWriter()
         {
-            this.resourceUrlMapping = Settings.Default.ResourceUrlMappingFileName.Deserialize<ConcurrentDictionary<int, ConcurrentDictionary<int, string>>>();
-            if (this.resourceUrlMapping == null)
-                this.resourceUrlMapping = new ConcurrentDictionary<int, ConcurrentDictionary<int, string>>();
+            this.resourceUrlMapping = Settings.Default.ResourceUrlMappingFileName.Deserialize<ConcurrentDictionary<int, ConcurrentDictionary<int, string>>>()
+                                    ?? new ConcurrentDictionary<int, ConcurrentDictionary<int, string>>();
 
             var proxy = KanColleClient.Current.Proxy;
             proxy.SessionSource
@@ -36,8 +35,8 @@ namespace BattleInfoPlugin
 
         private void HttpGetMapResource(Session s)
         {
-            var filePath = s.GetSaveFilePath();
-            s.SaveResponseBody(filePath);
+            var filePath = s.Request.PathAndQuery.Split('?').First();
+            s.SaveResponseBody(Settings.Default.CacheDirPath + filePath);
 
             Debug.WriteLine($"{this.currentMapAreaId}-{this.currentMapInfoNo}:{filePath}");
 
@@ -56,12 +55,6 @@ namespace BattleInfoPlugin
 
     static class KcsResourceWriterExtensions
     {
-        public static string GetSaveFilePath(this Session session)
-        {
-            return Properties.Settings.Default.CacheDirPath
-                   + session.Request.PathAndQuery.Split('?').First();
-        }
-
         private static readonly object lockObj = new object();
 
         public static void SaveResponseBody(this Session session, string filePath)
