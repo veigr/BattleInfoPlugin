@@ -3,7 +3,7 @@
     /// <summary>
     /// 演習-昼戦
     /// </summary>
-    public class practice_battle : ICommonBattleMembers
+    public class practice_battle : ICommonFirstBattleMembers
     {
         public int api_dock_id { get; set; }
         public int[] api_ship_ke { get; set; }

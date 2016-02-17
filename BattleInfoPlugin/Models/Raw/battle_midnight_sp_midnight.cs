@@ -3,7 +3,7 @@
     /// <summary>
     /// 特殊夜戦
     /// </summary>
-    public class battle_midnight_sp_midnight : ICommonBattleMembers
+    public class battle_midnight_sp_midnight : ICommonFirstBattleMembers
     {
         public int api_deck_id { get; set; }
         public int[] api_ship_ke { get; set; }

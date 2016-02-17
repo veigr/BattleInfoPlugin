@@ -3,7 +3,7 @@
     /// <summary>
     /// 連合艦隊-水上部隊
     /// </summary>
-    public class combined_battle_battle_water : ICommonBattleMembers
+    public class combined_battle_battle_water : ICommonFirstBattleMembers
     {
         public int api_deck_id { get; set; }
         public int[] api_ship_ke { get; set; }

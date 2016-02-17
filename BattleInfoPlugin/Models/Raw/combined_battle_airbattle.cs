@@ -3,7 +3,7 @@
     /// <summary>
     /// 連合艦隊-航空戦
     /// </summary>
-    public class combined_battle_airbattle : ICommonBattleMembers
+    public class combined_battle_airbattle : ICommonFirstBattleMembers
     {
         public int api_deck_id { get; set; }
         public int[] api_ship_ke { get; set; }

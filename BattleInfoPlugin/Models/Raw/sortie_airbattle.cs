@@ -3,7 +3,7 @@
     /// <summary>
     /// 通常艦隊-航空戦
     /// </summary>
-    public class sortie_airbattle : ICommonBattleMembers
+    public class sortie_airbattle : ICommonFirstBattleMembers
     {
         public int api_dock_id { get; set; }
         public int[] api_ship_ke { get; set; }
