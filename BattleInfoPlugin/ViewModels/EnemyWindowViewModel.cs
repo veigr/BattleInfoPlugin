@@ -118,6 +118,7 @@ namespace BattleInfoPlugin.ViewModels
                             .GroupBy(y => y.Key, EnemyData.Curret.GetComparer())
                             .OrderBy(y => y.Key)
                             .Select(y => y.First())
+                            .OrderFleets()
                             .ToArray(),
                         ColorNo = x.Where(y => y.cells != null).Select(y => y.cells.ColorNo).FirstOrDefault(),
                         CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
@@ -125,9 +126,7 @@ namespace BattleInfoPlugin.ViewModels
                     //敵データのないセルは除外
                     .Where(x => x.EnemyFleets.Any())
                     .ToArray()
-                : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes) //なかったら敵データだけ(重複るが仕方ない)
-                    .OrderBy(cell => cell.Key)
-                    .ToArray();
+                : CreateMapCellViewModelsFromEnemiesData(mi, mapEnemies, cellTypes).ToArray();  //なかったら敵データだけ(重複るが仕方ない)
         }
 
         private static IEnumerable<EnemyCellViewModel> CreateMapCellViewModelsFromEnemiesData(
@@ -150,7 +149,7 @@ namespace BattleInfoPlugin.ViewModels
                         })
                         .GroupBy(x => x.Key, EnemyData.Curret.GetComparer())
                         .Select(x => x.First())
-                        .OrderBy(enemy => enemy.Key)
+                        .OrderFleets()
                         .ToArray(),
                     ColorNo = cell.Key.ColorNo,
                     CellType = cell.Key.GetCellType(cellTypes),
@@ -168,6 +167,18 @@ namespace BattleInfoPlugin.ViewModels
             {
                 this.Messenger.Raise(new InformationMessage(message, "マージ失敗", MessageBoxImage.Warning, "MergeResult"));
             }
+        }
+    }
+
+    static class EnemyWindowViewModelExtensions
+    {
+        public static IEnumerable<EnemyFleetViewModel> OrderFleets(this IEnumerable<EnemyFleetViewModel> fleets)
+        {
+            return fleets.OrderByDescending(enemy => enemy.Fleet.Rank.FirstOrDefault(x => x == 3))
+                        .ThenByDescending(enemy => enemy.Fleet.Rank.FirstOrDefault(x => x == 2))
+                        .ThenByDescending(enemy => enemy.Fleet.Rank.FirstOrDefault(x => x == 1))
+                        .ThenBy(enemy => enemy.EnemyShips.Length)
+                        .ThenBy(enemy => enemy.Key);
         }
     }
 }
