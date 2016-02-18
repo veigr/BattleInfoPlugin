@@ -184,6 +184,7 @@ namespace BattleInfoPlugin.ViewModels
                         .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(3)?.Ship?.Id ?? 0)
                         .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(4)?.Ship?.Id ?? 0)
                         .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(5)?.Ship?.Id ?? 0)
+                        .ThenBy(enemy => enemy.Fleet.Formation)
                         .ThenBy(enemy => enemy.Key);
         }
     }
