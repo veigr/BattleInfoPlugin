@@ -178,6 +178,12 @@ namespace BattleInfoPlugin.ViewModels
                         .ThenByDescending(enemy => enemy.Fleet.Rank.FirstOrDefault(x => x == 2))
                         .ThenByDescending(enemy => enemy.Fleet.Rank.FirstOrDefault(x => x == 1))
                         .ThenBy(enemy => enemy.EnemyShips.Length)
+                        .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(0)?.Ship?.Id ?? 0)
+                        .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(1)?.Ship?.Id ?? 0)
+                        .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(2)?.Ship?.Id ?? 0)
+                        .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(3)?.Ship?.Id ?? 0)
+                        .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(4)?.Ship?.Id ?? 0)
+                        .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(5)?.Ship?.Id ?? 0)
                         .ThenBy(enemy => enemy.Key);
         }
     }
