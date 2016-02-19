@@ -10,6 +10,7 @@ using MetroTrilithon.Mvvm;
 using System.Windows;
 using System.ComponentModel;
 using System.Reflection;
+using MetroTrilithon.Linq;
 
 namespace BattleInfoPlugin.ViewModels
 {
@@ -115,11 +116,8 @@ namespace BattleInfoPlugin.ViewModels
                         Key = x.Min(y => y.point.Key), //若い番号を採用
                         EnemyFleets = x.Where(y => y.cells != null) //敵データをEnemyIdでマージ
                             .SelectMany(y => y.cells.EnemyFleets)
-                            .GroupBy(y => y.Key, EnemyData.Curret.GetComparer())
-                            .OrderBy(y => y.Key)
-                            .Select(y => y.First())
-                            .OrderFleets()
-                            .ToArray(),
+                            .SelectMany(y => y.Fleets)
+                            .MergeEnemies(),
                         ColorNo = x.Where(y => y.cells != null).Select(y => y.cells.ColorNo).FirstOrDefault(),
                         CellType = x.Where(y => y.cells != null).Select(y => y.cells.CellType).FirstOrDefault(),
                     })
@@ -140,17 +138,7 @@ namespace BattleInfoPlugin.ViewModels
                 .Select(cell => new EnemyCellViewModel
                 {
                     Key = cell.Key.IdInEachMapInfo,
-                    EnemyFleets = cell.Value
-                        .Select(enemy => new EnemyFleetViewModel
-                        {
-                            Key = enemy.Key,
-                            Fleet = enemy.Value,
-                            EnemyShips = enemy.Value.Ships.Select(s => new EnemyShipViewModel { Ship = s }).ToArray(),
-                        })
-                        .GroupBy(x => x.Key, EnemyData.Curret.GetComparer())
-                        .Select(x => x.First())
-                        .OrderFleets()
-                        .ToArray(),
+                    EnemyFleets = cell.Value.MergeEnemies(),
                     ColorNo = cell.Key.ColorNo,
                     CellType = cell.Key.GetCellType(cellTypes),
                 });
@@ -170,7 +158,7 @@ namespace BattleInfoPlugin.ViewModels
         }
     }
 
-    static class EnemyWindowViewModelExtensions
+    static class Extensions
     {
         public static IEnumerable<EnemyFleetViewModel> OrderFleets(this IEnumerable<EnemyFleetViewModel> fleets)
         {
@@ -184,8 +172,21 @@ namespace BattleInfoPlugin.ViewModels
                         .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(3)?.Ship?.Id ?? 0)
                         .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(4)?.Ship?.Id ?? 0)
                         .ThenBy(enemy => enemy.EnemyShips.ElementAtOrDefault(5)?.Ship?.Id ?? 0)
-                        .ThenBy(enemy => enemy.Fleet.Formation)
                         .ThenBy(enemy => enemy.Key);
+        }
+
+        public static EnemyFleetViewModel[] MergeEnemies(this IEnumerable<KeyValuePair<string, FleetData>> enemies)
+        {
+            return enemies.GroupBy(x => x.Key, EnemyData.Curret.GetComparer())
+                        .Select(x => x.First())
+                        .GroupBy(x => x.Value.Ships.Select(s => s.Id).JoinString(","))
+                        .Select(enemy => new EnemyFleetViewModel
+                        {
+                            Fleets = enemy.ToDictionary(x => x.Key, x => x.Value),
+                            EnemyShips = enemy.FirstOrDefault().Value.Ships.Select(s => new EnemyShipViewModel { Ship = s }).ToArray(),
+                        })
+                        .OrderFleets()
+                        .ToArray();
         }
     }
 }

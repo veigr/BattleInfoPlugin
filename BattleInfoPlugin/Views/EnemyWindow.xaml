@@ -583,7 +583,7 @@
                                                             <TextBlock Margin="5,10,5,0">
                                                                 <Run Text="陣形:"
                                                                      FontSize="12"/>
-                                                                <Run Text="{Binding Fleet.Formation, Mode=OneTime}"
+                                                                <Run Text="{Binding Formation, Mode=OneTime}"
                                                                      Style="{DynamicResource EmphaticTextElementStyleKey}"
                                                                      FontSize="12"/>
                                                             </TextBlock>

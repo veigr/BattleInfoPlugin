@@ -13,20 +13,20 @@ using Livet.Messaging.Windows;
 
 using BattleInfoPlugin.Models;
 using System.Windows;
+using MetroTrilithon.Linq;
 
 namespace BattleInfoPlugin.ViewModels.Enemies
 {
     public class EnemyFleetViewModel : ViewModel
     {
-        public string Key { get; set; }
+        public string Key
+            => this.Fleets.Keys.JoinString("\r\n");
 
         public string Name
-            => !string.IsNullOrWhiteSpace(this.Fleet.Name)
-                ? this.Fleet.Name
-                : "？？？";
+            => this.Fleet?.Name ?? "？？？";
 
         public string Rank
-            => string.Join(", ", this.Fleet.Rank.Where(x => 0 < x).Select(x =>
+            => string.Join(", ", this.Fleet?.Rank.Where(x => 0 < x).Select(x =>
             {
                 switch (x)
                 {
@@ -43,8 +43,16 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public Visibility RankVisibility
             => !string.IsNullOrEmpty(this.Rank) ? Visibility.Visible : Visibility.Collapsed;
+        
+        public Dictionary<string, FleetData> Fleets { get; set; } // 陣形ごとのデータ
 
-        public FleetData Fleet { get; set; }
+        public FleetData Fleet => this.Fleets.Values.FirstOrDefault();
+
+        public string Formation => Fleets.Values
+                                    .OrderBy(x => x.Formation)
+                                    .Select(x => x.Formation.ToString())
+                                    .Distinct()
+                                    .JoinString(", ");
 
         #region EnemyShips
 
@@ -78,7 +86,10 @@ namespace BattleInfoPlugin.ViewModels.Enemies
                 MessageBoxImage.Question))
                 return;
 
-            this.ParentCell.ParentMap.WindowViewModel.RemoveEnemy(this.Key);
+            foreach (var key in this.Fleets.Keys)
+            {
+                this.ParentCell.ParentMap.WindowViewModel.RemoveEnemy(key);
+            }
         }
 
         public void CopyIdToClipboard()
