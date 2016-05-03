@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using DDW.Swf;
 using BattleInfoPlugin.Properties;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace BattleInfoPlugin.Models.Repositories
 {
@@ -63,12 +64,19 @@ namespace BattleInfoPlugin.Models.Repositories
             {
                 var swf = map.ToSwf();
 
-                return swf?.Tags
-                    .SkipWhile(x => x.TagType != TagType.ShowFrame) //1フレーム飛ばす
+                var frame = swf?.Tags.SkipWhile(x => x.TagType != TagType.ShowFrame).ToArray();
+                var jpeg3 = frame
                     .OfType<DefineBitsTag>()
                     .Where(x => x.TagType == TagType.DefineBitsJPEG3)
-                    .Select(x => x.ToBitmapFrame())
-                    .Where(x => x.Width == 768)
+                    .Select(x => x.ToBitmapFrame());
+                var lossless2 = frame
+                    .OfType<DefineBitsLosslessTag>()
+                    .Where(x => x.TagType == TagType.DefineBitsLossless2)
+                    .Select(x => x.ToBitmapFrame());
+
+                return jpeg3.Concat(lossless2)
+                    .Where(x => x != null)
+                    .Where(x => x.PixelWidth == 768)
                     .ToArray();
             }
 
@@ -185,6 +193,27 @@ namespace BattleInfoPlugin.Models.Repositories
                     (int)Math.Floor(tag.Matrix.TranslateX / 20) / 2 * 2,
                     (int)Math.Floor(tag.Matrix.TranslateY / 20) / 2 * 2)
                 : default(Point);
+        }
+
+        public static BitmapFrame ToBitmapFrame(this DefineBitsLosslessTag tag)
+        {
+            if (tag == null) return null;
+
+            BitmapFrame frame;
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    tag.GetBitmap().Save(stream, ImageFormat.Png);
+                    frame = BitmapFrame.Create(stream,
+                        BitmapCreateOptions.IgnoreColorProfile, BitmapCacheOption.OnLoad);
+                }
+            }
+            catch (NotSupportedException)
+            {
+                return null;
+            }
+            return frame;
         }
 
         public static BitmapFrame ToBitmapFrame(this DefineBitsTag tag)
