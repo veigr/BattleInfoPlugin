@@ -17,6 +17,7 @@
         public int[][] api_eParam { get; set; }
         public int[] api_search { get; set; }
         public int[] api_formation { get; set; }
+        public Api_Air_Base_Attack[] api_air_base_attack { get; set; }
         public int[] api_stage_flag { get; set; }
         public Api_Kouku api_kouku { get; set; }
         public int api_support_flag { get; set; }

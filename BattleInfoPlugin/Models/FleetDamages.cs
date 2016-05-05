@@ -29,6 +29,19 @@ namespace BattleInfoPlugin.Models
             };
         }
 
+        public FleetDamages Add(FleetDamages value)
+        {
+            return Parse(new[]
+            {
+                this.Ship1 - value.Ship1,
+                this.Ship2 - value.Ship2,
+                this.Ship3 - value.Ship3,
+                this.Ship4 - value.Ship4,
+                this.Ship5 - value.Ship5,
+                this.Ship6 - value.Ship6,
+            });
+        }
+
         public static FleetDamages Parse(IEnumerable<int> damages)
         {
             if (damages == null) throw new ArgumentNullException();

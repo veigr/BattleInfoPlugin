@@ -286,6 +286,7 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.Enemies.CalcDamages(
+                data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
                 data.api_kouku2.GetEnemyDamages()
@@ -319,6 +320,7 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.Enemies.CalcDamages(
+                data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
@@ -355,6 +357,7 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.Enemies.CalcDamages(
+                data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
@@ -455,6 +458,7 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.Enemies.CalcDamages(
+                data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),    //将来的に増える可能性を想定して追加しておく
                 data.api_kouku.GetEnemyDamages(),
                 data.api_kouku2.GetEnemyDamages()
@@ -483,6 +487,7 @@ namespace BattleInfoPlugin.Models
                 );
 
             this.Enemies.CalcDamages(
+                data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),

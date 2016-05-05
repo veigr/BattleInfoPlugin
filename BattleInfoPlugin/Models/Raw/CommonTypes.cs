@@ -131,4 +131,25 @@
     }
 
     #endregion
+
+    #region 基地航空隊
+
+    public class Api_Air_Base_Attack
+    {
+        public int api_base_id { get; set; }
+        public int[] api_stage_flag { get; set; }
+        public int[][] api_plane_from { get; set; }
+        public Api_Squadron_Plane[] api_squadron_plane { get; set; }
+        public Api_Stage1 api_stage1 { get; set; }
+        public Api_Stage2 api_stage2 { get; set; }
+        public Api_Stage3 api_stage3 { get; set; }  // e のみのデータ
+    }
+
+    public class Api_Squadron_Plane
+    {
+        public int api_mst_id { get; set; }
+        public int api_count { get; set; }
+    }
+
+    #endregion
 }
