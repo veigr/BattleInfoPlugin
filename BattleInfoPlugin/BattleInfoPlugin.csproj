@@ -190,6 +190,7 @@
     <Compile Include="NotifyAttribute.cs" />
     <Compile Include="SortieDataListener.cs" />
     <Compile Include="ViewModels\AirCombatResultViewModel.cs" />
+    <Compile Include="ViewModels\Enemies\CellPointViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyFleetViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyMapViewModel.cs" />
     <Compile Include="ViewModels\Enemies\EnemyCellViewModel.cs" />

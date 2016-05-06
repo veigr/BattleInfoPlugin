@@ -205,6 +205,11 @@ namespace BattleInfoPlugin.Models.Repositories
             if (!this.EnemyData.MapCellDatas.ContainsKey(mapInfo))
                 this.EnemyData.MapCellDatas.Add(mapInfo, new List<MapCellData>());
 
+            var currentCell = Master.Current.MapCells
+                .Select(x => x.Value)
+                .Where(x => x.MapAreaId == startNext.api_maparea_id)
+                .Where(x => x.MapInfoIdInEachMapArea == startNext.api_mapinfo_no)
+                .FirstOrDefault(x => x.IdInEachMapInfo == startNext.api_no);
             var mapCellData = new MapCellData
             {
                 MapAreaId = startNext.api_maparea_id,
@@ -216,6 +221,7 @@ namespace BattleInfoPlugin.Models.Repositories
                 EventKind = startNext.api_event_kind,
                 ProductionKind = startNext.api_production_kind,
                 SelectCells = startNext.api_select_route != null ? startNext.api_select_route.api_select_cells : new int[0],
+                Distance = startNext.api_distance_data.FirstOrDefault(x => x.api_mapcell_id == currentCell.Id).api_distance,
             };
 
             var exists = this.EnemyData.MapCellDatas[mapInfo].SingleOrDefault(x => x.No == mapCellData.No);

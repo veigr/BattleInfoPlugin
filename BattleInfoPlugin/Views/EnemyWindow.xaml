@@ -322,14 +322,14 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="{x:Type ContentPresenter}">
-                                        <Setter Property="Canvas.Left" Value="{Binding Path=Value.Item1.X}"/>
-                                        <Setter Property="Canvas.Top" Value="{Binding Path=Value.Item1.Y}"/>
+                                        <Setter Property="Canvas.Left" Value="{Binding Path=Point.X}"/>
+                                        <Setter Property="Canvas.Top" Value="{Binding Path=Point.Y}"/>
                                     </Style>
                                 </ItemsControl.ItemContainerStyle>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <local:Cell Text="{Binding Key}"
-                                                    CellIconNumber="{Binding Value.Item2}">
+                                        <local:Cell Text="{Binding Label}"
+                                                    CellIconNumber="{Binding ColorNo}">
                                             <i:Interaction.Behaviors>
                                                 <behaviors:ScrollToCellBehavior ScrollTargetName="EnemiesDataScrollViewer"
                                                                                 ParentElement="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:MetroWindow}}}"/>

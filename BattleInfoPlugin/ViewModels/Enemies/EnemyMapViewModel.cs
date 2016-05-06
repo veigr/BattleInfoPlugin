@@ -56,7 +56,7 @@ namespace BattleInfoPlugin.ViewModels.Enemies
 
         public bool ExistsMapAssembly => MapResource.ExistsAssembly;
 
-        public IDictionary<string, Tuple<Point, int>> CellPoints
+        public CellPointViewModel[] CellPoints
         {
             get
             {
@@ -64,24 +64,24 @@ namespace BattleInfoPlugin.ViewModels.Enemies
                     .Where(kvp => kvp.Value != default(Point)) //座標データがないものを除去 e.g. 6-3-13
                     .GroupBy(kvp => kvp.Value) //重複ポイントを除去
                     .Select(g => g.OrderBy(x => x.Key).First())
-                    .ToDictionary(
-                        x => x.Key.ToString(),
-                        x => Tuple.Create(x.Value, this.GetCellColorNo(x.Key))
-                    );
+                    .Select(x => CreateCellPoint(x))
+                    .ToArray();
             }
         }
 
         public IEnumerable<Point> Flags => MapResource.GetMapFlags(this.Info);
 
-        private int GetCellColorNo(int idInEachMapInfo)
+        private CellPointViewModel CreateCellPoint(KeyValuePair<int, Point> source)
         {
-            var data = this.CellDatas.SingleOrDefault(x => x.No == idInEachMapInfo);
-            if (data != default(MapCellData) && data.EventId == 6)
-                return 1;  // 気のせいマスは何もなかったことに
-            return Master.Current.MapCells
+            var data = this.CellDatas.FirstOrDefault(x => x.No == source.Key);
+            var cell = Master.Current.MapCells
                 .Select(c => c.Value)
-                .Single(c => c.IdInEachMapInfo == idInEachMapInfo && c.MapInfoId == this.Info.Id)
-                .ColorNo;
+                .FirstOrDefault(c => c.IdInEachMapInfo == source.Key && c.MapInfoId == this.Info.Id);
+            return new CellPointViewModel(
+                source.Key.ToString(),
+                source.Value,
+                data?.ColorNo ?? cell?.ColorNo ?? 0,
+                data?.Distance ?? 0);
         }
 
         public override string Name

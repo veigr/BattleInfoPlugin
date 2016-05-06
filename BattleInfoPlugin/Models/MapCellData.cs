@@ -32,5 +32,8 @@ namespace BattleInfoPlugin.Models
         //能動分岐
         [DataMember]
         public int[] SelectCells { get; set; }
+        //距離
+        [DataMember]
+        public int Distance { get; set; }
     }
 }
