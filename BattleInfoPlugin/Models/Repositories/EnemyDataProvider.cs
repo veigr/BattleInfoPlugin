@@ -221,7 +221,7 @@ namespace BattleInfoPlugin.Models.Repositories
                 EventKind = startNext.api_event_kind,
                 ProductionKind = startNext.api_production_kind,
                 SelectCells = startNext.api_select_route != null ? startNext.api_select_route.api_select_cells : new int[0],
-                Distance = startNext.api_distance_data.FirstOrDefault(x => x.api_mapcell_id == currentCell.Id).api_distance,
+                Distance = startNext.api_distance_data?.FirstOrDefault(x => x.api_mapcell_id == currentCell.Id)?.api_distance ?? 0,
             };
 
             var exists = this.EnemyData.MapCellDatas[mapInfo].SingleOrDefault(x => x.No == mapCellData.No);
