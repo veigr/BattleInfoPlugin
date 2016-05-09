@@ -180,19 +180,41 @@ namespace BattleInfoPlugin.Models.Repositories
 
         public static Point FindPoint(this IEnumerable<PlaceObject2Tag> places, int num)
         {
-            return places
-                .SingleOrDefault(p => p.Name == "line" + num)
-                .ToPoint();
+            var arr = places
+                .OrderBy(x => x.Name)
+                .Select(x => new { x.Name, Point = x.ToPoint() })
+                .ToArray();
+            var points = arr.Select(x => x.Point).ToArray();
+            return arr
+                .SingleOrDefault(p => p.Name == "line" + num)?.Point
+                .ToMergedPoint(points)
+                ?? default(Point);
         }
 
         public static Point ToPoint(this PlaceObject2Tag tag)
         {
             return tag != null
-                // 31-4 の No.5 と No.14 のように座標が微妙にずれて設定されてることがあるのでとりあえず丸め
                 ? new Point(
-                    (int)Math.Floor(tag.Matrix.TranslateX / 20) / 2 * 2,
-                    (int)Math.Floor(tag.Matrix.TranslateY / 20) / 2 * 2)
+                    (int)Math.Floor(tag.Matrix.TranslateX / 20),
+                    (int)Math.Floor(tag.Matrix.TranslateY / 20))
                 : default(Point);
+        }
+
+        public static Point ToMergedPoint(this Point point, IEnumerable<Point> points)
+        {
+            var p = points.FirstOrDefault(x => Math.Abs(x.X - point.X) < 2 && Math.Abs(x.Y - point.Y) < 2);
+            return p != default(Point) ? p : point;
+        }
+
+        public static IEnumerable<Point> MergeClosePoint(this IEnumerable<Point> points)
+        {
+            // 31-4 の No.5 と No.14 のように座標が微妙にずれて設定されてることがあるので、近い奴はマージする
+            return points.Aggregate(new List<Point>(), (r, a) =>
+            {
+                if (r.Any(b => 1 < Math.Abs(a.X - b.X) && 1 < Math.Abs(a.Y - b.Y)))
+                    r.Add(a);
+                return r;
+            });
         }
 
         public static BitmapFrame ToBitmapFrame(this DefineBitsLosslessTag tag)
