@@ -19,6 +19,8 @@
         public int[] api_formation { get; set; }
         public int[] api_stage_flag { get; set; }
         public Api_Kouku api_kouku { get; set; }
+        public int api_opening_taisen_flag { get; set; }
+        public Hougeki api_opening_taisen { get; set; }
         public int api_opening_flag { get; set; }
         public Raigeki api_opening_atack { get; set; }
         public int[] api_hourai_flag { get; set; }

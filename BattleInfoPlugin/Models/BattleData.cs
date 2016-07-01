@@ -314,6 +314,7 @@ namespace BattleInfoPlugin.Models
 
             this.SecondFleet.CalcDamages(
                 data.api_kouku.GetSecondFleetDamages(),
+                data.api_opening_taisen.GetFriendDamages(),
                 data.api_opening_atack.GetFriendDamages(),
                 data.api_hougeki1.GetFriendDamages(),
                 data.api_raigeki.GetFriendDamages()
@@ -323,6 +324,7 @@ namespace BattleInfoPlugin.Models
                 data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
+                data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
                 data.api_raigeki.GetEnemyDamages(),
@@ -351,6 +353,7 @@ namespace BattleInfoPlugin.Models
 
             this.SecondFleet.CalcDamages(
                 data.api_kouku.GetSecondFleetDamages(),
+                data.api_opening_taisen.GetFriendDamages(),
                 data.api_opening_atack.GetFriendDamages(),
                 data.api_hougeki3.GetFriendDamages(),
                 data.api_raigeki.GetFriendDamages()
@@ -360,6 +363,7 @@ namespace BattleInfoPlugin.Models
                 data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
+                data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
                 data.api_hougeki2.GetEnemyDamages(),
@@ -412,6 +416,7 @@ namespace BattleInfoPlugin.Models
 
             this.FirstFleet.CalcPracticeDamages(
                 data.api_kouku.GetFirstFleetDamages(),
+                data.api_opening_taisen.GetFriendDamages(),
                 data.api_opening_atack.GetFriendDamages(),
                 data.api_hougeki1.GetFriendDamages(),
                 data.api_hougeki2.GetFriendDamages(),
@@ -420,6 +425,7 @@ namespace BattleInfoPlugin.Models
 
             this.Enemies.CalcPracticeDamages(
                 data.api_kouku.GetEnemyDamages(),
+                data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
                 data.api_hougeki2.GetEnemyDamages(),
@@ -480,6 +486,7 @@ namespace BattleInfoPlugin.Models
 
             this.FirstFleet.CalcDamages(
                 data.api_kouku.GetFirstFleetDamages(),
+                data.api_opening_taisen.GetFriendDamages(),
                 data.api_opening_atack.GetFriendDamages(),
                 data.api_hougeki1.GetFriendDamages(),
                 data.api_hougeki2.GetFriendDamages(),
@@ -490,6 +497,7 @@ namespace BattleInfoPlugin.Models
                 data.api_air_base_attack.GetEnemyDamages(),
                 data.api_support_info.GetEnemyDamages(),
                 data.api_kouku.GetEnemyDamages(),
+                data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
                 data.api_hougeki2.GetEnemyDamages(),
