@@ -24,7 +24,7 @@
     </viewModels:FleetViewModel.AirCombatResults>
 
     <viewModels:FleetViewModel.Fleet>
-        <models:FleetData Formation="戦闘陣形" FleetType="Enemy">
+        <models:FleetData Formation="戦闘陣形" FleetType="EnemyFirst">
             <models:FleetData.Ships>
                 <models:MembersShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
                     <models:MembersShipData.HP>

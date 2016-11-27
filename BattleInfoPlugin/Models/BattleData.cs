@@ -104,18 +104,36 @@ namespace BattleInfoPlugin.Models
         #endregion
 
 
-        #region Enemies変更通知プロパティ
-        private FleetData _Enemies;
+        #region EnemyFirstFeet変更通知プロパティ
+        private FleetData _EnemyFirstFeet;
 
-        public FleetData Enemies
+        public FleetData EnemyFirstFleet
         {
             get
-            { return this._Enemies; }
+            { return this._EnemyFirstFeet; }
             set
             { 
-                if (this._Enemies == value)
+                if (this._EnemyFirstFeet == value)
                     return;
-                this._Enemies = value;
+                this._EnemyFirstFeet = value;
+                this.RaisePropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region EnemySecondFeet変更通知プロパティ
+        private FleetData _EnemySecondFeet;
+
+        public FleetData EnemySecondFleet
+        {
+            get
+            { return this._EnemySecondFeet; }
+            set
+            {
+                if (this._EnemySecondFeet == value)
+                    return;
+                this._EnemySecondFeet = value;
                 this.RaisePropertyChanged();
             }
         }
@@ -203,6 +221,20 @@ namespace BattleInfoPlugin.Models
             proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/sp_midnight")
                 .TryParse<combined_battle_sp_midnight>().Subscribe(x => this.Update(x.Data));
 
+
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/each_battle")
+                .TryParse<combined_battle_each_battle>().Subscribe(x => this.Update(x.Data));
+
+            //proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/each_battle_water")
+            //    .TryParse<combined_battle_each_battle_water>().Subscribe(x => this.Update(x.Data));
+
+            //proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/ec_battle")
+            //    .TryParse<combined_battle_ec_battle>().Subscribe(x => this.Update(x.Data));
+
+            proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_combined_battle/ec_midnight_battle")
+                .TryParse<combined_battle_ec_midnight_battle>().Subscribe(x => this.Update(x.Data));
+
+
             proxy.ApiSessionSource.Where(x => x.Request.PathAndQuery == "/kcsapi/api_req_practice/battle")
                 .TryParse<practice_battle>().Subscribe(x => this.Update(x.Data));
 
@@ -249,7 +281,7 @@ namespace BattleInfoPlugin.Models
 
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
-            this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+            this.EnemyFirstFleet.CalcDamages(data.api_hougeki.GetEnemyDamages());
         }
 
         public void Update(battle_midnight_sp_midnight data)
@@ -262,7 +294,7 @@ namespace BattleInfoPlugin.Models
 
             this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
-            this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+            this.EnemyFirstFleet.CalcDamages(data.api_hougeki.GetEnemyDamages());
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
         }
@@ -285,11 +317,11 @@ namespace BattleInfoPlugin.Models
                 data.api_kouku2.GetSecondFleetDamages()
                 );
 
-            this.Enemies.CalcDamages(
-                data.api_air_base_attack.GetEnemyDamages(),
+            this.EnemyFirstFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemyFirstFleetDamages(),
                 data.api_support_info.GetEnemyDamages(),
-                data.api_kouku.GetEnemyDamages(),
-                data.api_kouku2.GetEnemyDamages()
+                data.api_kouku.GetEnemyFirstFleetDamages(),
+                data.api_kouku2.GetEnemyFirstFleetDamages()
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); //航空戦2回目はスルー
@@ -320,10 +352,10 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetFriendDamages()
                 );
 
-            this.Enemies.CalcDamages(
-                data.api_air_base_attack.GetEnemyDamages(),
+            this.EnemyFirstFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemyFirstFleetDamages(),
                 data.api_support_info.GetEnemyDamages(),
-                data.api_kouku.GetEnemyDamages(),
+                data.api_kouku.GetEnemyFirstFleetDamages(),
                 data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
@@ -359,10 +391,10 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetFriendDamages()
                 );
 
-            this.Enemies.CalcDamages(
-                data.api_air_base_attack.GetEnemyDamages(),
+            this.EnemyFirstFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemyFirstFleetDamages(),
                 data.api_support_info.GetEnemyDamages(),
-                data.api_kouku.GetEnemyDamages(),
+                data.api_kouku.GetEnemyFirstFleetDamages(),
                 data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
@@ -386,7 +418,7 @@ namespace BattleInfoPlugin.Models
 
             this.SecondFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
-            this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+            this.EnemyFirstFleet.CalcDamages(data.api_hougeki.GetEnemyDamages());
         }
 
         public void Update(combined_battle_sp_midnight data)
@@ -399,9 +431,127 @@ namespace BattleInfoPlugin.Models
 
             this.SecondFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
 
-            this.Enemies.CalcDamages(data.api_hougeki.GetEnemyDamages());
+            this.EnemyFirstFleet.CalcDamages(data.api_hougeki.GetEnemyDamages());
 
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
+        }
+
+        private void Update(combined_battle_each_battle data)
+        {
+            this.Name = "連合艦隊 - 機動部隊 - vs敵連合艦隊 - 昼戦";
+
+            this.UpdateFleets(data.api_deck_id, data, data.api_formation);
+            this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
+            this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+            this.FirstFleet.CalcDamages(
+                data.api_kouku.GetFirstFleetDamages(),
+                data.api_hougeki1.GetFriendFirstFleetDamages(),
+                data.api_hougeki3.GetFriendFirstFleetDamages()
+                );
+
+            this.SecondFleet.CalcDamages(
+                data.api_kouku.GetSecondFleetDamages(),
+                data.api_opening_taisen.GetFriendDamages(),
+                data.api_opening_atack.GetFriendDamages(),
+                data.api_hougeki2.GetFriendSecondleetDamages(),
+                data.api_raigeki.GetFriendDamages(),
+                data.api_hougeki3.GetFriendSecondleetDamages()
+                );
+
+            this.EnemyFirstFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemyFirstFleetDamages(),
+                data.api_kouku.GetEnemyFirstFleetDamages(),
+                data.api_support_info.GetEnemyDamages(),
+                data.api_opening_atack.GetEnemyDamages(),
+                data.api_hougeki1.GetEnemyFirstFleetDamages(),
+                data.api_raigeki.GetEnemyDamages(),
+                data.api_hougeki3.GetEnemyFirstFleetDamages()
+                );
+
+            this.EnemySecondFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemySecondFleetDamages(),
+                data.api_kouku.GetEnemySecondFleetDamages(),
+                data.api_support_info.GetEnemySecondFleetDamages(),
+                data.api_opening_taisen.GetEnemyDamages(),
+                data.api_opening_atack.GetEnemySecondFleetDamages(),
+                data.api_hougeki2.GetEnemySecondFleetDamages(),
+                data.api_raigeki.GetEnemySecondFleetDamages(),
+                data.api_hougeki3.GetEnemySecondFleetDamages()
+                );
+
+            this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+            this.AirCombatResults = data.api_kouku.ToResult();
+        }
+
+
+        //private void Update(combined_battle_each_battle_water data)
+        //{
+        //    this.Name = "連合艦隊 - 水上部隊 - vs敵連合艦隊 - 昼戦";
+
+        //    this.UpdateFleets(data.api_deck_id, data, data.api_formation);
+        //    this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
+        //    this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+        //    this.FirstFleet.CalcDamages(
+        //        data.api_kouku.GetFirstFleetDamages(),
+        //        data.api_hougeki1.GetFriendFirstFleetDamages(),
+        //        data.api_hougeki3.GetFriendFirstFleetDamages()
+        //        );
+
+        //    this.SecondFleet.CalcDamages(
+        //        data.api_kouku.GetSecondFleetDamages(),
+        //        data.api_opening_taisen.GetFriendDamages(),
+        //        data.api_opening_atack.GetFriendDamages(),
+        //        data.api_hougeki2.GetFriendSecondleetDamages(),
+        //        data.api_raigeki.GetFriendDamages(),
+        //        data.api_hougeki3.GetFriendSecondleetDamages()
+        //        );
+
+        //    this.EnemyFirstFeet.CalcDamages(
+        //        data.api_air_base_attack.GetEnemyFirstFleetDamages(),
+        //        data.api_kouku.GetEnemyFirstFleetDamages(),
+        //        data.api_support_info.GetEnemyDamages(),
+        //        data.api_opening_atack.GetEnemyDamages(),
+        //        data.api_hougeki1.GetEnemyFirstFleetDamages(),
+        //        data.api_raigeki.GetEnemyDamages(),
+        //        data.api_hougeki3.GetEnemyFirstFleetDamages()
+        //        );
+
+        //    this.EnemySecondFeet.CalcDamages(
+        //        data.api_air_base_attack.GetEnemySecondFleetDamages(),
+        //        data.api_kouku.GetEnemySecondFleetDamages(),
+        //        data.api_support_info.GetEnemySecondFleetDamages(),
+        //        data.api_opening_taisen.GetEnemyDamages(),
+        //        data.api_opening_atack.GetEnemySecondFleetDamages(),
+        //        data.api_hougeki2.GetEnemySecondFleetDamages(),
+        //        data.api_raigeki.GetEnemySecondFleetDamages(),
+        //        data.api_hougeki3.GetEnemySecondFleetDamages()
+        //        );
+
+        //    this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
+
+        //    this.AirCombatResults = data.api_kouku.ToResult();
+        //}
+
+        private void Update(combined_battle_ec_midnight_battle data)
+        {
+            this.Name = "連合艦隊 - vs敵連合艦隊 - 夜戦";
+
+            this.UpdateFleets(data.api_deck_id, data);
+            this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
+            this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+
+            if(data.api_active_deck[0] == 1)
+                this.FirstFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
+            else
+                this.SecondFleet.CalcDamages(data.api_hougeki.GetFriendDamages());
+
+            if (data.api_active_deck[1] == 1)
+                this.EnemyFirstFleet.CalcDamages(data.api_hougeki.GetEnemyDamages());
+            else
+                this.EnemySecondFleet.CalcDamages(data.api_hougeki.GetEnemyDamages());
         }
 
         public void Update(practice_battle data)
@@ -423,8 +573,8 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetFriendDamages()
                 );
 
-            this.Enemies.CalcPracticeDamages(
-                data.api_kouku.GetEnemyDamages(),
+            this.EnemyFirstFleet.CalcPracticeDamages(
+                data.api_kouku.GetEnemyFirstFleetDamages(),
                 data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
@@ -447,7 +597,7 @@ namespace BattleInfoPlugin.Models
 
             this.FirstFleet.CalcPracticeDamages(data.api_hougeki.GetFriendDamages());
 
-            this.Enemies.CalcPracticeDamages(data.api_hougeki.GetEnemyDamages());
+            this.EnemyFirstFleet.CalcPracticeDamages(data.api_hougeki.GetEnemyDamages());
         }
 
         private void Update(sortie_airbattle data)
@@ -463,11 +613,11 @@ namespace BattleInfoPlugin.Models
                 data.api_kouku2.GetFirstFleetDamages()
                 );
 
-            this.Enemies.CalcDamages(
-                data.api_air_base_attack.GetEnemyDamages(),
+            this.EnemyFirstFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemyFirstFleetDamages(),
                 data.api_support_info.GetEnemyDamages(),    //将来的に増える可能性を想定して追加しておく
-                data.api_kouku.GetEnemyDamages(),
-                data.api_kouku2.GetEnemyDamages()
+                data.api_kouku.GetEnemyFirstFleetDamages(),
+                data.api_kouku2.GetEnemyFirstFleetDamages()
                 );
 
             this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy(); // 航空戦2回目はスルー
@@ -493,10 +643,10 @@ namespace BattleInfoPlugin.Models
                 data.api_raigeki.GetFriendDamages()
                 );
 
-            this.Enemies.CalcDamages(
-                data.api_air_base_attack.GetEnemyDamages(),
+            this.EnemyFirstFleet.CalcDamages(
+                data.api_air_base_attack.GetEnemyFirstFleetDamages(),
                 data.api_support_info.GetEnemyDamages(),
-                data.api_kouku.GetEnemyDamages(),
+                data.api_kouku.GetEnemyFirstFleetDamages(),
                 data.api_opening_taisen.GetEnemyDamages(),
                 data.api_opening_atack.GetEnemyDamages(),
                 data.api_hougeki1.GetEnemyDamages(),
@@ -572,18 +722,18 @@ namespace BattleInfoPlugin.Models
             this.UpdatedTime = DateTimeOffset.Now;
             this.UpdateFriendFleets(api_deck_id);
             
-            this.Enemies = new FleetData(
+            this.EnemyFirstFleet = new FleetData(
                 data.ToMastersShipDataArray(),
-                this.Enemies?.Formation ?? Formation.なし,
-                this.Enemies?.Name ?? "",
-                FleetType.Enemy,
-                this.Enemies?.Rank);
+                this.EnemyFirstFleet?.Formation ?? Formation.なし,
+                this.EnemyFirstFleet?.Name ?? "",
+                FleetType.EnemyFirst,
+                this.EnemyFirstFleet?.Rank);
 
             if (api_formation != null)
             {
                 this.BattleSituation = (BattleSituation)api_formation[2];
                 if (this.FirstFleet != null) this.FirstFleet.Formation = (Formation)api_formation[0];
-                if (this.Enemies != null) this.Enemies.Formation = (Formation)api_formation[1];
+                if (this.EnemyFirstFleet != null) this.EnemyFirstFleet.Formation = (Formation)api_formation[1];
             }
 
             this.CurrentDeckId = api_deck_id;
@@ -609,7 +759,7 @@ namespace BattleInfoPlugin.Models
         private void UpdateMaxHP(int[] api_maxhps, int[] api_maxhps_combined = null)
         {
             this.FirstFleet.Ships.SetValues(api_maxhps.GetFriendData(), (s, v) => s.MaxHP = v);
-            this.Enemies.Ships.SetValues(api_maxhps.GetEnemyData(), (s, v) => s.MaxHP = v);
+            this.EnemyFirstFleet.Ships.SetValues(api_maxhps.GetEnemyData(), (s, v) => s.MaxHP = v);
 
             if (api_maxhps_combined == null) return;
             this.SecondFleet.Ships.SetValues(api_maxhps_combined.GetFriendData(), (s, v) => s.MaxHP = v);
@@ -618,7 +768,7 @@ namespace BattleInfoPlugin.Models
         private void UpdateNowHP(int[] api_nowhps, int[] api_nowhps_combined = null)
         {
             this.FirstFleet.Ships.SetValues(api_nowhps.GetFriendData(), (s, v) => s.NowHP = v);
-            this.Enemies.Ships.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
+            this.EnemyFirstFleet.Ships.SetValues(api_nowhps.GetEnemyData(), (s, v) => s.NowHP = v);
 
             if (api_nowhps_combined == null) return;
             this.SecondFleet.Ships.SetValues(api_nowhps_combined.GetFriendData(), (s, v) => s.NowHP = v);
@@ -634,7 +784,7 @@ namespace BattleInfoPlugin.Models
             this.FriendAirSupremacy = AirSupremacy.航空戦なし;
             this.AirCombatResults = new AirCombatResult[0];
             if (this.FirstFleet != null) this.FirstFleet.Formation = Formation.なし;
-            this.Enemies = new FleetData();
+            this.EnemyFirstFleet = new FleetData();
         }
     }
 }

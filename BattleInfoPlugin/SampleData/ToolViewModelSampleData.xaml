@@ -8,7 +8,7 @@
                           UpdatedTime="2015/03/08 15:15:15"
                           BattleSituation="T字有利"
                           FriendAirSupremacy="制空権確保"
-                          BattleName="連合艦隊 - 水上部隊 - 昼戦"
+                          BattleName="連合艦隊 - 水上部隊 - vs敵連合艦隊 - 昼戦"
                           DropShipName="ほっぽ">
 
     <viewModels:ToolViewModel.AirCombatResults>
@@ -32,7 +32,7 @@
         <models:AirCombatResult Name="空対艦"/>
     </viewModels:ToolViewModel.AirCombatResults>
 
-    <viewModels:ToolViewModel.Enemies>
+    <viewModels:ToolViewModel.EnemyFirstFleet>
         <viewModels:FleetViewModel Name="敵艦隊" FleetFormation="輪形陣" IsVisible="True">
             <viewModels:FleetViewModel.AirCombatResults>
                 <viewModels:AirCombatResultViewModel Name="1回目/空対空"/>
@@ -49,7 +49,7 @@
                 <viewModels:AirCombatResultViewModel Name="空対艦"/>
             </viewModels:FleetViewModel.AirCombatResults>
             <viewModels:FleetViewModel.Fleet>
-                <models:FleetData FleetType="Enemy">
+                <models:FleetData FleetType="EnemyFirst">
                     <models:FleetData.Ships>
                         <models:MembersShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
                             <models:MembersShipData.HP>
@@ -70,7 +70,39 @@
                 </models:FleetData>
             </viewModels:FleetViewModel.Fleet>
         </viewModels:FleetViewModel>
-    </viewModels:ToolViewModel.Enemies>
+    </viewModels:ToolViewModel.EnemyFirstFleet>
+
+    <viewModels:ToolViewModel.EnemySecondFleet>
+        <viewModels:FleetViewModel Name="敵護衛艦隊" IsVisible="True">
+            <viewModels:FleetViewModel.AirCombatResults>
+                <viewModels:AirCombatResultViewModel Name="1回目/空対空"/>
+                <viewModels:AirCombatResultViewModel Name="1回目/空対艦"/>
+                <viewModels:AirCombatResultViewModel Name="空対空"/>
+                <viewModels:AirCombatResultViewModel Name="空対艦"/>
+            </viewModels:FleetViewModel.AirCombatResults>
+            <viewModels:FleetViewModel.Fleet>
+                <models:FleetData FleetType="EnemySecond">
+                    <models:FleetData.Ships>
+                        <models:MembersShipData MaxHP="15" NowHP="83" Name="戦艦水鬼" Situation="Tow" TypeName="つよい">
+                            <models:MembersShipData.HP>
+                                <wrapper:LimitedValue Current="36" Maximum="43" Minimum="0"/>
+                            </models:MembersShipData.HP>
+                        </models:MembersShipData>
+                        <models:MembersShipData MaxHP="20" NowHP="96" Name="ほっぽ" Situation="Repair" TypeName="ろり" AdditionalName="elite">
+                            <models:MembersShipData.HP>
+                                <wrapper:LimitedValue Current="71" Maximum="85" Minimum="0"/>
+                            </models:MembersShipData.HP>
+                        </models:MembersShipData>
+                        <models:MembersShipData MaxHP="40" NowHP="62" Name="駆逐ロ級後期型" Situation="HeavilyDamaged" TypeName="きもい" AdditionalName="flagship">
+                            <models:MembersShipData.HP>
+                                <wrapper:LimitedValue Current="-999" Maximum="999" Minimum="0"/>
+                            </models:MembersShipData.HP>
+                        </models:MembersShipData>
+                    </models:FleetData.Ships>
+                </models:FleetData>
+            </viewModels:FleetViewModel.Fleet>
+        </viewModels:FleetViewModel>
+    </viewModels:ToolViewModel.EnemySecondFleet>
 
     <viewModels:ToolViewModel.FirstFleet>
         <viewModels:FleetViewModel Name="自艦隊" FleetFormation="戦闘陣形" IsVisible="True">

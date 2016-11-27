@@ -9,7 +9,7 @@
         public Api_Stage1 api_stage1 { get; set; }
         public Api_Stage2 api_stage2 { get; set; }
         public Api_Stage3 api_stage3 { get; set; }
-        public Api_Stage3_Combined api_stage3_combined { get; set; }
+        public Api_Stage3 api_stage3_combined { get; set; }
     }
 
     public class Api_Stage1
@@ -50,14 +50,6 @@
         public double[] api_edam { get; set; }
     }
 
-    public class Api_Stage3_Combined
-    {
-        public int[] api_frai_flag { get; set; }
-        public int[] api_fbak_flag { get; set; }
-        public int[] api_fcl_flag { get; set; }
-        public double[] api_fdam { get; set; }
-    }
-
     #endregion
 
     #region 支援
@@ -79,6 +71,7 @@
         public Api_Stage1 api_stage1 { get; set; }
         public Api_Stage2 api_stage2 { get; set; }
         public Api_Stage3 api_stage3 { get; set; }
+        public Api_Stage3 api_stage3_combined { get; set; }
     }
 
     public class Api_Support_Hourai
@@ -112,6 +105,7 @@
 
     public class Hougeki
     {
+        public int[] api_at_eflag { get; set; }
         public int[] api_at_list { get; set; }
         public int[] api_at_type { get; set; }
         public object[] api_df_list { get; set; }
@@ -143,6 +137,7 @@
         public Api_Stage1 api_stage1 { get; set; }
         public Api_Stage2 api_stage2 { get; set; }
         public Api_Stage3 api_stage3 { get; set; }  // e のみのデータ
+        public Api_Stage3 api_stage3_combined { get; set; }  // e のみのデータ
     }
 
     public class Api_Squadron_Plane

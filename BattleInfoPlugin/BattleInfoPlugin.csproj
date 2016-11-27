@@ -45,16 +45,16 @@
       <HintPath>..\packages\KanColleViewer.Composition.1.4.0\lib\net45\KanColleViewer.Composition.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="KanColleViewer.Controls, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleViewer.Controls.1.3.1\lib\net46\KanColleViewer.Controls.dll</HintPath>
+    <Reference Include="KanColleViewer.Controls, Version=1.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KanColleViewer.Controls.1.3.2\lib\net46\KanColleViewer.Controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="KanColleViewer.PluginAnalyzer, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\KanColleViewer.PluginAnalyzer.1.1.1.0\lib\net46\KanColleViewer.PluginAnalyzer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="KanColleWrapper, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KanColleWrapper.1.4.0\lib\net46\KanColleWrapper.dll</HintPath>
+    <Reference Include="KanColleWrapper, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KanColleWrapper.1.6.2\lib\net46\KanColleWrapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Livet, Version=1.3.0.0, Culture=neutral, PublicKeyToken=b0b1d3f711ef38cb, processorArchitecture=MSIL">
@@ -91,7 +91,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="StatefulModel, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StatefulModel.0.5.0\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\StatefulModel.dll</HintPath>
+      <HintPath>..\packages\StatefulModel.0.6.0\lib\portable-net45+win+wp80+MonoAndroid10+xamarinios10+MonoTouch10\StatefulModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SwfFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -158,6 +158,9 @@
     <Compile Include="Models\MapInfo.cs" />
     <Compile Include="Models\Notifiers\BattleEndNotifier.cs" />
     <Compile Include="Models\Notifiers\BrowserImageMonitor.cs" />
+    <Compile Include="Models\Raw\combined_battle_each_battle_water.cs" />
+    <Compile Include="Models\Raw\combined_battle_each_battle.cs" />
+    <Compile Include="Models\Raw\combined_battle_ec_midnight_battle.cs" />
     <Compile Include="Models\Raw\combined_battle_ld_airbattle.cs" />
     <Compile Include="Models\Raw\ICommonBattleMembers.cs" />
     <Compile Include="Models\Raw\ICommonFirstBattleMembers.cs" />

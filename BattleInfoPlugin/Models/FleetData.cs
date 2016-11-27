@@ -117,7 +117,7 @@ namespace BattleInfoPlugin.Models
         //public int AirSuperiorityRequirements => this.AirSuperiorityPotential * 3 / 2;
         //public int AirSupremacyRequirements => this.AirSuperiorityPotential * 3;
 
-        public FleetData() : this(new ShipData[0], Formation.なし, "", FleetType.Enemy)
+        public FleetData() : this(new ShipData[0], Formation.なし, "", FleetType.EnemyFirst)
         {
         }
 

@@ -39,6 +39,7 @@ namespace BattleInfoPlugin.Models.Repositories
         /// すべてのセルの定義を取得します。
         /// </summary>
         [DataMember]
+        [Obsolete("すでに存在しないデータ")]
         public ConcurrentDictionary<int, MapCell> MapCells { get; private set; }
 
         public Master()
@@ -57,11 +58,10 @@ namespace BattleInfoPlugin.Models.Repositories
         {
             var areas = start2.api_mst_maparea.Select(x => new MapArea(x)).ToDictionary(x => x.Id, x => x);
             var infos = start2.api_mst_mapinfo.Select(x => new MapInfo(x)).ToDictionary(x => x.Id, x => x);
-            var cells = start2.api_mst_mapcell.Select(x => new MapCell(x)).ToDictionary(x => x.Id, x => x);
+
 
             foreach (var key in areas.Keys) this.MapAreas.AddOrUpdate(key, areas[key], (k, v) => areas[k]);
             foreach (var key in infos.Keys) this.MapInfos.AddOrUpdate(key, infos[key], (k, v) => infos[k]);
-            foreach (var key in cells.Keys) this.MapCells.AddOrUpdate(key, cells[key], (k, v) => cells[k]);
 
             this.Serialize(Settings.Default.MasterDataFileName);
         }

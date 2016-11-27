@@ -25,7 +25,7 @@ namespace BattleInfoPlugin.ViewModels
                 this.Count = result.FriendCount;
                 this.LostCount = result.FriendLostCount;
             }
-            if (type == FleetType.Enemy)
+            if (type == FleetType.EnemyFirst)
             {
                 this.Name = result.Name;
                 this.IsHappen = result.IsHappen;

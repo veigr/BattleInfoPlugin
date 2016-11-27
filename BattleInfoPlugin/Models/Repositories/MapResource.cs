@@ -158,6 +158,16 @@ namespace BattleInfoPlugin.Models.Repositories
                     { 4, "/kcs/resources/swf/map/yfsktnrbaildccbafgkfcjixvnndugfz.swf" },
                 }
             },
+            {
+                356, new Dictionary<int, string>
+                {
+                    { 1, "/kcs/resources/swf/map/nvnnohkjynpwjjiffkpioblpiqjxscjl.swf" },
+                    { 2, "/kcs/resources/swf/map/wfibpsbhyiqkogxxysvcullieqcsgeyr.swf" },
+                    { 3, "/kcs/resources/swf/map/xsxmiucgoihmyrvmiwcvkmjguonfhpgs.swf" },
+                    { 4, "/kcs/resources/swf/map/icayslygwoflmjtfwjjdqefjczrrpcde.swf" },
+                    { 5, "/kcs/resources/swf/map/ufdqcqmyqovksjkggcuviyyolpqgvsfb.swf" },
+                }
+            },
         };
 
         private static string GetMapSwfFilePath(this MapInfo map)

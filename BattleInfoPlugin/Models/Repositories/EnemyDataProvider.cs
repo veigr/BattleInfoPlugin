@@ -95,7 +95,7 @@ namespace BattleInfoPlugin.Models.Repositories
                             this.GetEnemiesFromId(enemy),
                             this.GetEnemyFormationFromId(enemy),
                             this.GetEnemyNameFromId(enemy),
-                            FleetType.Enemy,
+                            FleetType.EnemyFirst,
                             this.GetEnemyEncounterRankFromId(enemy)
                             ))));
         }

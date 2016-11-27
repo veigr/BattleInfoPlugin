@@ -15,6 +15,12 @@ namespace BattleInfoPlugin.Models.Raw
                ?? support?.api_support_hourai?.api_damage?.GetDamages()
                ?? defaultValue;
 
+        public static FleetDamages GetEnemySecondFleetDamages(this Api_Support_Info support)
+            => support?.api_support_airatack?.api_stage3_combined?.api_edam?.GetDamages()
+               ?? support?.api_support_hourai?.api_damage?.GetEnemyDamages()
+               ?? defaultValue;
+
+
         #endregion
 
         #region 砲撃
@@ -23,8 +29,24 @@ namespace BattleInfoPlugin.Models.Raw
             => hougeki?.api_damage?.GetFriendDamages(hougeki.api_df_list)
                ?? defaultValue;
 
+        public static FleetDamages GetFriendFirstFleetDamages(this Hougeki hougeki)
+            => hougeki?.api_damage?.GetFriendFirstFleetDamages(hougeki.api_df_list, hougeki.api_at_eflag)
+               ?? defaultValue;
+
+        public static FleetDamages GetFriendSecondleetDamages(this Hougeki hougeki)
+            => hougeki?.api_damage?.GetFriendSecondFleetDamages(hougeki.api_df_list, hougeki.api_at_eflag)
+               ?? defaultValue;
+
         public static FleetDamages GetEnemyDamages(this Hougeki hougeki)
             => hougeki?.api_damage?.GetEnemyDamages(hougeki.api_df_list)
+               ?? defaultValue;
+
+        public static FleetDamages GetEnemyFirstFleetDamages(this Hougeki hougeki)
+            => hougeki?.api_damage?.GetEnemyFirstFleetDamages(hougeki.api_df_list, hougeki.api_at_eflag)
+               ?? defaultValue;
+
+        public static FleetDamages GetEnemySecondFleetDamages(this Hougeki hougeki)
+            => hougeki?.api_damage?.GetEnemySecondFleetDamages(hougeki.api_df_list, hougeki.api_at_eflag)
                ?? defaultValue;
 
         #endregion
@@ -51,12 +73,20 @@ namespace BattleInfoPlugin.Models.Raw
             => kouku?.api_stage3_combined?.api_fdam?.GetDamages()
                ?? defaultValue;
 
-        public static FleetDamages GetEnemyDamages(this Api_Kouku kouku)
+        public static FleetDamages GetEnemyFirstFleetDamages(this Api_Kouku kouku)
             => kouku?.api_stage3?.api_edam?.GetDamages()
                ?? defaultValue;
 
-        public static FleetDamages GetEnemyDamages(this Api_Air_Base_Attack[] attacks)
+        public static FleetDamages GetEnemySecondFleetDamages(this Api_Kouku kouku)
+            => kouku?.api_stage3_combined?.api_edam?.GetDamages()
+               ?? defaultValue;
+
+        public static FleetDamages GetEnemyFirstFleetDamages(this Api_Air_Base_Attack[] attacks)
             => attacks?.Select(x => x?.api_stage3?.api_edam?.GetDamages() ?? defaultValue)
+            ?.Aggregate((a, b) => a.Add(b)) ?? defaultValue;
+
+        public static FleetDamages GetEnemySecondFleetDamages(this Api_Air_Base_Attack[] attacks)
+            => attacks?.Select(x => x?.api_stage3_combined?.api_edam?.GetDamages() ?? defaultValue)
             ?.Aggregate((a, b) => a.Add(b)) ?? defaultValue;
 
         public static AirSupremacy GetAirSupremacy(this Api_Kouku kouku)
@@ -65,7 +95,7 @@ namespace BattleInfoPlugin.Models.Raw
         public static AirCombatResult[] ToResult(this Api_Kouku kouku, string prefixName = "")
         {
             return kouku != null
-                ? new []
+                ? new[]
                 {
                     kouku.api_stage1.ToResult($"{prefixName}空対空"),
                     kouku.api_stage2.ToResult($"{prefixName}空対艦")
@@ -89,8 +119,16 @@ namespace BattleInfoPlugin.Models.Raw
             => raigeki?.api_fdam?.GetDamages()
                ?? defaultValue;
 
+        public static FleetDamages GetFriendSecondFleetDamages(this Raigeki raigeki)
+            => raigeki?.api_fdam?.GetEnemyDamages()
+               ?? defaultValue;
+
         public static FleetDamages GetEnemyDamages(this Raigeki raigeki)
             => raigeki?.api_edam?.GetDamages()
+               ?? defaultValue;
+
+        public static FleetDamages GetEnemySecondFleetDamages(this Raigeki raigeki)
+            => raigeki?.api_edam?.GetEnemyDamages()
                ?? defaultValue;
 
         #endregion
@@ -117,6 +155,9 @@ namespace BattleInfoPlugin.Models.Raw
         public static IEnumerable<T> GetEnemyData<T>(this IEnumerable<T> source, int origin = 1)
             => source.Skip(origin + 6).Take(6);
 
+        public static IEnumerable<T> Get6Data<T>(this IEnumerable<T> source, int startIndex, int origin = 1)
+            => source.Skip(origin + startIndex).Take(6);
+
         /// <summary>
         /// 雷撃・航空戦ダメージリスト算出
         /// </summary>
@@ -125,6 +166,18 @@ namespace BattleInfoPlugin.Models.Raw
         public static FleetDamages GetDamages(this double[] damages)
             => damages
                 .GetFriendData() //敵味方共通
+                .Select(Convert.ToInt32)
+                .ToArray()
+                .ToFleetDamages();
+
+        /// <summary>
+        /// 雷撃・航空戦ダメージリスト算出(敵連合艦隊用)
+        /// </summary>
+        /// <param name="damages">api_fdam/api_edam</param>
+        /// <returns></returns>
+        public static FleetDamages GetEnemyDamages(this double[] damages)
+            => damages
+                .GetEnemyData()
                 .Select(Convert.ToInt32)
                 .ToArray()
                 .ToFleetDamages();
@@ -158,6 +211,58 @@ namespace BattleInfoPlugin.Models.Raw
                 .ToFleetDamages();
 
         /// <summary>
+        /// 12vs12砲撃戦友軍第1艦隊ダメージリスト算出
+        /// </summary>
+        /// <param name="damages">api_damage</param>
+        /// <param name="df_list">api_df_list</param>
+        /// <returns></returns>
+        public static FleetDamages GetFriendFirstFleetDamages(this object[] damages, object[] df_list, int[] eFlags)
+            => damages
+                .ToIntArray()
+                .ToSortedDamages(df_list.ToIntArray(), eFlags)
+                .Get6Data(0, 0)
+                .ToFleetDamages();
+
+        /// <summary>
+        /// 12vs12砲撃戦友軍第2艦隊ダメージリスト算出
+        /// </summary>
+        /// <param name="damages">api_damage</param>
+        /// <param name="df_list">api_df_list</param>
+        /// <returns></returns>
+        public static FleetDamages GetFriendSecondFleetDamages(this object[] damages, object[] df_list, int[] eFlags)
+            => damages
+                .ToIntArray()
+                .ToSortedDamages(df_list.ToIntArray(), eFlags)
+                .Get6Data(6, 0)
+                .ToFleetDamages();
+
+        /// <summary>
+        /// 12vs12砲撃戦敵軍第1艦隊ダメージリスト算出
+        /// </summary>
+        /// <param name="damages">api_damage</param>
+        /// <param name="df_list">api_df_list</param>
+        /// <returns></returns>
+        public static FleetDamages GetEnemyFirstFleetDamages(this object[] damages, object[] df_list, int[] eflags)
+            => damages
+                .ToIntArray()
+                .ToSortedDamages(df_list.ToIntArray(), eflags)
+                .Get6Data(12, 0)
+                .ToFleetDamages();
+
+        /// <summary>
+        /// 12vs12砲撃戦敵軍第2艦隊ダメージリスト算出
+        /// </summary>
+        /// <param name="damages">api_damage</param>
+        /// <param name="df_list">api_df_list</param>
+        /// <returns></returns>
+        public static FleetDamages GetEnemySecondFleetDamages(this object[] damages, object[] df_list, int[] eflags)
+            => damages
+                .ToIntArray()
+                .ToSortedDamages(df_list.ToIntArray(), eflags)
+                .Get6Data(18, 0)
+                .ToFleetDamages();
+
+        /// <summary>
         /// 砲撃戦ダメージリストint配列化
         /// 弾着観測射撃データはフラット化する
         /// api_df_listも同様の型なので流用可能
@@ -185,6 +290,26 @@ namespace BattleInfoPlugin.Models.Raw
             foreach (var d in zip.Where(d => 0 < d.df))
             {
                 ret[d.df - 1] += d.da;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// フラット化したapi_damageとapi_df_listを元に
+        /// 自軍12隻＋敵軍12隻の長さ24のダメージ合計配列を作成
+        /// </summary>
+        /// <param name="damages">api_damage</param>
+        /// <param name="dfList">api_df_list</param>
+        /// <returns></returns>
+        private static int[] ToSortedDamages(this int[] damages, int[] dfList, int[] eFlags)
+        {
+            var zip = damages
+                        .Zip(dfList, (da, df) => new { df, da })
+                        .Zip(eFlags, (d, ef) => new { d.df, d.da, ef });
+            var ret = new int[24];
+            foreach (var d in zip.Where(d => 0 < d.df))
+            {
+                ret[d.df - 1 + (d.ef == 0 ? 0 : 12)] += d.da;
             }
             return ret;
         }

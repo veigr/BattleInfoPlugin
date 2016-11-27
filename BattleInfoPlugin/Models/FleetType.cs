@@ -10,6 +10,7 @@ namespace BattleInfoPlugin.Models
     {
         First,
         Second,
-        Enemy,
+        EnemyFirst,
+        EnemySecond,
     }
 }
